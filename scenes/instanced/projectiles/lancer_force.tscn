@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scenes/instanced/projectiles/projectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/sprites/sprite_circle.gd" type="Script" id=2]
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=3]
+[ext_resource path="res://src/sprites/sprite_line.gd" type="Script" id=4]
+[ext_resource path="res://src/effect/projectile/projectile_lancer.gd" type="Script" id=5]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 4.0
+height = 0.0
+
+[node name="LancerForce" instance=ExtResource( 1 )]
+collision_mask = 35
+script = ExtResource( 5 )
+duration = 0.5
+speed = 0.0
+hitspark = null
+
+[node name="PixelSnapLeftCircle" type="Node2D" parent="." index="0"]
+script = ExtResource( 3 )
+
+[node name="LeftCircle" type="Node2D" parent="PixelSnapLeftCircle" index="0"]
+script = ExtResource( 2 )
+radius = 4.0
+color = Color( 1, 0.827451, 0.313726, 1 )
+
+[node name="PixelSnapRightCircle" type="Node2D" parent="." index="1"]
+script = ExtResource( 3 )
+
+[node name="RightCircle" type="Node2D" parent="PixelSnapRightCircle" index="0"]
+script = ExtResource( 2 )
+radius = 4.0
+color = Color( 1, 0.827451, 0.313726, 1 )
+
+[node name="PixelSnapLine" type="Node2D" parent="." index="2"]
+script = ExtResource( 3 )
+
+[node name="Line" type="Node2D" parent="PixelSnapLine" index="0"]
+script = ExtResource( 4 )
+length = 0.0
+width = 8.0
+color = Color( 1, 1, 1, 1 )
+antialiased = false
+
+[node name="CollisionShape2D" parent="." index="3"]
+rotation = 1.5708
+shape = SubResource( 1 )

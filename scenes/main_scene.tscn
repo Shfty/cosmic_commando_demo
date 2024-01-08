@@ -1,0 +1,145 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scenes/instanced/user_interface/loading_screen.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/instanced/user_interface/title_screen.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/main_scene.gd" type="Script" id=3]
+[ext_resource path="res://resources/audio_stream_sample/menu_move.wav" type="AudioStream" id=4]
+[ext_resource path="res://src/scene_loader.gd" type="Script" id=5]
+[ext_resource path="res://scenes/instanced/user_interface/fps_readout.gd" type="Script" id=6]
+[ext_resource path="res://resources/themes/alien_soldier.tres" type="Theme" id=7]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends AudioStreamPlayer
+
+var _cached_focus_owner: Node
+func gui_focus_changed(node: Control) -> void:
+	if Engine.is_editor_hint():
+		return
+
+	if node != _cached_focus_owner:
+		_cached_focus_owner = node
+		play()
+"
+
+[node name="MainScene" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+default_ui_scene = ExtResource( 2 )
+
+[node name="UIFocusAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+bus = "UI"
+script = SubResource( 1 )
+
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+margin_right = 400.0
+margin_bottom = 224.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameViewport" type="Viewport" parent="ViewportContainer"]
+pause_mode = 2
+size = Vector2( 400, 224 )
+transparent_bg = true
+handle_input_locally = false
+hdr = false
+usage = 0
+render_target_update_mode = 3
+audio_listener_enable_2d = true
+
+[node name="DefaultCamera" type="Camera2D" parent="ViewportContainer/GameViewport"]
+pause_mode = 1
+current = true
+
+[node name="GameSceneLoader" type="Node2D" parent="ViewportContainer/GameViewport"]
+pause_mode = 1
+script = ExtResource( 5 )
+default_scene = null
+populate_mode = 1
+
+[node name="UILayer" type="CanvasLayer" parent="ViewportContainer/GameViewport"]
+
+[node name="UISceneLoader" type="Control" parent="ViewportContainer/GameViewport/UILayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 5 )
+default_scene = null
+populate_mode = 1
+
+[node name="LoadingScreen" parent="ViewportContainer/GameViewport/UILayer" instance=ExtResource( 1 )]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+hide_loading_bars = true
+corner_widget = 1
+
+[node name="ColorRect" type="ColorRect" parent="ViewportContainer/GameViewport/UILayer"]
+margin_top = 215.0
+margin_right = 40.0
+margin_bottom = 224.0
+rect_min_size = Vector2( 40, 9 )
+color = Color( 0, 0, 0, 0.498039 )
+
+[node name="FPSLabel" type="Label" parent="ViewportContainer/GameViewport/UILayer/ColorRect"]
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 21.0
+margin_bottom = 15.0
+size_flags_horizontal = 3
+theme = ExtResource( 7 )
+custom_colors/font_color = Color( 1, 0.866667, 0, 1 )
+text = "-:--"
+align = 2
+script = ExtResource( 6 )
+[connection signal="gui_focus_changed" from="ViewportContainer/GameViewport" to="UIFocusAudio" method="gui_focus_changed"]
+[connection signal="instance_scene_progress" from="ViewportContainer/GameViewport/GameSceneLoader" to="." method="set_game_instance_scene_progress"]
+[connection signal="load_progress" from="ViewportContainer/GameViewport/GameSceneLoader" to="." method="set_game_load_progress"]
+[connection signal="populate_tree_progress" from="ViewportContainer/GameViewport/GameSceneLoader" to="." method="set_game_populate_tree_progress"]
+[connection signal="instance_scene_progress" from="ViewportContainer/GameViewport/UILayer/UISceneLoader" to="." method="set_ui_instance_scene_progress"]
+[connection signal="load_progress" from="ViewportContainer/GameViewport/UILayer/UISceneLoader" to="." method="set_ui_load_progress"]
+[connection signal="populate_tree_progress" from="ViewportContainer/GameViewport/UILayer/UISceneLoader" to="." method="set_ui_populate_tree_progress"]
+[connection signal="load_game_scene" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" to="." method="load_scenes"]
+[connection signal="quit_game" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" to="." method="quit_game"]
+[connection signal="focus_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Gameplay" method="grab_focus"]
+[connection signal="ui_cancel" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox" method="set_active_pane" binds= [ 1 ]]
+[connection signal="focus_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Gameplay" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox" method="set_active_pane" binds= [ 0 ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Gameplay" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Gameplay" method="grab_focus"]
+[connection signal="focus_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Control" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox" method="set_active_pane" binds= [ 1 ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Control" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Control" method="grab_focus"]
+[connection signal="focus_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Video" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox" method="set_active_pane" binds= [ 2 ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Video" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Video" method="grab_focus"]
+[connection signal="focus_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Audio" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox" method="set_active_pane" binds= [ 3 ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Audio" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Audio" method="grab_focus"]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Back" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Back" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Back" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox" method="set_active_pane" binds= [ 1 ]]
+[connection signal="focus_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" method="grab_focus"]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/Options" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/Options" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/Options" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox" method="set_active_pane" binds= [ 0 ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" method="start_demo"]
+[connection signal="ready" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" method="grab_focus"]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/SceneSelect" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/SceneSelect" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/SceneSelect" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox" method="set_active_pane" binds= [ 2 ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/Quit" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/Quit" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/MainMenuHBox/Quit" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" method="quit_game"]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/GithubButton" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/GithubButton" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/GithubButton" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" method="open_link" binds= [ "https://github.com/Shfty/" ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/DiscordButton" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/DiscordButton" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/DiscordButton" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" method="open_link" binds= [ "https://discord.gg/c72WBuG" ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/PatreonButton" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/PatreonButton" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/PatreonButton" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" method="open_link" binds= [ "https://www.patreon.com/shifty_studio" ]]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/TwitterButton" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/TwitterButton" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/MainMenuPane/CreditHBox/TwitterButton" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" method="open_link" binds= [ "https://twitter.com/shiftyaxel" ]]
+[connection signal="focus_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/SceneSelectPane" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/SceneSelectVBox" method="grab_focus"]
+[connection signal="ui_cancel" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/SceneSelectPane" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox" method="set_active_pane" binds= [ 1 ]]
+[connection signal="scene_selected" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/SceneSelectVBox" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen" method="scene_selected"]
+[connection signal="mouse_entered" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/Back" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/Back" method="grab_focus"]
+[connection signal="pressed" from="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/Back" to="ViewportContainer/GameViewport/UILayer/UISceneLoader/TitleScreen/PaneHBox" method="set_active_pane" binds= [ 1 ]]

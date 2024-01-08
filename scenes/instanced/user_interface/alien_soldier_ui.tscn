@@ -1,0 +1,327 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://resources/themes/alien_soldier.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/instanced/user_interface/stat_readout.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/instanced/user_interface/weapon_readout.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/instanced/user_interface/alien_soldier_ui.gd" type="Script" id=4]
+[ext_resource path="res://src/switch_container.gd" type="Script" id=6]
+[ext_resource path="res://src/ui_pointer.gd" type="Script" id=7]
+[ext_resource path="res://resources/textures/ui_pointer.png" type="Texture" id=8]
+[ext_resource path="res://src/scene_select_vbox.gd" type="Script" id=9]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+signal ui_cancel()
+
+func get_vbox_container() -> Control:
+	return $VBoxContainer as Control if has_node(\"VBoxContainer\") else null
+
+func grab_focus() -> void:
+	var vbox_container = get_vbox_container()
+	assert(vbox_container)
+	if vbox_container.get_child_count() > 1:
+		vbox_container.get_child(1).grab_focus()
+
+func _unhandled_input(event: InputEvent) -> void:
+	var focused_child = false
+
+	var vbox_container = get_vbox_container()
+	if vbox_container:
+		for child in vbox_container.get_children():
+			if child.has_focus():
+				focused_child = true
+
+	if not focused_child:
+		return
+
+	if event.is_action_pressed(\"ui_cancel\"):
+		emit_signal(\"ui_cancel\")
+		get_tree().set_input_as_handled()
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Control
+
+signal ui_cancel()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not UIUtil.has_focused_child(self):
+		return
+
+	if event.is_action_pressed(\"ui_cancel\"):
+		emit_signal(\"ui_cancel\")
+		get_tree().set_input_as_handled()
+"
+
+[node name="AlienSoldierUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 1 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 350.0 ],
+"_edit_use_anchors_": false,
+"_edit_vertical_guides_": [ 600.0 ]
+}
+
+[node name="Header" type="Control" parent="."]
+anchor_right = 1.0
+margin_bottom = 28.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="Header"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.733333 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Header"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = 4.0
+margin_right = 1.0
+size_flags_vertical = 0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PaddingPre" type="Control" parent="Header/HBoxContainer"]
+margin_bottom = 24.0
+
+[node name="StatReadout" parent="Header/HBoxContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 4.0
+margin_right = 288.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 102, 24 )
+size_flags_horizontal = 3
+
+[node name="PaddingMid" type="Control" parent="Header/HBoxContainer"]
+margin_left = 292.0
+margin_right = 296.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 4, 0 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Header/HBoxContainer"]
+margin_left = 300.0
+margin_top = 1.0
+margin_right = 392.0
+margin_bottom = 23.0
+size_flags_horizontal = 8
+size_flags_vertical = 6
+custom_constants/separation = 2
+
+[node name="WeaponReadout" parent="Header/HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 92.0
+margin_bottom = 12.0
+active_weapon = 0
+
+[node name="TimerReadout" type="HBoxContainer" parent="Header/HBoxContainer/VBoxContainer"]
+margin_top = 14.0
+margin_right = 92.0
+margin_bottom = 22.0
+custom_constants/separation = 0
+
+[node name="LabelTimer" type="Label" parent="Header/HBoxContainer/VBoxContainer/TimerReadout"]
+margin_right = 92.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0.866667, 0, 1 )
+text = "-:--"
+align = 2
+
+[node name="PaddingPost" type="Control" parent="Header/HBoxContainer"]
+margin_left = 396.0
+margin_right = 400.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 4, 0 )
+
+[node name="Viewport" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 28.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PauseMenuContainer" type="MarginContainer" parent="Viewport"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -75.0
+margin_top = -50.0
+margin_right = 75.0
+margin_bottom = 50.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="Viewport/PauseMenuContainer"]
+margin_right = 150.0
+margin_bottom = 100.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0, 0, 0, 0.752941 )
+
+[node name="MenuSwitchContainer" type="MarginContainer" parent="Viewport/PauseMenuContainer"]
+margin_right = 150.0
+margin_bottom = 100.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 24
+custom_constants/margin_top = 10
+custom_constants/margin_left = 24
+custom_constants/margin_bottom = 10
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+active_control = "PauseMenu"
+
+[node name="PauseMenu" type="Control" parent="Viewport/PauseMenuContainer/MenuSwitchContainer"]
+margin_left = 24.0
+margin_top = 10.0
+margin_right = 126.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer"]
+margin_left = 36.0
+margin_right = 66.0
+margin_bottom = 8.0
+size_flags_horizontal = 4
+text = "Pause"
+align = 1
+
+[node name="ContinueButton" type="Button" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer"]
+margin_top = 12.0
+margin_right = 102.0
+margin_bottom = 25.0
+focus_neighbour_top = NodePath("../QuitGameButton")
+action_mode = 0
+text = "Continue"
+
+[node name="SceneSelectButton" type="Button" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer"]
+margin_top = 29.0
+margin_right = 102.0
+margin_bottom = 42.0
+action_mode = 0
+text = "Scene Select"
+
+[node name="MainMenuButton" type="Button" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer"]
+margin_top = 46.0
+margin_right = 102.0
+margin_bottom = 59.0
+action_mode = 0
+text = "Main Menu"
+
+[node name="QuitGameButton" type="Button" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer"]
+margin_top = 63.0
+margin_right = 102.0
+margin_bottom = 76.0
+focus_neighbour_bottom = NodePath("../ContinueButton")
+action_mode = 0
+text = "Quit Game"
+
+[node name="SceneSelect" type="Control" parent="Viewport/PauseMenuContainer/MenuSwitchContainer"]
+visible = false
+margin_left = 24.0
+margin_top = 10.0
+margin_right = 126.0
+margin_bottom = 90.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect/VBoxContainer"]
+margin_left = 17.0
+margin_right = 85.0
+margin_bottom = 8.0
+size_flags_horizontal = 4
+text = "Scene Select"
+align = 1
+
+[node name="SceneSelectVBox" type="VBoxContainer" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect/VBoxContainer"]
+margin_top = 12.0
+margin_right = 102.0
+margin_bottom = 76.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect/VBoxContainer"]
+margin_top = 80.0
+margin_right = 102.0
+margin_bottom = 93.0
+size_flags_horizontal = 3
+action_mode = 0
+text = "Back"
+
+[node name="UIPointer" type="TextureRect" parent="Viewport"]
+visible = false
+margin_right = 16.0
+margin_bottom = 16.0
+rect_pivot_offset = Vector2( 8, 8 )
+mouse_filter = 2
+texture = ExtResource( 8 )
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="ui_cancel" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu" to="." method="hide_pause_menu"]
+[connection signal="mouse_entered" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/ContinueButton" to="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/ContinueButton" method="grab_focus"]
+[connection signal="pressed" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/ContinueButton" to="." method="hide_pause_menu"]
+[connection signal="mouse_entered" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/SceneSelectButton" to="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/SceneSelectButton" method="grab_focus"]
+[connection signal="pressed" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/SceneSelectButton" to="Viewport/PauseMenuContainer/MenuSwitchContainer" method="set_active_control" binds= [ "SceneSelect" ]]
+[connection signal="mouse_entered" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/MainMenuButton" to="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/MainMenuButton" method="grab_focus"]
+[connection signal="pressed" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/MainMenuButton" to="." method="main_menu"]
+[connection signal="mouse_entered" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/QuitGameButton" to="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/QuitGameButton" method="grab_focus"]
+[connection signal="pressed" from="Viewport/PauseMenuContainer/MenuSwitchContainer/PauseMenu/VBoxContainer/QuitGameButton" to="." method="quit_game"]
+[connection signal="focus_entered" from="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect" to="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect/VBoxContainer/SceneSelectVBox" method="grab_focus"]
+[connection signal="ui_cancel" from="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect" to="Viewport/PauseMenuContainer/MenuSwitchContainer" method="set_active_control" binds= [ "PauseMenu" ]]
+[connection signal="scene_selected" from="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect/VBoxContainer/SceneSelectVBox" to="." method="scene_selected"]
+[connection signal="pressed" from="Viewport/PauseMenuContainer/MenuSwitchContainer/SceneSelect/VBoxContainer/Button" to="Viewport/PauseMenuContainer/MenuSwitchContainer" method="set_active_control" binds= [ "PauseMenu" ]]

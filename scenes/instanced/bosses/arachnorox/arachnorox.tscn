@@ -1,0 +1,4185 @@
+[gd_scene load_steps=79 format=2]
+
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_lower_mouth.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/treasure_kit/transform_watcher_2d.gd" type="Script" id=2]
+[ext_resource path="res://src/treasure_kit/ik_path.gd" type="Script" id=3]
+[ext_resource path="res://src/treasure_kit/path_transform.gd" type="Script" id=4]
+[ext_resource path="res://src/treasure_kit/bone_chain_2d.gd" type="Script" id=5]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_leg_segment.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_foot.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_joint.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/treasure_kit/sprite_path.gd" type="Script" id=9]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_flak_cannon_barrel.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_flak_cannon.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_head.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_face.tscn" type="PackedScene" id=13]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_eye.tscn" type="PackedScene" id=14]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_pupil.tscn" type="PackedScene" id=15]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_upper_mouth.tscn" type="PackedScene" id=16]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/arachnorox_state_machine.tscn" type="PackedScene" id=17]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/arachnorox.gd" type="Script" id=18]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/arachnorox_projectile_spread.tscn" type="PackedScene" id=19]
+[ext_resource path="res://scenes/instanced/weapon.tscn" type="PackedScene" id=20]
+[ext_resource path="res://src/treasure_kit/spring_2d.gd" type="Script" id=21]
+[ext_resource path="res://src/treasure_kit/float_property_integrator.gd" type="Script" id=22]
+[ext_resource path="res://src/treasure_kit/vector2_property_integrator.gd" type="Script" id=23]
+[ext_resource path="res://src/hurtbox.gd" type="Script" id=24]
+[ext_resource path="res://src/hitbox.gd" type="Script" id=25]
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/components/arachnorox_brain.tscn" type="PackedScene" id=26]
+[ext_resource path="res://resources/audio_stream_sample/bosses/arachnorox/flak_cannon.wav" type="AudioStream" id=27]
+[ext_resource path="res://resources/audio_stream_sample/bosses/arachnorox/creature_roar.wav" type="AudioStream" id=28]
+[ext_resource path="res://resources/audio_stream_sample/bosses/arachnorox/spin_up.wav" type="AudioStream" id=29]
+[ext_resource path="res://resources/audio_stream_sample/bosses/arachnorox/metal_impact.wav" type="AudioStream" id=30]
+[ext_resource path="res://resources/audio_stream_sample/bosses/arachnorox/soft_explosion.wav" type="AudioStream" id=31]
+[ext_resource path="res://resources/audio_stream_sample/bosses/arachnorox/hard_explosion.wav" type="AudioStream" id=32]
+[ext_resource path="res://resources/audio_stream_sample/bosses/arachnorox/spring.wav" type="AudioStream" id=33]
+[ext_resource path="res://src/treasure_kit/node_proxy.gd" type="Script" id=34]
+[ext_resource path="res://src/treasure_kit/debug_child_strip.gd" type="Script" id=35]
+[ext_resource path="res://src/treasure_kit/child_path_2d.gd" type="Script" id=36]
+[ext_resource path="res://resources/textures/spark.png" type="Texture" id=37]
+
+[sub_resource type="Animation" id=1]
+resource_name = "flak_cannon_sweep"
+length = 6.1
+step = 0.05
+tracks/0/type = "animation"
+tracks/0/path = NodePath("AnimationPlayers/Head")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"clips": PoolStringArray( "shake", "idle" ),
+"times": PoolRealArray( 0, 1 )
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayers/Head:playback_default_blend_time")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0.1, 0.5 ]
+}
+tracks/2/type = "animation"
+tracks/2/path = NodePath("AnimationPlayers/Mouth")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"clips": PoolStringArray( "open", "idle", "open", "idle" ),
+"times": PoolRealArray( 0, 1, 1.85, 4.1 )
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("AnimationPlayers/Mouth:playback_default_blend_time")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.9, 1.75 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0.1, 0.5, 0.2 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("..:barrel_state")
+tracks/4/interp = 0
+tracks/4/loop_wrap = false
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 1.25, 4.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 0 ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath("../Model/Weapons/LeftBarrel")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 2.65, 2.775, 2.9, 3.025 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "refire"
+}, {
+"args": [  ],
+"method": "refire"
+}, {
+"args": [  ],
+"method": "refire"
+}, {
+"args": [  ],
+"method": "refire"
+} ]
+}
+tracks/6/type = "method"
+tracks/6/path = NodePath("../Model/Weapons/RightBarrel")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 3.32228, 3.445, 3.57, 3.695 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "refire"
+}, {
+"args": [  ],
+"method": "refire"
+}, {
+"args": [  ],
+"method": "refire"
+}, {
+"args": [  ],
+"method": "refire"
+} ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("Springs/EyeEndpoint:source_node_paths")
+tracks/7/interp = 0
+tracks/7/loop_wrap = false
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 1, 3.15, 4.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("Controller/ControlPoints/RestTargets/EyeRest") ], [ NodePath("Controller/ControlPoints/MainSkeletonWrapper/LeftBarrelEndpoint") ], [ NodePath("Controller/ControlPoints/MainSkeletonWrapper/RightBarrelEndpoint") ], [ NodePath("Controller/ControlPoints/RestTargets/EyeRest") ] ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("Integrators/LeftBarrel/TargetIntegrator:target_path")
+tracks/8/interp = 0
+tracks/8/loop_wrap = false
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0, 1.25, 2.65, 4.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/RestTargets/BarrelRest"), NodePath("../../../ControlPoints/CannonSweepTargets/Left/Start"), NodePath("../../../ControlPoints/CannonSweepTargets/Left/End"), NodePath("../../../ControlPoints/RestTargets/BarrelRest") ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("Integrators/RightBarrel/TargetIntegrator:target_path")
+tracks/9/interp = 0
+tracks/9/loop_wrap = false
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0, 1.25, 3.3, 4.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/RestTargets/BarrelRest"), NodePath("../../../ControlPoints/CannonSweepTargets/Right/Start"), NodePath("../../../ControlPoints/CannonSweepTargets/Right/End"), NodePath("../../../ControlPoints/RestTargets/BarrelRest") ]
+}
+tracks/10/type = "method"
+tracks/10/path = NodePath("../ArachnoroxStateMachine")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 4.70053 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ "FlakCannonSweepFinished" ],
+"method": "fire_custom_event"
+} ]
+}
+tracks/11/type = "audio"
+tracks/11/path = NodePath("../Model/Audio/RoarAudio")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"clips": [ {
+"end_offset": 0.55,
+"start_offset": 0.0,
+"stream": ExtResource( 28 )
+} ],
+"times": PoolRealArray( 0 )
+}
+tracks/12/type = "audio"
+tracks/12/path = NodePath("../Model/Audio/LeftSpinUpAudio")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"clips": [ {
+"end_offset": 0.7,
+"start_offset": 0.0,
+"stream": ExtResource( 29 )
+} ],
+"times": PoolRealArray( 1 )
+}
+tracks/13/type = "audio"
+tracks/13/path = NodePath("../Model/Audio/RightSpinUpAudio")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"clips": [ {
+"end_offset": 0.7,
+"start_offset": 0.0,
+"stream": ExtResource( 29 )
+} ],
+"times": PoolRealArray( 1 )
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "idle"
+length = 2.0
+tracks/0/type = "animation"
+tracks/0/path = NodePath("AnimationPlayers/Head")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"clips": PoolStringArray( "idle" ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "animation"
+tracks/1/path = NodePath("AnimationPlayers/Mouth")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"clips": PoolStringArray( "idle" ),
+"times": PoolRealArray( 0 )
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("..:barrel_state")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "leg_strike"
+length = 3.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("NodeProxies/LegStrike/EndpointSpring:source_node_paths")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.9, 1.1, 1.3, 1.5, 1.7, 2.1, 2.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../NodeProxies/LegStrike/EndpointRestTarget") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/PreStrike") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/FirstStrike") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/PreStrike") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/SecondStrike") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/PreStrike") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/ThirdStrike") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/PreStrike") ], [ NodePath("../../../NodeProxies/LegStrike/EndpointRestTarget") ] ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("NodeProxies/LegStrike/EndpointSpring:spring_tension")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.9, 2.1, 2.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 5.0, 20.0, 5.0, 10.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("NodeProxies/LegStrike/HandleSpring:source_node_paths")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2, 1.1, 1.5, 2.1, 2.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../NodeProxies/LegStrike/HandleRestTarget") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/FirstHandle") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/SecondHandle") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/ThirdHandle") ], [ NodePath("../../../ControlPoints/LegStrikeTargets/CenterHandle") ], [ NodePath("../../../NodeProxies/LegStrike/HandleRestTarget") ] ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Springs/EyeEndpoint:source_node_paths")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1.1, 1.5, 2.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../ControlPoints/LegStrikeTargets/FirstStrike") ], [ NodePath("../../ControlPoints/LegStrikeTargets/SecondStrike") ], [ NodePath("../../ControlPoints/LegStrikeTargets/ThirdStrike") ], [ NodePath("../../ControlPoints/RestTargets/EyeRest") ] ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("NodeProxies/LegStrike/Hitbox:active")
+tracks/4/interp = 0
+tracks/4/loop_wrap = false
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.9, 1.1, 1.3, 1.5, 1.7, 1.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false, true, false, true, false ]
+}
+tracks/5/type = "animation"
+tracks/5/path = NodePath("AnimationPlayers/Mouth")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"clips": PoolStringArray( "closed", "open", "closed", "open", "closed", "open", "closed", "idle" ),
+"times": PoolRealArray( 0, 0.2, 0.9, 1.1, 1.3, 1.5, 1.7, 2.1 )
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("AnimationPlayers/Mouth:playback_default_blend_time")
+tracks/6/interp = 0
+tracks/6/loop_wrap = false
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0.1, 0.8, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0.4, 0.1, 0.4 ]
+}
+tracks/7/type = "animation"
+tracks/7/path = NodePath("AnimationPlayers/Head")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"clips": PoolStringArray( "idle" ),
+"times": PoolRealArray( 0 )
+}
+tracks/8/type = "method"
+tracks/8/path = NodePath("../ArachnoroxStateMachine")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 2.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ "LegStrikeFinished" ],
+"method": "fire_custom_event"
+} ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("NodeProxies/LegStrike/StrikeAudio:playing")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0, 0.9, 1.3, 1.7, 2.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, true, true, false ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("NodeProxies/LegStrike/WalkAudio:playing")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0, 2.5, 3.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("NodeProxies/LegStrike/SpringAudio:playing")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0, 0.2, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("../Model/Particles/LegStrike/CPUParticles:emitting")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0, 1, 1.1, 1.4, 1.5, 1.8, 1.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false, true, false, true, false ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "leg_swipe"
+length = 3.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("NodeProxies/LegSwipe/EndpointSpring:source_node_paths")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 1.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../NodeProxies/LegSwipe/EndpointRestTarget") ], [ NodePath("../../../ControlPoints/LegSwipeTargets/PreSwipe") ], [ NodePath("../../../NodeProxies/LegSwipe/EndpointRestTarget") ] ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("NodeProxies/LegSwipe/EndpointSpring:target_node_path")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.2, 1.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ NodePath("../../../NodeProxies/LegSwipe/Endpoint"), NodePath(""), NodePath("../../../NodeProxies/LegSwipe/Endpoint") ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("NodeProxies/LegSwipe/EndpointSpring:spring_tension")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1.2, 1.6, 2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 5.0, 10.0, 5.0, 10.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("NodeProxies/LegSwipe/HandleSpring:source_node_paths")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.2, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../NodeProxies/LegSwipe/HandleRestTarget") ], [ NodePath("../../../NodeProxies/LegSwipe/HandleCenterTarget") ], [ NodePath("../../../NodeProxies/LegSwipe/HandleRestTarget") ] ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("PathTransforms/LegSwipe:target_paths")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 1.2, 1.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("") ], [ NodePath("../../NodeProxies/LegSwipe/Endpoint") ], [ NodePath("") ] ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("PathTransforms/LegSwipe:sample_alpha")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 1.2, 2 ),
+"transitions": PoolRealArray( 1, 0.4, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0, 1.0 ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("NodeProxies/LegSwipe/Hitbox:active")
+tracks/6/interp = 0
+tracks/6/loop_wrap = false
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 1.2, 1.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/7/type = "animation"
+tracks/7/path = NodePath("AnimationPlayers/Head")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"clips": PoolStringArray( "idle" ),
+"times": PoolRealArray( 0 )
+}
+tracks/8/type = "animation"
+tracks/8/path = NodePath("AnimationPlayers/Mouth")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"clips": PoolStringArray( "idle", "closed", "open", "closed", "idle" ),
+"times": PoolRealArray( 0, 0.2, 1.2, 1.6, 2.4 )
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("AnimationPlayers/Mouth:playback_default_blend_time")
+tracks/9/interp = 0
+tracks/9/loop_wrap = false
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0.1, 1.1, 2.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0.4, 0.1, 0.4 ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("NodeProxies/LegSwipe/SpringAudio:playing")
+tracks/10/interp = 0
+tracks/10/loop_wrap = false
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0, 0.2, 1.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("NodeProxies/LegSwipe/SwipeAudio:playing")
+tracks/11/interp = 0
+tracks/11/loop_wrap = false
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0, 1.2, 1.3, 2.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, true, false ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("NodeProxies/LegSwipe/WalkAudio:playing")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0, 2.2, 3.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/13/type = "method"
+tracks/13/path = NodePath("..")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 1.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "update_swipe_target"
+} ]
+}
+tracks/14/type = "method"
+tracks/14/path = NodePath("../ArachnoroxStateMachine")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 2.6 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ "LegSwipeFinished" ],
+"method": "fire_custom_event"
+} ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "walk"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Springs/UpperLeftArm/Endpoint:source_node_paths")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/RestTargets/UpperLeftLegRest") ], [ NodePath("../../../ControlPoints/WalkTargets/UpperLeftLeg/StepUp") ], [ NodePath("../../../ControlPoints/WalkTargets/UpperLeftLeg/StepDown") ], [ NodePath("../../../ControlPoints/RestTargets/UpperLeftLegRest") ] ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Springs/LowerRightArm/Endpoint:source_node_paths")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.25, 0.3, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/RestTargets/LowerRightLegRest") ], [ NodePath("../../../ControlPoints/RestTargets/LowerRightLegRest") ], [ NodePath("../../../ControlPoints/WalkTargets/LowerRightLeg/StepUp") ], [ NodePath("../../../ControlPoints/WalkTargets/LowerRightLeg/StepDown") ], [ NodePath("../../../ControlPoints/RestTargets/LowerRightLegRest") ] ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Springs/LowerLeftArm/Endpoint:source_node_paths")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.4, 0.45, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/RestTargets/LowerLeftLegRest") ], [ NodePath("../../../ControlPoints/RestTargets/LowerLeftLegRest") ], [ NodePath("../../../ControlPoints/WalkTargets/LowerLeftLeg/StepUp") ], [ NodePath("../../../ControlPoints/WalkTargets/LowerLeftLeg/StepDown") ], [ NodePath("../../../ControlPoints/RestTargets/LowerLeftLegRest") ] ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Springs/UpperRightArm/Endpoint:source_node_paths")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.6, 0.65, 0.7, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/RestTargets/UpperRightLegRest") ], [ NodePath("../../../ControlPoints/RestTargets/UpperRightLegRest") ], [ NodePath("../../../ControlPoints/WalkTargets/UpperRightLeg/StepUp") ], [ NodePath("../../../ControlPoints/WalkTargets/UpperRightLeg/StepDown") ], [ NodePath("../../../ControlPoints/RestTargets/UpperRightLegRest") ] ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath("..")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.75 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "reset_walk"
+} ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath("../ArachnoroxStateMachine")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray(  ),
+"transitions": PoolRealArray(  ),
+"values": [  ]
+}
+tracks/6/type = "audio"
+tracks/6/path = NodePath("../Model/Audio/UpperLeftLegWalkAudio")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 32 )
+} ],
+"times": PoolRealArray( 0.1 )
+}
+tracks/7/type = "audio"
+tracks/7/path = NodePath("../Model/Audio/LowerRightLegWalkAudio")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 32 )
+} ],
+"times": PoolRealArray( 0.25 )
+}
+tracks/8/type = "audio"
+tracks/8/path = NodePath("../Model/Audio/LowerLeftLegWalkAudio")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 32 )
+} ],
+"times": PoolRealArray( 0.4 )
+}
+tracks/9/type = "audio"
+tracks/9/path = NodePath("../Model/Audio/UpperRightLegWalkAudio")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 32 )
+} ],
+"times": PoolRealArray( 0.55 )
+}
+
+[sub_resource type="Animation" id=6]
+length = 2.0
+loop = true
+step = 0.25
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("../Model/Skeletons/Main/Root:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 3.98011, 0.25, -3.98011, -4, -0.25, 0, 0.25, 0, 4, -0.25, 0, 0.25, 0, 0, -0.25, 4, 0.25, -4 ),
+"times": PoolRealArray( 0, 0.5, 1.5, 2 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("../Model/Skeletons/Main/Root:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 2, -0.25, 0, 0.25, 0, -2, -0.25, 0, 0.25, 0, 2, -0.25, 0, 0.25, 0, -2, -0.25, 0, 0.25, 0, 2, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5, 1, 1.5, 2 )
+}
+
+[sub_resource type="Animation" id=7]
+length = 0.3
+loop = true
+step = 0.3
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("../Model/Skeletons/Main/Root:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("../Model/Skeletons/Main/Root:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, 0, 0, 0, 0, -19.764, -0.0740048, -0.161507, 0.0740048, 0.161507, 17.3823, -0.0734441, 0.161505, 0.0734441, -0.161505, 0, 0, 0, 0, 0 ),
+"times": PoolRealArray( 0, 0.075, 0.225, 0.3 )
+}
+
+[sub_resource type="Animation" id=8]
+loop = true
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("../Model/Skeletons/Face/Root/Mouth/UpperMouth:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("../Model/Skeletons/Face/Root/Mouth/UpperMouth:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( -1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("../Model/Skeletons/Face/Root/Mouth/LowerMouth:position:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath("../Model/Skeletons/Face/Root/Mouth/LowerMouth:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=9]
+loop = true
+step = 0.25
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("../Model/Skeletons/Face/Root/Mouth/UpperMouth:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("../Model/Skeletons/Face/Root/Mouth/UpperMouth:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, -4, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5, 1 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("../Model/Skeletons/Face/Root/Mouth/LowerMouth:position:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath("../Model/Skeletons/Face/Root/Mouth/LowerMouth:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5, 1 )
+}
+
+[sub_resource type="Animation" id=10]
+loop = true
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("../Model/Skeletons/Face/Root/Mouth/UpperMouth:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("../Model/Skeletons/Face/Root/Mouth/UpperMouth:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( -5, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("../Model/Skeletons/Face/Root/Mouth/LowerMouth:position:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath("../Model/Skeletons/Face/Root/Mouth/LowerMouth:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 5, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=11]
+tracks/0/type = "value"
+tracks/0/path = NodePath("Integrators/LeftBarrel/Rotator:delta_value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 3,
+"values": [ 1800.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Integrators/RightBarrel/Rotator:delta_value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 3,
+"values": [ 1800.0 ]
+}
+
+[sub_resource type="Animation" id=12]
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Integrators/LeftBarrel/Rotator:delta_value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 2 ),
+"transitions": PoolRealArray( 1 ),
+"update": 3,
+"values": [ 180.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Integrators/RightBarrel/Rotator:delta_value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 2 ),
+"transitions": PoolRealArray( 1 ),
+"update": 3,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=13]
+tracks/0/type = "value"
+tracks/0/path = NodePath("ControlPoints/CannonSweepTargets/Left/Start:position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -250, 90 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ControlPoints/CannonSweepTargets/Left/End:position")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 250, 90 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+tracks/0/type = "value"
+tracks/0/path = NodePath("ControlPoints/CannonSweepTargets/Left/Start:position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 250, 90 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ControlPoints/CannonSweepTargets/Left/End:position")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -250, 90 ) ]
+}
+
+[sub_resource type="Animation" id=15]
+tracks/0/type = "value"
+tracks/0/path = NodePath("ControlPoints/CannonSweepTargets/Right/Start:position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -250, 90 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ControlPoints/CannonSweepTargets/Right/End:position")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 250, 90 ) ]
+}
+
+[sub_resource type="Animation" id=16]
+tracks/0/type = "value"
+tracks/0/path = NodePath("ControlPoints/CannonSweepTargets/Right/Start:position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 250, 90 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ControlPoints/CannonSweepTargets/Right/End:position")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -250, 90 ) ]
+}
+
+[sub_resource type="Animation" id=17]
+tracks/0/type = "value"
+tracks/0/path = NodePath("NodeProxies/LegStrike/EndpointSpring:proxy_target")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../Springs/LowerLeftArm/Endpoint") ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("NodeProxies/LegStrike/HandleSpring:proxy_target")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../Springs/LowerLeftArm/Handle") ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("NodeProxies/LegStrike/Hitbox:proxy_target")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Hitboxes/LowerLeftLegHitbox") ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("NodeProxies/LegStrike/EndpointRestTarget:proxy_target")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/RestTargets/LowerLeftLegRest") ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("NodeProxies/LegStrike/HandleRestTarget:proxy_target")
+tracks/4/interp = 0
+tracks/4/loop_wrap = false
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/LowerLeftArmEndpoint/LowerLeftArmHandleTarget") ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("NodeProxies/LegStrike/SpringAudio:proxy_target")
+tracks/5/interp = 0
+tracks/5/loop_wrap = false
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/LowerLeftJointSpringAudio") ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("NodeProxies/LegStrike/StrikeAudio:proxy_target")
+tracks/6/interp = 0
+tracks/6/loop_wrap = false
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/LowerLeftLegStrikeAudio") ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("NodeProxies/LegStrike/WalkAudio:proxy_target")
+tracks/7/interp = 0
+tracks/7/loop_wrap = false
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/LowerLeftLegWalkAudio") ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("Springs/LowerRightArm/Endpoint:source_node_paths")
+tracks/8/interp = 0
+tracks/8/loop_wrap = false
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/RestTargets/LowerRightLegRest") ] ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("Springs/LowerRightArm/Handle:source_node_paths")
+tracks/9/interp = 0
+tracks/9/loop_wrap = false
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/LowerRightArmEndpoint/LowerRightArmHandleTarget") ] ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("PathTransforms/LegStrikeParticles:source_path")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../IKPaths/LowerLeftArmIKPath") ]
+}
+
+[sub_resource type="Animation" id=18]
+tracks/0/type = "value"
+tracks/0/path = NodePath("NodeProxies/LegStrike/EndpointSpring:proxy_target")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../Springs/LowerRightArm/Endpoint") ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("NodeProxies/LegStrike/HandleSpring:proxy_target")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../Springs/LowerRightArm/Handle") ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("NodeProxies/LegStrike/Hitbox:proxy_target")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Hitboxes/LowerRightLegHitbox") ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("NodeProxies/LegStrike/EndpointRestTarget:proxy_target")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/RestTargets/LowerRightLegRest") ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("NodeProxies/LegStrike/HandleRestTarget:proxy_target")
+tracks/4/interp = 0
+tracks/4/loop_wrap = false
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/LowerRightArmEndpoint/LowerRightArmHandleTarget") ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("NodeProxies/LegStrike/SpringAudio:proxy_target")
+tracks/5/interp = 0
+tracks/5/loop_wrap = false
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/LowerRightJointSpringAudio") ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("NodeProxies/LegStrike/StrikeAudio:proxy_target")
+tracks/6/interp = 0
+tracks/6/loop_wrap = false
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/LowerRightLegStrikeAudio") ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("NodeProxies/LegStrike/WalkAudio:proxy_target")
+tracks/7/interp = 0
+tracks/7/loop_wrap = false
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/LowerRightLegWalkAudio") ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("Springs/LowerLeftArm/Endpoint:source_node_paths")
+tracks/8/interp = 0
+tracks/8/loop_wrap = false
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/RestTargets/LowerLeftLegRest") ] ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("Springs/LowerLeftArm/Handle:source_node_paths")
+tracks/9/interp = 0
+tracks/9/loop_wrap = false
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/LowerLeftArmEndpoint/LowerLeftArmHandleTarget") ] ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("PathTransforms/LegStrikeParticles:source_path")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../IKPaths/LowerRightArmIKPath") ]
+}
+
+[sub_resource type="Animation" id=19]
+tracks/0/type = "value"
+tracks/0/path = NodePath("ControlPoints/LegStrikeTargets/FirstStrike:position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -64, 82 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ControlPoints/LegStrikeTargets/ThirdStrike:position")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 64, 82 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ControlPoints/LegStrikeTargets/FirstHandle:position")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 20, -25 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("ControlPoints/LegStrikeTargets/ThirdHandle:position")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -20, -25 ) ]
+}
+
+[sub_resource type="Animation" id=20]
+tracks/0/type = "value"
+tracks/0/path = NodePath("ControlPoints/LegStrikeTargets/FirstStrike:position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 64, 82 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ControlPoints/LegStrikeTargets/ThirdStrike:position")
+tracks/1/interp = 0
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -64, 82 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ControlPoints/LegStrikeTargets/FirstHandle:position")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -20, -25 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("ControlPoints/LegStrikeTargets/ThirdHandle:position")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 20, -25 ) ]
+}
+
+[sub_resource type="Animation" id=21]
+tracks/0/type = "value"
+tracks/0/path = NodePath("NodeProxies/LegSwipe/Endpoint:proxy_target")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/UpperLeftArmEndpoint") ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("NodeProxies/LegSwipe/EndpointSpring:proxy_target")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../Springs/UpperLeftArm/Endpoint") ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("NodeProxies/LegSwipe/HandleSpring:proxy_target")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../Springs/UpperLeftArm/Handle") ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("NodeProxies/LegSwipe/Hitbox:proxy_target")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Hitboxes/UpperLeftLegHitbox") ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("NodeProxies/LegSwipe/SpringAudio:proxy_target")
+tracks/4/interp = 0
+tracks/4/loop_wrap = false
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/UpperLeftJointSpringAudio") ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("NodeProxies/LegSwipe/SwipeAudio:proxy_target")
+tracks/5/interp = 0
+tracks/5/loop_wrap = false
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/UpperLeftLegSwipeAudio") ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("NodeProxies/LegSwipe/WalkAudio:proxy_target")
+tracks/6/interp = 0
+tracks/6/loop_wrap = false
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/UpperLeftLegWalkAudio") ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("NodeProxies/LegSwipe/EndpointRestTarget:proxy_target")
+tracks/7/interp = 0
+tracks/7/loop_wrap = false
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/RestTargets/UpperLeftLegRest") ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("NodeProxies/LegSwipe/HandleRestTarget:proxy_target")
+tracks/8/interp = 0
+tracks/8/loop_wrap = false
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/UpperLeftArmEndpoint/UpperLeftArmHandleTarget") ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("NodeProxies/LegSwipe/HandleCenterTarget:proxy_target")
+tracks/9/interp = 0
+tracks/9/loop_wrap = false
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/UpperLeftArmEndpoint") ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("Springs/UpperRightArm/Endpoint:source_node_paths")
+tracks/10/interp = 0
+tracks/10/loop_wrap = false
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/RestTargets/UpperRightLegRest") ] ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("Springs/UpperRightArm/Endpoint:target_node_path")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/UpperRightArmEndpoint") ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("Springs/UpperRightArm/Handle:source_node_paths")
+tracks/12/interp = 0
+tracks/12/loop_wrap = false
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/UpperRightArmEndpoint/UpperRightArmHandleTarget") ] ]
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("ControlPoints/LegSwipeTargets/PreSwipe:position")
+tracks/13/interp = 0
+tracks/13/loop_wrap = false
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -110, -85 ) ]
+}
+tracks/14/type = "value"
+tracks/14/path = NodePath("ControlPoints/LegSwipeTargets/PostSwipe:position")
+tracks/14/interp = 0
+tracks/14/loop_wrap = false
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -192, 70 ) ]
+}
+tracks/15/type = "method"
+tracks/15/path = NodePath("..")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "reset_swipe_targets"
+} ]
+}
+
+[sub_resource type="Animation" id=22]
+tracks/0/type = "value"
+tracks/0/path = NodePath("NodeProxies/LegSwipe/EndpointSpring:proxy_target")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../Springs/UpperRightArm/Endpoint") ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("NodeProxies/LegSwipe/Endpoint:proxy_target")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/UpperRightArmEndpoint") ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("NodeProxies/LegSwipe/HandleSpring:proxy_target")
+tracks/2/interp = 0
+tracks/2/loop_wrap = false
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../Springs/UpperRightArm/Handle") ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("NodeProxies/LegSwipe/Hitbox:proxy_target")
+tracks/3/interp = 0
+tracks/3/loop_wrap = false
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Hitboxes/UpperRightLegHitbox") ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("NodeProxies/LegSwipe/SpringAudio:proxy_target")
+tracks/4/interp = 0
+tracks/4/loop_wrap = false
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/UpperRightJointSpringAudio") ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("NodeProxies/LegSwipe/SwipeAudio:proxy_target")
+tracks/5/interp = 0
+tracks/5/loop_wrap = false
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/UpperRightLegSwipeAudio") ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("NodeProxies/LegSwipe/WalkAudio:proxy_target")
+tracks/6/interp = 0
+tracks/6/loop_wrap = false
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../../Model/Audio/UpperRightLegWalkAudio") ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("NodeProxies/LegSwipe/EndpointRestTarget:proxy_target")
+tracks/7/interp = 0
+tracks/7/loop_wrap = false
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/RestTargets/UpperRightLegRest") ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("NodeProxies/LegSwipe/HandleRestTarget:proxy_target")
+tracks/8/interp = 0
+tracks/8/loop_wrap = false
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/UpperRightArmEndpoint/UpperRightArmHandleTarget") ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("NodeProxies/LegSwipe/HandleCenterTarget:proxy_target")
+tracks/9/interp = 0
+tracks/9/loop_wrap = false
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/UpperRightArmEndpoint") ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("Springs/UpperLeftArm/Endpoint:source_node_paths")
+tracks/10/interp = 0
+tracks/10/loop_wrap = false
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/RestTargets/UpperLeftLegRest") ] ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("Springs/UpperLeftArm/Endpoint:target_node_path")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ NodePath("../../../ControlPoints/UpperLeftArmEndpoint") ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("Springs/UpperLeftArm/Handle:source_node_paths")
+tracks/12/interp = 0
+tracks/12/loop_wrap = false
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ [ NodePath("../../../ControlPoints/UpperLeftArmEndpoint/UpperLeftArmHandleTarget") ] ]
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("ControlPoints/LegSwipeTargets/PreSwipe:position")
+tracks/13/interp = 0
+tracks/13/loop_wrap = false
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 110, -85 ) ]
+}
+tracks/14/type = "value"
+tracks/14/path = NodePath("ControlPoints/LegSwipeTargets/PostSwipe:position")
+tracks/14/interp = 0
+tracks/14/loop_wrap = false
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 192, 70 ) ]
+}
+tracks/15/type = "method"
+tracks/15/path = NodePath("..")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "reset_swipe_targets"
+} ]
+}
+
+[sub_resource type="Curve2D" id=23]
+_data = {
+"points": PoolVector2Array( 0, 0, -35, -28, 0, 0, 0, 50, 0, 0, -114, -45 )
+}
+
+[sub_resource type="Curve2D" id=24]
+_data = {
+"points": PoolVector2Array( 0, 0, 35, -28, 0, 0, 0, 50, 0, 0, 114, -45 )
+}
+
+[sub_resource type="Curve2D" id=25]
+_data = {
+"points": PoolVector2Array( 0, 0, -64, -22, 0, 0, 0, -50, 0, 0, -102, 42 )
+}
+
+[sub_resource type="Curve2D" id=26]
+_data = {
+"points": PoolVector2Array( 0, 0, 64, -22, 0, 0, -3.05176e-05, -50, 0, 0, 102, 42 )
+}
+
+[sub_resource type="Curve2D" id=27]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 102 )
+}
+
+[sub_resource type="Curve2D" id=28]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -24, 102 )
+}
+
+[sub_resource type="Curve2D" id=29]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 106 )
+}
+
+[sub_resource type="Curve2D" id=30]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -72, 106 )
+}
+
+[sub_resource type="CircleShape2D" id=31]
+radius = 16.0
+
+[sub_resource type="Curve2D" id=32]
+_data = {
+"points": PoolVector2Array( 59, 1, -161, -26.7298, -110, -85, 0, -43.4744, 0, 40, -271, 0, -44.5966, 4.00001, 63, -7.62939e-06, -192, 70, 59, 1, -161, -26.7298, -110, -85 )
+}
+
+[sub_resource type="Curve2D" id=33]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, -46, 0, 44, 0, 46, 59, 0, 0, 0, 0, 90, 0 )
+}
+
+[sub_resource type="Curve2D" id=34]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, -38, 0.0770264, 41, 0.0770264, 39, 54.5256, 0, 0, 0, 0, 80, 0 )
+}
+
+[sub_resource type="Curve2D" id=35]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, -41.9316, 0, 41, 0, 42.0896, -56, 0.226669, 7.62939e-06, 0.0684052, 0, 83.0896, 0 )
+}
+
+[sub_resource type="Curve2D" id=36]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, -46, -0.245918, 43, -0.245911, 46, -50.2262, 0, 0, 0, 0, 89, 0 )
+}
+
+[sub_resource type="CircleShape2D" id=37]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id=38]
+radius = 12.0
+
+[sub_resource type="CircleShape2D" id=39]
+radius = 18.0
+
+[sub_resource type="Curve" id=40]
+_data = [ Vector2( 0, 1 ), 0.0, -9.05e-08, 0, 0, Vector2( 1, 0 ), -3.105, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=41]
+offsets = PoolRealArray( 0.35786, 0.7, 1 )
+colors = PoolColorArray( 1, 0.811765, 0.47451, 1, 1, 0.4, 0, 1, 1, 0.4, 0, 0 )
+
+[node name="Arachnorox" type="Node2D"]
+script = ExtResource( 18 )
+max_health = 3584
+
+[node name="ArachnoroxStateMachine" parent="." instance=ExtResource( 17 )]
+
+[node name="Controller" type="Node2D" parent="."]
+
+[node name="AnimationPlayers" type="Node2D" parent="Controller"]
+
+[node name="Root" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "idle"
+playback_process_mode = 0
+method_call_mode = 1
+anims/flak_cannon_sweep = SubResource( 1 )
+anims/idle = SubResource( 2 )
+anims/leg_strike = SubResource( 3 )
+anims/leg_swipe = SubResource( 4 )
+anims/walk = SubResource( 5 )
+
+[node name="Head" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "idle"
+playback_process_mode = 0
+playback_default_blend_time = 0.1
+anims/idle = SubResource( 6 )
+anims/shake = SubResource( 7 )
+
+[node name="Mouth" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "idle"
+playback_process_mode = 0
+playback_default_blend_time = 0.1
+anims/closed = SubResource( 8 )
+anims/idle = SubResource( 9 )
+anims/open = SubResource( 10 )
+
+[node name="Barrel" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "idle"
+playback_process_mode = 0
+method_call_mode = 1
+anims/active = SubResource( 11 )
+anims/idle = SubResource( 12 )
+
+[node name="LeftBarrelPattern" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "left_to_right"
+playback_process_mode = 0
+method_call_mode = 1
+anims/left_to_right = SubResource( 13 )
+anims/right_to_left = SubResource( 14 )
+
+[node name="RightBarrelPattern" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "right_to_left"
+playback_process_mode = 0
+method_call_mode = 1
+anims/left_to_right = SubResource( 15 )
+anims/right_to_left = SubResource( 16 )
+
+[node name="LegStrikeSide" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "left"
+playback_process_mode = 0
+method_call_mode = 1
+anims/left = SubResource( 17 )
+anims/right = SubResource( 18 )
+
+[node name="LegStrikePattern" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "left_to_right"
+playback_process_mode = 0
+method_call_mode = 1
+anims/left_to_right = SubResource( 19 )
+anims/right_to_left = SubResource( 20 )
+
+[node name="LegSwipeSide" type="AnimationPlayer" parent="Controller/AnimationPlayers"]
+root_node = NodePath("../..")
+autoplay = "left"
+playback_process_mode = 0
+method_call_mode = 1
+anims/left = SubResource( 21 )
+anims/right = SubResource( 22 )
+
+[node name="TransformWatchers" type="Node2D" parent="Controller"]
+
+[node name="UpperLeftArm" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root/UpperLeftArm")
+target_paths = [ NodePath("../../../Model/Skeletons/UpperLeftArm"), NodePath("../../ControlPoints/UpperLeftArmWrapper"), NodePath("../../../Model/ProjectileBlockers/UpperLeftJointBlocker"), NodePath("../../../Model/Audio/UpperLeftJointSpringAudio") ]
+transform_flags = 1
+
+[node name="UpperRightArm" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root/UpperRightArm")
+target_paths = [ NodePath("../../../Model/Skeletons/UpperRightArm"), NodePath("../../ControlPoints/UpperRightArmWrapper"), NodePath("../../../Model/ProjectileBlockers/UpperRightJointBlocker"), NodePath("../../../Model/Audio/UpperRightJointSpringAudio") ]
+transform_flags = 1
+
+[node name="LowerLeftArm" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root/LowerLeftArm")
+target_paths = [ NodePath("../../../Model/Skeletons/LowerLeftArm"), NodePath("../../ControlPoints/LowerLeftArmWrapper") ]
+transform_flags = 1
+
+[node name="LowerRightArm" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root/LowerRightArm")
+target_paths = [ NodePath("../../../Model/Skeletons/LowerRightArm"), NodePath("../../ControlPoints/LowerRightArmWrapper") ]
+transform_flags = 1
+
+[node name="MainSkeleton" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main")
+target_paths = [ NodePath("../../ControlPoints/MainSkeletonWrapper"), NodePath("../../../Model/Audio/RoarSound"), NodePath("../../../Model/Audio/SpinUpSound") ]
+transform_flags = 1
+
+[node name="HeadTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root")
+target_paths = [ NodePath("../../../Model/Visuals/Head") ]
+transform_flags = 1
+
+[node name="FaceTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Face/Root")
+target_paths = [ NodePath("../../../Model/Visuals/Face") ]
+transform_flags = 1
+
+[node name="LeftEyeTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Face/Root/LeftEye")
+target_paths = [ NodePath("../../../Model/Visuals/LeftEye"), NodePath("../../../Model/Hurtboxes/LeftEyeHurtbox") ]
+transform_flags = 1
+
+[node name="RightEyeTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Face/Root/RightEye")
+target_paths = [ NodePath("../../../Model/Visuals/RightEye"), NodePath("../../../Model/Hurtboxes/RightEyeHurtbox") ]
+transform_flags = 1
+
+[node name="LeftPupilTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Face/Root/LeftEye/LeftPupil")
+target_paths = [ NodePath("../../../Model/Visuals/LeftPupil") ]
+transform_flags = 1
+
+[node name="RightPupilTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Face/Root/RightEye/RightPupil")
+target_paths = [ NodePath("../../../Model/Visuals/RightPupil") ]
+transform_flags = 1
+
+[node name="UpperMouthTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Face/Root/Mouth/UpperMouth")
+target_paths = [ NodePath("../../../Model/Visuals/UpperMouth") ]
+transform_flags = 1
+
+[node name="LowerMouthTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Face/Root/Mouth/LowerMouth")
+target_paths = [ NodePath("../../../Model/Visuals/LowerMouth") ]
+transform_flags = 1
+
+[node name="LeftFlakCannonTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root/LeftFlakCannon")
+target_paths = [ NodePath("../../../Model/Visuals/LeftFlakCannon"), NodePath("../../../Model/Audio/LeftSpinUpSound") ]
+transform_flags = 1
+
+[node name="RightFlakCannonTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root/RightFlakCannon")
+target_paths = [ NodePath("../../../Model/Visuals/RightFlakCannon"), NodePath("../../../Model/Audio/RightSpinUpSound") ]
+transform_flags = 1
+
+[node name="LeftBarrelTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root/LeftFlakCannon/LeftBarrel")
+target_paths = [ NodePath("../../../Model/Weapons/LeftBarrel") ]
+transform_flags = 3
+
+[node name="RightBarrelTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Main/Root/RightFlakCannon/RightBarrel")
+target_paths = [ NodePath("../../../Model/Weapons/RightBarrel") ]
+transform_flags = 3
+
+[node name="BrainTransform" type="Node2D" parent="Controller/TransformWatchers"]
+script = ExtResource( 2 )
+source_path = NodePath("../../../Model/Skeletons/Face/Root/Brain")
+target_paths = [ NodePath("../../../Model/Visuals/Brain"), NodePath("../../../Model/Hurtboxes/BrainHurtbox") ]
+transform_flags = 3
+
+[node name="IKPaths" type="Node2D" parent="Controller"]
+z_index = 1
+
+[node name="UpperLeftArmIKPath" type="Path2D" parent="Controller/IKPaths"]
+position = Vector2( -61, -53 )
+curve = SubResource( 23 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_bone_path = NodePath("../../../Model/Skeletons/UpperLeftArm/BoneChain")
+end_bone_path = NodePath("../../../Model/Skeletons/UpperLeftArm/BoneChain/Joint1/Joint2/Joint3/Joint4")
+endpoint_path = NodePath("../../ControlPoints/UpperLeftArmEndpoint")
+out_handle_path = NodePath("../../ControlPoints/UpperLeftArmWrapper/UpperLeftArmOutHandle")
+in_handle_path = NodePath("../../ControlPoints/UpperLeftArmEndpoint/UpperLeftArmInHandle")
+max_length = -1.0
+_cached_endpoint_position = Vector2( -175, -98 )
+_cached_handle_position = null
+
+[node name="UpperRightArmIKPath" type="Path2D" parent="Controller/IKPaths"]
+position = Vector2( 61, -53 )
+curve = SubResource( 24 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_bone_path = NodePath("../../../Model/Skeletons/UpperRightArm/BoneChain")
+end_bone_path = NodePath("../../../Model/Skeletons/UpperRightArm/BoneChain/Joint1/Joint2/Joint3/Joint4")
+endpoint_path = NodePath("../../ControlPoints/UpperRightArmEndpoint")
+out_handle_path = NodePath("../../ControlPoints/UpperRightArmWrapper/UpperRightArmOutHandle")
+in_handle_path = NodePath("../../ControlPoints/UpperRightArmEndpoint/UpperRightArmInHandle")
+max_length = -1.0
+_cached_endpoint_position = Vector2( 175, -98 )
+_cached_handle_position = null
+
+[node name="LowerLeftArmIKPath" type="Path2D" parent="Controller/IKPaths"]
+position = Vector2( -48, 40 )
+curve = SubResource( 25 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_bone_path = NodePath("../../../Model/Skeletons/LowerLeftArm/BoneChain")
+end_bone_path = NodePath("../../../Model/Skeletons/LowerLeftArm/BoneChain/Joint1/Joint2/Joint3/Joint4")
+endpoint_path = NodePath("../../ControlPoints/LowerLeftArmEndpoint")
+out_handle_path = NodePath("../../ControlPoints/LowerLeftArmWrapper/LowerLeftArmOutHandle")
+in_handle_path = NodePath("../../ControlPoints/LowerLeftArmEndpoint/LowerLeftArmInHandle")
+max_length = -1.0
+_cached_endpoint_position = Vector2( -150, 82 )
+_cached_handle_position = null
+
+[node name="LowerRightArmIKPath" type="Path2D" parent="Controller/IKPaths"]
+position = Vector2( 48, 40 )
+curve = SubResource( 26 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_bone_path = NodePath("../../../Model/Skeletons/LowerRightArm/BoneChain")
+end_bone_path = NodePath("../../../Model/Skeletons/LowerRightArm/BoneChain/Joint1/Joint2/Joint3/Joint4")
+endpoint_path = NodePath("../../ControlPoints/LowerRightArmEndpoint")
+out_handle_path = NodePath("../../ControlPoints/LowerRightArmWrapper/LowerRightArmOutHandle")
+in_handle_path = NodePath("../../ControlPoints/LowerRightArmEndpoint/LowerRightArmInHandle")
+max_length = -1.0
+_cached_endpoint_position = Vector2( 150, 82 )
+_cached_handle_position = null
+
+[node name="LeftEyeIKPath" type="Path2D" parent="Controller/IKPaths"]
+position = Vector2( -24, -12 )
+curve = SubResource( 27 )
+script = ExtResource( 3 )
+start_bone_path = NodePath("../../../Model/Skeletons/Face/Root/LeftEye")
+end_bone_path = NodePath("../../../Model/Skeletons/Face/Root/LeftEye/LeftPupil")
+endpoint_path = NodePath("../../ControlPoints/MainSkeletonWrapper/EyeEndpoint")
+out_handle_path = NodePath("")
+in_handle_path = NodePath("")
+max_length = 3.0
+_cached_endpoint_position = Vector2( -1.4013e-45, 90 )
+_cached_handle_position = null
+
+[node name="RightEyeIKPath" type="Path2D" parent="Controller/IKPaths"]
+position = Vector2( 24, -12 )
+curve = SubResource( 28 )
+script = ExtResource( 3 )
+start_bone_path = NodePath("../../../Model/Skeletons/Face/Root/RightEye")
+end_bone_path = NodePath("../../../Model/Skeletons/Face/Root/RightEye/RightPupil")
+endpoint_path = NodePath("../../ControlPoints/MainSkeletonWrapper/EyeEndpoint")
+out_handle_path = NodePath("")
+in_handle_path = NodePath("")
+max_length = 3.0
+_cached_endpoint_position = Vector2( -1.4013e-45, 90 )
+_cached_handle_position = null
+
+[node name="LeftBarrelIKPath" type="Path2D" parent="Controller/IKPaths"]
+position = Vector2( -72, -4 )
+curve = SubResource( 29 )
+script = ExtResource( 3 )
+start_bone_path = NodePath("../../../Model/Skeletons/Main/Root/LeftFlakCannon")
+end_bone_path = NodePath("../../../Model/Skeletons/Main/Root/LeftFlakCannon/LeftBarrel")
+endpoint_path = NodePath("../../ControlPoints/MainSkeletonWrapper/LeftBarrelEndpoint")
+out_handle_path = NodePath("")
+in_handle_path = NodePath("")
+max_length = 5.0
+_cached_endpoint_position = Vector2( 4.2039e-45, 102 )
+_cached_handle_position = null
+
+[node name="RightBarrelIKPath" type="Path2D" parent="Controller/IKPaths"]
+position = Vector2( 72, -4 )
+curve = SubResource( 30 )
+script = ExtResource( 3 )
+start_bone_path = NodePath("../../../Model/Skeletons/Main/Root/RightFlakCannon")
+end_bone_path = NodePath("../../../Model/Skeletons/Main/Root/RightFlakCannon/RightBarrel")
+endpoint_path = NodePath("../../ControlPoints/MainSkeletonWrapper/RightBarrelEndpoint")
+out_handle_path = NodePath("")
+in_handle_path = NodePath("")
+max_length = 5.0
+_cached_endpoint_position = Vector2( 4.2039e-45, 102 )
+_cached_handle_position = null
+
+[node name="PathTransforms" type="Node2D" parent="Controller"]
+
+[node name="UpperLeftFoot" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/UpperLeftArmIKPath")
+target_paths = [ NodePath("../../../Model/Visuals/UpperLeftFoot"), NodePath("../../../Model/Hitboxes/UpperLeftLegHitbox"), NodePath("../../../Model/ProjectileBlockers/UpperLeftFootBlocker"), NodePath("../../../Model/Audio/UpperLeftLegStrikeSound"), NodePath("../../../Model/Audio/UpperLeftLegSwipeSound") ]
+sample_mode = 1
+sample_alpha = 1.0
+look_ahead = 12.0
+transform_flags = 3
+
+[node name="UpperRightFoot" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/UpperRightArmIKPath")
+target_paths = [ NodePath("../../../Model/Visuals/UpperRightFoot"), NodePath("../../../Model/Hitboxes/UpperRightLegHitbox"), NodePath("../../../Model/ProjectileBlockers/UpperRightFootBlocker"), NodePath("../../../Model/Audio/UpperRightLegStrikeSound"), NodePath("../../../Model/Audio/UpperRightLegSwipeSound") ]
+sample_mode = 1
+sample_alpha = 1.0
+look_ahead = 12.0
+transform_flags = 3
+
+[node name="LowerLeftFoot" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/LowerLeftArmIKPath")
+target_paths = [ NodePath("../../../Model/Visuals/LowerLeftFoot"), NodePath("../../../Model/Hitboxes/LowerLeftLegHitbox"), NodePath("../../../Model/ProjectileBlockers/LowerLeftFootBlocker"), NodePath("../../../Model/Audio/LowerLeftLegStrikeSound") ]
+sample_mode = 1
+sample_alpha = 1.0
+look_ahead = 12.0
+transform_flags = 3
+
+[node name="LowerRightFoot" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/LowerRightArmIKPath")
+target_paths = [ NodePath("../../../Model/Visuals/LowerRightFoot"), NodePath("../../../Model/Hitboxes/LowerRightLegHitbox"), NodePath("../../../Model/ProjectileBlockers/LowerRightFootBlocker"), NodePath("../../../Model/Audio/LowerRightLegStrikeSound") ]
+sample_mode = 1
+sample_alpha = 1.0
+look_ahead = 12.0
+transform_flags = 3
+
+[node name="UpperLeftJoint" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/UpperLeftArmIKPath")
+target_paths = [ NodePath("../../../Model/Visuals/UpperLeftJoint") ]
+sample_mode = 0
+sample_alpha = 0.0
+look_ahead = 1.0
+transform_flags = 3
+
+[node name="UpperRightJoint" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/UpperRightArmIKPath")
+target_paths = [ NodePath("../../../Model/Visuals/UpperRightJoint") ]
+sample_mode = 0
+sample_alpha = 0.0
+look_ahead = 1.0
+transform_flags = 3
+
+[node name="LowerLeftJoint" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/LowerLeftArmIKPath")
+target_paths = [ NodePath("../../../Model/Visuals/LowerLeftJoint") ]
+sample_mode = 0
+sample_alpha = 0.0
+look_ahead = 1.0
+transform_flags = 3
+
+[node name="LowerRightJoint" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/LowerRightArmIKPath")
+target_paths = [ NodePath("../../../Model/Visuals/LowerRightJoint") ]
+sample_mode = 0
+sample_alpha = 0.0
+look_ahead = 1.0
+transform_flags = 3
+
+[node name="LegSwipe" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../ControlPoints/LegSwipeTargets")
+target_paths = [ NodePath("") ]
+sample_mode = 1
+sample_alpha = 0.0
+look_ahead = 1.0
+transform_flags = 1
+
+[node name="LegStrikeParticles" type="Node2D" parent="Controller/PathTransforms"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+source_path = NodePath("../../IKPaths/LowerLeftArmIKPath")
+target_paths = [ NodePath("../../../Model/Particles/LegStrike") ]
+sample_mode = 1
+sample_alpha = 1.0
+look_ahead = 1.0
+transform_flags = 3
+
+[node name="Springs" type="Node2D" parent="Controller"]
+
+[node name="MainSkeleton" type="Node2D" parent="Controller/Springs"]
+position = Vector2( 0.667419, 0 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../ControlPoints/UpperLeftArmEndpoint"), NodePath("../../ControlPoints/UpperRightArmEndpoint"), NodePath("../../ControlPoints/LowerLeftArmEndpoint"), NodePath("../../ControlPoints/LowerRightArmEndpoint") ]
+target_node_path = NodePath("../../../Model/Skeletons/Main")
+spring_tension = 8.0
+rest_offset = Vector2( 0, 20 )
+length_limit = -1.0
+
+[node name="Face" type="Node2D" parent="Controller/Springs"]
+position = Vector2( 0.667419, 0 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../Model/Skeletons/Main/Root") ]
+target_node_path = NodePath("../../../Model/Skeletons/Face")
+spring_tension = 8.0
+rest_offset = Vector2( 0, 0 )
+length_limit = 4.0
+
+[node name="EyeEndpoint" type="Node2D" parent="Controller/Springs"]
+position = Vector2( 0.667419, 0 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("Controller/ControlPoints/RestTargets/EyeRest") ]
+target_node_path = NodePath("../../ControlPoints/MainSkeletonWrapper/EyeEndpoint")
+spring_tension = 20.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="UpperLeftArm" type="Node2D" parent="Controller/Springs"]
+
+[node name="Endpoint" type="Node2D" parent="Controller/Springs/UpperLeftArm"]
+position = Vector2( -175, -98 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../ControlPoints/RestTargets/UpperLeftLegRest") ]
+target_node_path = NodePath("../../../NodeProxies/LegSwipe/Endpoint")
+spring_tension = 5.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="Handle" type="Node2D" parent="Controller/Springs/UpperLeftArm"]
+position = Vector2( -175, -48 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../NodeProxies/LegSwipe/HandleRestTarget") ]
+target_node_path = NodePath("../../../ControlPoints/UpperLeftArmEndpoint/UpperLeftArmInHandle")
+spring_tension = 10.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="UpperRightArm" type="Node2D" parent="Controller/Springs"]
+
+[node name="Endpoint" type="Node2D" parent="Controller/Springs/UpperRightArm"]
+position = Vector2( -175, -98 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../ControlPoints/RestTargets/UpperRightLegRest") ]
+target_node_path = NodePath("../../../ControlPoints/UpperRightArmEndpoint")
+spring_tension = 5.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="Handle" type="Node2D" parent="Controller/Springs/UpperRightArm"]
+position = Vector2( -175, -47.9999 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../ControlPoints/UpperRightArmEndpoint/UpperRightArmHandleTarget") ]
+target_node_path = NodePath("../../../ControlPoints/UpperRightArmEndpoint/UpperRightArmInHandle")
+spring_tension = 10.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="LowerLeftArm" type="Node2D" parent="Controller/Springs"]
+
+[node name="Endpoint" type="Node2D" parent="Controller/Springs/LowerLeftArm"]
+position = Vector2( -150, 82 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../ControlPoints/RestTargets/LowerLeftLegRest") ]
+target_node_path = NodePath("../../../ControlPoints/LowerLeftArmEndpoint")
+spring_tension = 5.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="Handle" type="Node2D" parent="Controller/Springs/LowerLeftArm"]
+position = Vector2( -150, 32 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../NodeProxies/LegStrike/HandleRestTarget") ]
+target_node_path = NodePath("../../../ControlPoints/LowerLeftArmEndpoint/LowerLeftArmInHandle")
+spring_tension = 20.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="LowerRightArm" type="Node2D" parent="Controller/Springs"]
+
+[node name="Endpoint" type="Node2D" parent="Controller/Springs/LowerRightArm"]
+position = Vector2( -150, 82 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../ControlPoints/RestTargets/LowerRightLegRest") ]
+target_node_path = NodePath("../../../ControlPoints/LowerRightArmEndpoint")
+spring_tension = 10.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="Handle" type="Node2D" parent="Controller/Springs/LowerRightArm"]
+position = Vector2( -150, 32 )
+script = ExtResource( 21 )
+source_node_paths = [ NodePath("../../../ControlPoints/LowerRightArmEndpoint/LowerRightArmHandleTarget") ]
+target_node_path = NodePath("../../../ControlPoints/LowerRightArmEndpoint/LowerRightArmInHandle")
+spring_tension = 10.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="Integrators" type="Node2D" parent="Controller"]
+
+[node name="LeftBarrel" type="Node" parent="Controller/Integrators"]
+
+[node name="Rotator" type="Node" parent="Controller/Integrators/LeftBarrel"]
+script = ExtResource( 22 )
+process_mode = 1
+target_path = NodePath("../../../../Model/Visuals/LeftBarrel")
+target_subname = "rotation_offset"
+mode = 0
+delta_value = 180.0
+use_modulo = true
+modulo = 360.0
+
+[node name="TargetIntegrator" type="Node" parent="Controller/Integrators/LeftBarrel"]
+script = ExtResource( 23 )
+process_mode = 1
+source_path = NodePath("../../../ControlPoints/MainSkeletonWrapper/LeftBarrelEndpoint")
+source_subname = "position"
+target_mode = 1
+target_path = NodePath("../../../ControlPoints/RestTargets/BarrelRest")
+target_subname = "position"
+speed = 1000.0
+
+[node name="RightBarrel" type="Node" parent="Controller/Integrators"]
+
+[node name="Rotator" type="Node" parent="Controller/Integrators/RightBarrel"]
+script = ExtResource( 22 )
+process_mode = 1
+target_path = NodePath("../../../../Model/Visuals/RightBarrel")
+target_subname = "rotation_offset"
+mode = 0
+delta_value = 180.0
+use_modulo = true
+modulo = 360.0
+
+[node name="TargetIntegrator" type="Node" parent="Controller/Integrators/RightBarrel"]
+script = ExtResource( 23 )
+process_mode = 1
+source_path = NodePath("../../../ControlPoints/MainSkeletonWrapper/RightBarrelEndpoint")
+source_subname = "position"
+target_mode = 1
+target_path = NodePath("../../../ControlPoints/RestTargets/BarrelRest")
+target_subname = "position"
+speed = 1000.0
+
+[node name="ControlPoints" type="Node2D" parent="Controller"]
+z_index = 2
+
+[node name="UpperLeftArmEndpoint" type="KinematicBody2D" parent="Controller/ControlPoints"]
+visible = false
+position = Vector2( -175, -98 )
+collision_layer = 0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Controller/ControlPoints/UpperLeftArmEndpoint"]
+shape = SubResource( 31 )
+
+[node name="UpperLeftArmInHandle" type="Position2D" parent="Controller/ControlPoints/UpperLeftArmEndpoint"]
+position = Vector2( 0, 50 )
+rotation = 5.96055e-07
+scale = Vector2( 0.999985, 0.999985 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="UpperLeftArmHandleTarget" type="Position2D" parent="Controller/ControlPoints/UpperLeftArmEndpoint"]
+position = Vector2( 0, 50 )
+scale = Vector2( 0.999969, 0.999969 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="UpperRightArmEndpoint" type="KinematicBody2D" parent="Controller/ControlPoints"]
+visible = false
+position = Vector2( 175, -98 )
+collision_layer = 0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Controller/ControlPoints/UpperRightArmEndpoint"]
+shape = SubResource( 31 )
+
+[node name="UpperRightArmInHandle" type="Position2D" parent="Controller/ControlPoints/UpperRightArmEndpoint"]
+position = Vector2( 0, 50 )
+scale = Vector2( 1.00044, 1.00044 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="UpperRightArmHandleTarget" type="Position2D" parent="Controller/ControlPoints/UpperRightArmEndpoint"]
+position = Vector2( 0, 50 )
+scale = Vector2( 1.00044, 1.00044 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerLeftArmEndpoint" type="KinematicBody2D" parent="Controller/ControlPoints"]
+visible = false
+position = Vector2( -150, 82 )
+collision_layer = 0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Controller/ControlPoints/LowerLeftArmEndpoint"]
+shape = SubResource( 31 )
+
+[node name="LowerLeftArmInHandle" type="Position2D" parent="Controller/ControlPoints/LowerLeftArmEndpoint"]
+position = Vector2( 0, -50 )
+scale = Vector2( 1.00001, 1.00001 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerLeftArmHandleTarget" type="Position2D" parent="Controller/ControlPoints/LowerLeftArmEndpoint"]
+position = Vector2( 0, -50 )
+scale = Vector2( 1.00001, 1.00001 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerLeftArmTip" type="Position2D" parent="Controller/ControlPoints/LowerLeftArmEndpoint"]
+position = Vector2( 0, 20 )
+scale = Vector2( 1.00001, 1.00001 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerRightArmEndpoint" type="KinematicBody2D" parent="Controller/ControlPoints"]
+visible = false
+position = Vector2( 150, 82 )
+collision_layer = 0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Controller/ControlPoints/LowerRightArmEndpoint"]
+shape = SubResource( 31 )
+
+[node name="LowerRightArmInHandle" type="Position2D" parent="Controller/ControlPoints/LowerRightArmEndpoint"]
+position = Vector2( -3.05176e-05, -50 )
+scale = Vector2( 1.00038, 1.00038 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerRightArmHandleTarget" type="Position2D" parent="Controller/ControlPoints/LowerRightArmEndpoint"]
+position = Vector2( 0, -50 )
+scale = Vector2( 1.00038, 1.00038 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerRightArmTip" type="Position2D" parent="Controller/ControlPoints/LowerRightArmEndpoint"]
+position = Vector2( 0, 20 )
+scale = Vector2( 1.00001, 1.00001 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="UpperLeftArmWrapper" type="Node2D" parent="Controller/ControlPoints"]
+position = Vector2( -61, -53 )
+
+[node name="UpperLeftArmOutHandle" type="Position2D" parent="Controller/ControlPoints/UpperLeftArmWrapper"]
+position = Vector2( -35, -28 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="UpperRightArmWrapper" type="Node2D" parent="Controller/ControlPoints"]
+position = Vector2( 61, -53 )
+
+[node name="UpperRightArmOutHandle" type="Position2D" parent="Controller/ControlPoints/UpperRightArmWrapper"]
+position = Vector2( 35, -28 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerLeftArmWrapper" type="Node2D" parent="Controller/ControlPoints"]
+position = Vector2( -48, 40 )
+
+[node name="LowerLeftArmOutHandle" type="Position2D" parent="Controller/ControlPoints/LowerLeftArmWrapper"]
+position = Vector2( -64, -22 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerRightArmWrapper" type="Node2D" parent="Controller/ControlPoints"]
+position = Vector2( 48, 40 )
+
+[node name="LowerRightArmOutHandle" type="Position2D" parent="Controller/ControlPoints/LowerRightArmWrapper"]
+position = Vector2( 64, -22 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="MainSkeletonWrapper" type="Node2D" parent="Controller/ControlPoints"]
+position = Vector2( 4.2039e-45, 12 )
+
+[node name="LeftBarrelEndpoint" type="Position2D" parent="Controller/ControlPoints/MainSkeletonWrapper"]
+position = Vector2( 0, 90 )
+scale = Vector2( 1.00003, 1.00003 )
+
+[node name="RightBarrelEndpoint" type="Position2D" parent="Controller/ControlPoints/MainSkeletonWrapper"]
+position = Vector2( 0, 90 )
+scale = Vector2( 1.00004, 1.00004 )
+
+[node name="EyeEndpoint" type="Position2D" parent="Controller/ControlPoints/MainSkeletonWrapper"]
+position = Vector2( -5.60519e-45, 78 )
+
+[node name="RestTargets" type="Node2D" parent="Controller/ControlPoints"]
+
+[node name="EyeRest" type="Position2D" parent="Controller/ControlPoints/RestTargets"]
+position = Vector2( 0, 90 )
+
+[node name="BarrelRest" type="Position2D" parent="Controller/ControlPoints/RestTargets"]
+position = Vector2( 0, 90 )
+
+[node name="UpperLeftLegRest" type="Position2D" parent="Controller/ControlPoints/RestTargets"]
+position = Vector2( -175, -98 )
+
+[node name="UpperRightLegRest" type="Position2D" parent="Controller/ControlPoints/RestTargets"]
+position = Vector2( 175, -98 )
+
+[node name="LowerRightLegRest" type="Position2D" parent="Controller/ControlPoints/RestTargets"]
+position = Vector2( 150, 82 )
+
+[node name="LowerLeftLegRest" type="Position2D" parent="Controller/ControlPoints/RestTargets"]
+position = Vector2( -150, 82 )
+
+[node name="CannonSweepTargets" type="Node2D" parent="Controller/ControlPoints"]
+visible = false
+
+[node name="Left" type="Node2D" parent="Controller/ControlPoints/CannonSweepTargets"]
+script = ExtResource( 35 )
+mode = 1
+color = Color( 1, 1, 1, 1 )
+width = 1.5
+start_from_parent = false
+close_strip = false
+antialiased = true
+
+[node name="Start" type="Position2D" parent="Controller/ControlPoints/CannonSweepTargets/Left"]
+position = Vector2( -250, 90 )
+
+[node name="End" type="Position2D" parent="Controller/ControlPoints/CannonSweepTargets/Left"]
+position = Vector2( 250, 90 )
+
+[node name="Right" type="Node2D" parent="Controller/ControlPoints/CannonSweepTargets"]
+script = ExtResource( 35 )
+mode = 1
+color = Color( 1, 1, 1, 1 )
+width = 1.5
+start_from_parent = false
+close_strip = false
+antialiased = true
+
+[node name="Start" type="Position2D" parent="Controller/ControlPoints/CannonSweepTargets/Right"]
+position = Vector2( -250, 90 )
+
+[node name="End" type="Position2D" parent="Controller/ControlPoints/CannonSweepTargets/Right"]
+position = Vector2( 250, 90 )
+
+[node name="LegStrikeTargets" type="Node2D" parent="Controller/ControlPoints"]
+visible = false
+position = Vector2( -80, 0 )
+script = ExtResource( 35 )
+__meta__ = {
+"_edit_group_": true
+}
+mode = 0
+color = Color( 1, 0, 0, 1 )
+width = 1.5
+start_from_parent = true
+close_strip = false
+antialiased = true
+
+[node name="PreStrike" type="Position2D" parent="Controller/ControlPoints/LegStrikeTargets"]
+
+[node name="FirstStrike" type="Position2D" parent="Controller/ControlPoints/LegStrikeTargets"]
+position = Vector2( -64, 82 )
+
+[node name="SecondStrike" type="Position2D" parent="Controller/ControlPoints/LegStrikeTargets"]
+position = Vector2( 0, 82 )
+
+[node name="ThirdStrike" type="Position2D" parent="Controller/ControlPoints/LegStrikeTargets"]
+position = Vector2( 64, 82 )
+
+[node name="FirstHandle" type="Position2D" parent="Controller/ControlPoints/LegStrikeTargets"]
+position = Vector2( 20, -25 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="SecondHandle" type="Position2D" parent="Controller/ControlPoints/LegStrikeTargets"]
+position = Vector2( 0, -25 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="ThirdHandle" type="Position2D" parent="Controller/ControlPoints/LegStrikeTargets"]
+position = Vector2( -20, -25 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LegSwipeTargets" type="Path2D" parent="Controller/ControlPoints"]
+visible = false
+curve = SubResource( 32 )
+script = ExtResource( 36 )
+__meta__ = {
+"_edit_group_": true
+}
+start_from_self = false
+close_path = true
+
+[node name="PreSwipe" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets"]
+position = Vector2( -110, -85 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets/PreSwipe"]
+position = Vector2( 59, 1 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets/PreSwipe"]
+position = Vector2( -161, -26.7298 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="SwipeTarget" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets"]
+position = Vector2( -271, 0 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets/SwipeTarget"]
+position = Vector2( 0, -43.4744 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets/SwipeTarget"]
+position = Vector2( 0, 40 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="PostSwipe" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets"]
+position = Vector2( -192, 70 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets/PostSwipe"]
+position = Vector2( -44.5966, 4.00001 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/LegSwipeTargets/PostSwipe"]
+position = Vector2( 63, -7.62939e-06 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="WalkTargets" type="Node2D" parent="Controller/ControlPoints"]
+
+[node name="UpperLeftLeg" type="Path2D" parent="Controller/ControlPoints/WalkTargets"]
+position = Vector2( -175, -98 )
+curve = SubResource( 33 )
+script = ExtResource( 36 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_from_self = true
+close_path = false
+
+[node name="StepUp" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperLeftLeg"]
+position = Vector2( 46, 59 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperLeftLeg/StepUp"]
+position = Vector2( -46, 0 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperLeftLeg/StepUp"]
+position = Vector2( 44, 0 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="StepDown" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperLeftLeg"]
+position = Vector2( 90, 0 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperLeftLeg/StepDown"]
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperLeftLeg/StepDown"]
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="UpperRightLeg" type="Path2D" parent="Controller/ControlPoints/WalkTargets"]
+position = Vector2( 175, -98 )
+curve = SubResource( 34 )
+script = ExtResource( 36 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_from_self = true
+close_path = false
+
+[node name="StepUp" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperRightLeg"]
+position = Vector2( 39, 54.5256 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperRightLeg/StepUp"]
+position = Vector2( -38, 0.0770264 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperRightLeg/StepUp"]
+position = Vector2( 41, 0.0770264 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="StepDown" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperRightLeg"]
+position = Vector2( 80, 0 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperRightLeg/StepDown"]
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/UpperRightLeg/StepDown"]
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerLeftLeg" type="Path2D" parent="Controller/ControlPoints/WalkTargets"]
+position = Vector2( -150.158, 82 )
+curve = SubResource( 35 )
+script = ExtResource( 36 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_from_self = true
+close_path = false
+
+[node name="StepUp" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerLeftLeg"]
+position = Vector2( 42.0896, -56 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerLeftLeg/StepUp"]
+position = Vector2( -41.9316, 0 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerLeftLeg/StepUp"]
+position = Vector2( 41, 0 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="StepDown" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerLeftLeg"]
+position = Vector2( 83.0896, 0 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerLeftLeg/StepDown"]
+position = Vector2( 0.226669, 7.62939e-06 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerLeftLeg/StepDown"]
+position = Vector2( 0.0684052, 0 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LowerRightLeg" type="Path2D" parent="Controller/ControlPoints/WalkTargets"]
+position = Vector2( 150, 82 )
+curve = SubResource( 36 )
+script = ExtResource( 36 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_from_self = true
+close_path = false
+
+[node name="StepUp" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerRightLeg"]
+position = Vector2( 46, -50.2262 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerRightLeg/StepUp"]
+position = Vector2( -46, -0.245918 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerRightLeg/StepUp"]
+position = Vector2( 43, -0.245911 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="StepDown" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerRightLeg"]
+position = Vector2( 89, 0 )
+
+[node name="InHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerRightLeg/StepDown"]
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="OutHandle" type="Position2D" parent="Controller/ControlPoints/WalkTargets/LowerRightLeg/StepDown"]
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="NodeProxies" type="Node2D" parent="Controller"]
+
+[node name="LegStrike" type="Node" parent="Controller/NodeProxies"]
+
+[node name="EndpointSpring" type="Node" parent="Controller/NodeProxies/LegStrike"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../Springs/LowerLeftArm/Endpoint")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -150, 82 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+source_node_paths = [ NodePath("../../../ControlPoints/RestTargets/LowerLeftLegRest") ]
+target_node_path = NodePath("../../../ControlPoints/LowerLeftArmEndpoint")
+spring_tension = 5.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="HandleSpring" type="Node" parent="Controller/NodeProxies/LegStrike"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../Springs/LowerLeftArm/Handle")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -150, 32 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+source_node_paths = [ NodePath("../../../NodeProxies/LegStrike/HandleRestTarget") ]
+target_node_path = NodePath("../../../ControlPoints/LowerLeftArmEndpoint/LowerLeftArmInHandle")
+spring_tension = 20.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="Hitbox" type="Node" parent="Controller/NodeProxies/LegStrike"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../../Model/Hitboxes/LowerLeftLegHitbox")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -150, 82 )
+rotation = 1.64202
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+input_pickable = true
+space_override = 0
+gravity_point = false
+gravity_distance_scale = 0.0
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+priority = 0.0
+monitoring = false
+monitorable = false
+collision_layer = 2147483648
+collision_mask = 4
+audio_bus_override = false
+audio_bus_name = "Master"
+active = false
+contact_damage = 80
+contact_force = 0.0
+
+[node name="SpringAudio" type="Node" parent="Controller/NodeProxies/LegStrike"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../../Model/Audio/LowerLeftJointSpringAudio")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -59.9359, -51.1076 )
+rotation = 1.49673
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+stream = ExtResource( 33 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+stream_paused = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="StrikeAudio" type="Node" parent="Controller/NodeProxies/LegStrike"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../../Model/Audio/LowerLeftLegStrikeAudio")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -150, 82 )
+rotation = 1.64897
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+stream = ExtResource( 30 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+stream_paused = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="WalkAudio" type="Node" parent="Controller/NodeProxies/LegStrike"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../../Model/Audio/LowerLeftLegWalkAudio")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -150, 82 )
+rotation = 1.64897
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+stream = ExtResource( 32 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+stream_paused = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="EndpointRestTarget" type="Node2D" parent="Controller/NodeProxies/LegStrike"]
+position = Vector2( -150, 82 )
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../ControlPoints/RestTargets/LowerLeftLegRest")
+position = Vector2( -150, 82 )
+
+[node name="HandleRestTarget" type="Node2D" parent="Controller/NodeProxies/LegStrike"]
+position = Vector2( 0, -50 )
+scale = Vector2( 1.00001, 1.00001 )
+script = ExtResource( 34 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+proxy_target = NodePath("../../../ControlPoints/LowerLeftArmEndpoint/LowerLeftArmHandleTarget")
+position = Vector2( 0, -50 )
+scale = Vector2( 1.00001, 1.00001 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="LegSwipe" type="Node" parent="Controller/NodeProxies"]
+
+[node name="Endpoint" type="Node" parent="Controller/NodeProxies/LegSwipe"]
+script = ExtResource( 34 )
+__meta__ = {
+"_edit_group_": true
+}
+proxy_target = NodePath("../../../ControlPoints/UpperLeftArmEndpoint")
+visible = false
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -175, -98 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+input_pickable = false
+collision_layer = 0
+collision_mask = 1
+collision/safe_margin = 0.08
+motion/sync_to_physics = false
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="EndpointSpring" type="Node" parent="Controller/NodeProxies/LegSwipe"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../Springs/UpperLeftArm/Endpoint")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -175, -98 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+source_node_paths = [ NodePath("../../../ControlPoints/RestTargets/UpperLeftLegRest") ]
+target_node_path = NodePath("../../../NodeProxies/LegSwipe/Endpoint")
+spring_tension = 5.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="HandleSpring" type="Node" parent="Controller/NodeProxies/LegSwipe"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../Springs/UpperLeftArm/Handle")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -175, -48 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+source_node_paths = [ NodePath("../../../NodeProxies/LegSwipe/HandleRestTarget") ]
+target_node_path = NodePath("../../../ControlPoints/UpperLeftArmEndpoint/UpperLeftArmInHandle")
+spring_tension = 10.0
+rest_offset = Vector2( 0, 0 )
+length_limit = -1.0
+
+[node name="Hitbox" type="Node" parent="Controller/NodeProxies/LegSwipe"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../../Model/Hitboxes/UpperLeftLegHitbox")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -175, -98 )
+rotation = -1.73939
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+input_pickable = true
+space_override = 0
+gravity_point = false
+gravity_distance_scale = 0.0
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+priority = 0.0
+monitoring = false
+monitorable = false
+collision_layer = 2147483648
+collision_mask = 4
+audio_bus_override = false
+audio_bus_name = "Master"
+active = false
+contact_damage = 80
+contact_force = 0.0
+
+[node name="SpringAudio" type="Node" parent="Controller/NodeProxies/LegSwipe"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../../Model/Audio/UpperLeftJointSpringAudio")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -61, -53 )
+rotation = 1.49673
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+stream = ExtResource( 33 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+stream_paused = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="SwipeAudio" type="Node" parent="Controller/NodeProxies/LegSwipe"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../../Model/Audio/UpperLeftLegSwipeAudio")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -175, -98 )
+rotation = -1.73965
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+stream = ExtResource( 31 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+stream_paused = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="WalkAudio" type="Node" parent="Controller/NodeProxies/LegSwipe"]
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../../Model/Audio/UpperLeftLegWalkAudio")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+position = Vector2( -175, -98 )
+rotation = -1.73965
+scale = Vector2( 1, 1 )
+z_index = 0
+z_as_relative = true
+stream = ExtResource( 32 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+stream_paused = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="EndpointRestTarget" type="Node2D" parent="Controller/NodeProxies/LegSwipe"]
+position = Vector2( -175, -98 )
+script = ExtResource( 34 )
+proxy_target = NodePath("../../../ControlPoints/RestTargets/UpperLeftLegRest")
+position = Vector2( -175, -98 )
+
+[node name="HandleRestTarget" type="Node2D" parent="Controller/NodeProxies/LegSwipe"]
+position = Vector2( 0, 50 )
+scale = Vector2( 0.999969, 0.999969 )
+script = ExtResource( 34 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+proxy_target = NodePath("../../../ControlPoints/UpperLeftArmEndpoint/UpperLeftArmHandleTarget")
+position = Vector2( 0, 50 )
+scale = Vector2( 0.999969, 0.999969 )
+__meta__ = {
+"_gizmo_extents_": 5.0
+}
+
+[node name="HandleCenterTarget" type="Node2D" parent="Controller/NodeProxies/LegSwipe"]
+visible = false
+position = Vector2( -175, -98 )
+script = ExtResource( 34 )
+__meta__ = {
+"_edit_group_": true
+}
+proxy_target = NodePath("../../../ControlPoints/UpperLeftArmEndpoint")
+visible = false
+position = Vector2( -175, -98 )
+input_pickable = false
+collision_layer = 0
+collision_mask = 1
+collision/safe_margin = 0.08
+motion/sync_to_physics = false
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Model" type="Node2D" parent="."]
+
+[node name="Skeletons" type="Node2D" parent="Model"]
+visible = false
+
+[node name="Main" type="Skeleton2D" parent="Model/Skeletons"]
+position = Vector2( 4.2039e-45, 12 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Root" type="Bone2D" parent="Model/Skeletons/Main"]
+rest = Transform2D( 1, 0, 0, 1, 0, 1 )
+
+[node name="LeftFlakCannon" type="Bone2D" parent="Model/Skeletons/Main/Root"]
+show_behind_parent = true
+position = Vector2( -72, -16 )
+rotation = 0.974136
+rest = Transform2D( 0.687745, 0.725953, -0.725953, 0.687745, -72, -16 )
+default_length = 8.0
+
+[node name="LeftBarrel" type="Bone2D" parent="Model/Skeletons/Main/Root/LeftFlakCannon"]
+show_behind_parent = true
+position = Vector2( 4.99965, -3.8147e-06 )
+rotation = -0.00696447
+scale = Vector2( 1.0526, 1.0526 )
+rest = Transform2D( 1, 0, 0, 1, 9, 0 )
+default_length = 8.0
+
+[node name="RightFlakCannon" type="Bone2D" parent="Model/Skeletons/Main/Root"]
+show_behind_parent = true
+position = Vector2( 72, -16 )
+rotation = 2.16746
+rest = Transform2D( -0.687745, 0.725953, -0.725953, -0.687745, 72, -16 )
+default_length = 8.0
+
+[node name="RightBarrel" type="Bone2D" parent="Model/Skeletons/Main/Root/RightFlakCannon"]
+show_behind_parent = true
+position = Vector2( 4.99965, 3.8147e-06 )
+rotation = 0.00539333
+scale = Vector2( 1.04914, 1.04914 )
+rest = Transform2D( 1, 0, 0, 1, 9, 0 )
+default_length = 8.0
+
+[node name="UpperLeftArm" type="Bone2D" parent="Model/Skeletons/Main/Root"]
+position = Vector2( -61, -65 )
+rotation = -2.88086
+rest = Transform2D( -0.966201, -0.257788, 0.257788, -0.966201, -61, -65 )
+
+[node name="UpperRightArm" type="Bone2D" parent="Model/Skeletons/Main/Root"]
+position = Vector2( 61, -65 )
+rotation = -0.260773
+rest = Transform2D( 0.966191, -0.257827, 0.257827, 0.966191, 61, -65 )
+
+[node name="LowerLeftArm" type="Bone2D" parent="Model/Skeletons/Main/Root"]
+position = Vector2( -48, 28 )
+rotation = 2.99994
+rest = Transform2D( -0.989984, 0.141179, -0.141179, -0.989984, -48, 28 )
+
+[node name="LowerRightArm" type="Bone2D" parent="Model/Skeletons/Main/Root"]
+position = Vector2( 48, 28 )
+rotation = 0.14165
+rest = Transform2D( 0.989984, 0.141177, -0.141177, 0.989984, 48, 28 )
+
+[node name="Face" type="Skeleton2D" parent="Model/Skeletons"]
+position = Vector2( 8.40779e-45, 12 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Root" type="Bone2D" parent="Model/Skeletons/Face"]
+rest = Transform2D( 1, 0, 0, 1, 0, 0 )
+
+[node name="LeftEye" type="Bone2D" parent="Model/Skeletons/Face/Root"]
+show_behind_parent = true
+position = Vector2( -24, -24 )
+rotation = 1.33971
+rest = Transform2D( 0.274721, 0.961524, -0.961524, 0.274721, -24, -24 )
+default_length = 8.0
+
+[node name="LeftPupil" type="Bone2D" parent="Model/Skeletons/Face/Root/LeftEye"]
+show_behind_parent = true
+position = Vector2( 3.00278, 0 )
+rotation = -1.39677e-05
+scale = Vector2( 1.04763, 1.04763 )
+rest = Transform2D( 1.00013, -3.57628e-07, 3.57628e-07, 1.00013, 3.0026, 0 )
+default_length = 8.0
+
+[node name="RightEye" type="Bone2D" parent="Model/Skeletons/Face/Root"]
+show_behind_parent = true
+position = Vector2( 24, -24 )
+rotation = 1.80189
+rest = Transform2D( -0.274721, 0.961524, -0.961524, -0.274721, 24, -24 )
+default_length = 8.0
+
+[node name="RightPupil" type="Bone2D" parent="Model/Skeletons/Face/Root/RightEye"]
+show_behind_parent = true
+position = Vector2( 3.00278, -1.90735e-06 )
+rotation = 0.000231203
+scale = Vector2( 1.08741, 1.08741 )
+rest = Transform2D( 1.00013, 3.8743e-07, -3.8743e-07, 1.00013, 3.0026, 1.90735e-06 )
+default_length = 8.0
+
+[node name="Mouth" type="Bone2D" parent="Model/Skeletons/Face/Root"]
+show_behind_parent = true
+position = Vector2( 0, 19 )
+rest = Transform2D( 1, 0, 0, 1, 0, 19 )
+default_length = 2.0
+
+[node name="UpperMouth" type="Bone2D" parent="Model/Skeletons/Face/Root/Mouth"]
+show_behind_parent = true
+position = Vector2( 0, -5 )
+rest = Transform2D( 1, 0, 0, 1, 0, -1 )
+default_length = 2.0
+
+[node name="LowerMouth" type="Bone2D" parent="Model/Skeletons/Face/Root/Mouth"]
+show_behind_parent = true
+position = Vector2( 0, 5 )
+rest = Transform2D( 1, 0, 0, 1, 0, 1 )
+default_length = 2.0
+
+[node name="Brain" type="Bone2D" parent="Model/Skeletons/Face/Root"]
+position = Vector2( 0, -56 )
+rest = Transform2D( 1, 0, 0, 1, 0, -58 )
+
+[node name="UpperLeftArm" type="Skeleton2D" parent="Model/Skeletons"]
+position = Vector2( -61, -53 )
+
+[node name="BoneChain" type="Bone2D" parent="Model/Skeletons/UpperLeftArm"]
+rotation = -2.78349
+rest = Transform2D( 1, 0, 0, 1, 0, 0 )
+script = ExtResource( 5 )
+chain_length = 5
+bone_length = 24.0
+
+[node name="Joint1" type="Bone2D" parent="Model/Skeletons/UpperLeftArm/BoneChain"]
+position = Vector2( 32.9676, -5.72205e-06 )
+rotation = -0.286781
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint2" type="Bone2D" parent="Model/Skeletons/UpperLeftArm/BoneChain/Joint1"]
+position = Vector2( 33.3922, 3.8147e-06 )
+rotation = 0.0795436
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint3" type="Bone2D" parent="Model/Skeletons/UpperLeftArm/BoneChain/Joint1/Joint2"]
+position = Vector2( 33.243, -7.62939e-06 )
+rotation = 0.843379
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint4" type="Bone2D" parent="Model/Skeletons/UpperLeftArm/BoneChain/Joint1/Joint2/Joint3"]
+position = Vector2( 31.0953, 0 )
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="UpperRightArm" type="Skeleton2D" parent="Model/Skeletons"]
+position = Vector2( 61, -53 )
+
+[node name="BoneChain" type="Bone2D" parent="Model/Skeletons/UpperRightArm"]
+rotation = -0.358107
+rest = Transform2D( 1, 0, 0, 1, 0, 0 )
+script = ExtResource( 5 )
+chain_length = 5
+bone_length = 24.0
+
+[node name="Joint1" type="Bone2D" parent="Model/Skeletons/UpperRightArm/BoneChain"]
+position = Vector2( 32.9676, 0 )
+rotation = 0.286781
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint2" type="Bone2D" parent="Model/Skeletons/UpperRightArm/BoneChain/Joint1"]
+position = Vector2( 33.3923, -3.8147e-06 )
+rotation = -0.0795436
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint3" type="Bone2D" parent="Model/Skeletons/UpperRightArm/BoneChain/Joint1/Joint2"]
+position = Vector2( 33.243, 0 )
+rotation = -0.843379
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint4" type="Bone2D" parent="Model/Skeletons/UpperRightArm/BoneChain/Joint1/Joint2/Joint3"]
+position = Vector2( 31.0953, 7.62939e-06 )
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="LowerLeftArm" type="Skeleton2D" parent="Model/Skeletons"]
+position = Vector2( -48, 40 )
+
+[node name="BoneChain" type="Bone2D" parent="Model/Skeletons/LowerLeftArm"]
+rotation = -2.88782
+rest = Transform2D( 1, 0, 0, 1, 0, 0 )
+script = ExtResource( 5 )
+chain_length = 5
+bone_length = 24.0
+
+[node name="Joint1" type="Bone2D" parent="Model/Skeletons/LowerLeftArm/BoneChain"]
+position = Vector2( 33.839, 0 )
+rotation = -0.252939
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint2" type="Bone2D" parent="Model/Skeletons/LowerLeftArm/BoneChain/Joint1"]
+position = Vector2( 33.6759, -5.72205e-06 )
+rotation = 5.7012
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint3" type="Bone2D" parent="Model/Skeletons/LowerLeftArm/BoneChain/Joint1/Joint2"]
+position = Vector2( 32.946, 3.8147e-06 )
+rotation = -0.746922
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint4" type="Bone2D" parent="Model/Skeletons/LowerLeftArm/BoneChain/Joint1/Joint2/Joint3"]
+position = Vector2( 33.4164, -7.62939e-06 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="LowerRightArm" type="Skeleton2D" parent="Model/Skeletons"]
+position = Vector2( 48, 40 )
+
+[node name="BoneChain" type="Bone2D" parent="Model/Skeletons/LowerRightArm"]
+rotation = -0.253774
+rest = Transform2D( 1, 0, 0, 1, 0, 0 )
+script = ExtResource( 5 )
+chain_length = 5
+bone_length = 24.0
+
+[node name="Joint1" type="Bone2D" parent="Model/Skeletons/LowerRightArm/BoneChain"]
+position = Vector2( 33.839, -3.8147e-06 )
+rotation = 0.252939
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint2" type="Bone2D" parent="Model/Skeletons/LowerRightArm/BoneChain/Joint1"]
+position = Vector2( 33.6759, 3.8147e-06 )
+rotation = 0.581985
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint3" type="Bone2D" parent="Model/Skeletons/LowerRightArm/BoneChain/Joint1/Joint2"]
+position = Vector2( 32.946, -1.14441e-05 )
+rotation = 0.746922
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Joint4" type="Bone2D" parent="Model/Skeletons/LowerRightArm/BoneChain/Joint1/Joint2/Joint3"]
+position = Vector2( 33.4164, 0 )
+scale = Vector2( 1, 1 )
+rest = Transform2D( 1, 0, 0, 1, 24, 0 )
+default_length = 24.0
+__meta__ = {
+"bone_chain_child": true
+}
+
+[node name="Visuals" type="Node2D" parent="Model"]
+
+[node name="UpperLeftArmPath" type="Node2D" parent="Model/Visuals"]
+position = Vector2( -61, -53 )
+script = ExtResource( 9 )
+packed_scene = ExtResource( 6 )
+target_path = NodePath("../../../Controller/IKPaths/UpperLeftArmIKPath")
+instance_count = 20
+transform_flags = 1
+rotation_offset = 0.0
+sprite_path_mode = 1
+anchor_mode = 1
+anchor_step = 14.0
+
+[node name="UpperRightArmPath" type="Node2D" parent="Model/Visuals"]
+position = Vector2( 61, -53 )
+script = ExtResource( 9 )
+packed_scene = ExtResource( 6 )
+target_path = NodePath("../../../Controller/IKPaths/UpperRightArmIKPath")
+instance_count = 20
+transform_flags = 1
+rotation_offset = 0.0
+sprite_path_mode = 1
+anchor_mode = 1
+anchor_step = 14.0
+
+[node name="LowerLeftArmPath" type="Node2D" parent="Model/Visuals"]
+position = Vector2( -48, 40 )
+script = ExtResource( 9 )
+packed_scene = ExtResource( 6 )
+target_path = NodePath("../../../Controller/IKPaths/LowerLeftArmIKPath")
+instance_count = 20
+transform_flags = 1
+rotation_offset = 0.0
+sprite_path_mode = 1
+anchor_mode = 1
+anchor_step = 14.0
+
+[node name="LowerRightArmPath" type="Node2D" parent="Model/Visuals"]
+position = Vector2( 48, 40 )
+script = ExtResource( 9 )
+packed_scene = ExtResource( 6 )
+target_path = NodePath("../../../Controller/IKPaths/LowerRightArmIKPath")
+instance_count = 20
+transform_flags = 1
+rotation_offset = 0.0
+sprite_path_mode = 1
+anchor_mode = 1
+anchor_step = 14.0
+
+[node name="UpperLeftJoint" parent="Model/Visuals" instance=ExtResource( 8 )]
+position = Vector2( -61, -53 )
+rotation = -2.52738
+
+[node name="UpperRightJoint" parent="Model/Visuals" instance=ExtResource( 8 )]
+position = Vector2( 61, -53 )
+rotation = -0.614214
+
+[node name="LowerLeftJoint" parent="Model/Visuals" instance=ExtResource( 8 )]
+position = Vector2( -48, 40 )
+rotation = -2.82003
+scale = Vector2( 1, 1 )
+
+[node name="LowerRightJoint" parent="Model/Visuals" instance=ExtResource( 8 )]
+position = Vector2( 48, 40 )
+rotation = -0.321563
+
+[node name="Brain" parent="Model/Visuals" instance=ExtResource( 26 )]
+position = Vector2( 8.40779e-45, -44 )
+
+[node name="Head" parent="Model/Visuals" instance=ExtResource( 12 )]
+position = Vector2( 4.2039e-45, 12 )
+
+[node name="Face" parent="Model/Visuals" instance=ExtResource( 13 )]
+position = Vector2( 8.40779e-45, 12 )
+
+[node name="LeftEye" parent="Model/Visuals" instance=ExtResource( 14 )]
+position = Vector2( -24, -12 )
+rotation = 3.14159
+scale = Vector2( 1, -1 )
+
+[node name="RightEye" parent="Model/Visuals" instance=ExtResource( 14 )]
+position = Vector2( 24, -12 )
+
+[node name="LeftPupil" parent="Model/Visuals" instance=ExtResource( 15 )]
+position = Vector2( -23.3122, -9.07705 )
+
+[node name="RightPupil" parent="Model/Visuals" instance=ExtResource( 15 )]
+position = Vector2( 23.3122, -9.07704 )
+
+[node name="UpperMouth" parent="Model/Visuals" instance=ExtResource( 16 )]
+position = Vector2( 8.40779e-45, 26 )
+
+[node name="LowerMouth" parent="Model/Visuals" instance=ExtResource( 1 )]
+position = Vector2( 8.40779e-45, 36 )
+
+[node name="LeftFlakCannon" parent="Model/Visuals" instance=ExtResource( 11 )]
+position = Vector2( -72, -4 )
+
+[node name="RightFlakCannon" parent="Model/Visuals" instance=ExtResource( 11 )]
+position = Vector2( 72, -4 )
+
+[node name="LeftBarrel" type="Node2D" parent="Model/Visuals"]
+position = Vector2( -72, -4 )
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+packed_scene = ExtResource( 10 )
+target_path = NodePath("../../../Controller/IKPaths/LeftBarrelIKPath")
+instance_count = 10
+transform_flags = 1
+rotation_offset = 123.315
+sprite_path_mode = 1
+anchor_mode = 0
+anchor_step = 1.0
+
+[node name="RightBarrel" type="Node2D" parent="Model/Visuals"]
+position = Vector2( 72, -4 )
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+packed_scene = ExtResource( 10 )
+target_path = NodePath("../../../Controller/IKPaths/RightBarrelIKPath")
+instance_count = 10
+transform_flags = 1
+rotation_offset = 141.144
+sprite_path_mode = 1
+anchor_mode = 0
+anchor_step = 1.0
+
+[node name="UpperLeftFoot" parent="Model/Visuals" instance=ExtResource( 7 )]
+position = Vector2( -175, -98 )
+rotation = -1.73939
+scale = Vector2( 1, 1 )
+
+[node name="UpperRightFoot" parent="Model/Visuals" instance=ExtResource( 7 )]
+position = Vector2( 175, -98 )
+rotation = -1.4022
+scale = Vector2( 1, 1 )
+
+[node name="LowerLeftFoot" parent="Model/Visuals" instance=ExtResource( 7 )]
+position = Vector2( -150, 82 )
+rotation = 1.64202
+
+[node name="LowerRightFoot" parent="Model/Visuals" instance=ExtResource( 7 )]
+position = Vector2( 150, 82 )
+rotation = 1.49957
+
+[node name="Hurtboxes" type="Node2D" parent="Model"]
+
+[node name="LeftEyeHurtbox" type="Area2D" parent="Model/Hurtboxes"]
+position = Vector2( -24, -12 )
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 24 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Model/Hurtboxes/LeftEyeHurtbox"]
+position = Vector2( -5, -4 )
+shape = SubResource( 37 )
+
+[node name="RightEyeHurtbox" type="Area2D" parent="Model/Hurtboxes"]
+position = Vector2( 24, -12 )
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 24 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Model/Hurtboxes/RightEyeHurtbox"]
+position = Vector2( 5, -4 )
+shape = SubResource( 37 )
+
+[node name="BrainHurtbox" type="Area2D" parent="Model/Hurtboxes"]
+position = Vector2( 8.40779e-45, -44 )
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 24 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Model/Hurtboxes/BrainHurtbox"]
+position = Vector2( 0, -4 )
+scale = Vector2( 3, 1 )
+shape = SubResource( 38 )
+
+[node name="Hitboxes" type="Node2D" parent="Model"]
+visible = false
+
+[node name="UpperLeftLegHitbox" type="Area2D" parent="Model/Hitboxes"]
+position = Vector2( -175, -98 )
+rotation = -1.73939
+scale = Vector2( 1, 1 )
+monitoring = false
+monitorable = false
+collision_layer = 2147483648
+collision_mask = 4
+script = ExtResource( 25 )
+active = false
+contact_damage = 80
+contact_force = 0.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/Hitboxes/UpperLeftLegHitbox"]
+polygon = PoolVector2Array( -16, -8, -8, -16, 8, -16, 24, 0, 8, 16, -7, 16, -16, 8 )
+
+[node name="UpperRightLegHitbox" type="Area2D" parent="Model/Hitboxes"]
+position = Vector2( 175, -98 )
+rotation = -1.4022
+scale = Vector2( 1, 1 )
+monitoring = false
+monitorable = false
+collision_layer = 2147483648
+collision_mask = 4
+script = ExtResource( 25 )
+active = false
+contact_damage = 80
+contact_force = 0.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/Hitboxes/UpperRightLegHitbox"]
+polygon = PoolVector2Array( -16, -8, -8, -16, 8, -16, 24, 0, 8, 16, -7, 16, -16, 8 )
+
+[node name="LowerLeftLegHitbox" type="Area2D" parent="Model/Hitboxes"]
+position = Vector2( -150, 82 )
+rotation = 1.64202
+monitoring = false
+monitorable = false
+collision_layer = 2147483648
+collision_mask = 4
+script = ExtResource( 25 )
+active = false
+contact_damage = 80
+contact_force = 0.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/Hitboxes/LowerLeftLegHitbox"]
+polygon = PoolVector2Array( -16, -8, -8, -16, 8, -16, 24, 0, 8, 16, -7, 16, -16, 8 )
+
+[node name="LowerRightLegHitbox" type="Area2D" parent="Model/Hitboxes"]
+position = Vector2( 150, 82 )
+rotation = 1.49957
+monitoring = false
+monitorable = false
+collision_layer = 2147483648
+collision_mask = 4
+script = ExtResource( 25 )
+active = false
+contact_damage = 80
+contact_force = 0.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/Hitboxes/LowerRightLegHitbox"]
+polygon = PoolVector2Array( -16, -8, -8, -16, 8, -16, 24, 0, 8, 16, -7, 16, -16, 8 )
+
+[node name="ProjectileBlockers" type="Node2D" parent="Model"]
+visible = false
+
+[node name="UpperLeftFootBlocker" type="KinematicBody2D" parent="Model/ProjectileBlockers"]
+position = Vector2( -175, -98 )
+rotation = -1.73939
+scale = Vector2( 1, 1 )
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Model/ProjectileBlockers/UpperLeftFootBlocker"]
+shape = SubResource( 39 )
+
+[node name="UpperRightFootBlocker" type="KinematicBody2D" parent="Model/ProjectileBlockers"]
+position = Vector2( 175, -98 )
+rotation = -1.4022
+scale = Vector2( 1, 1 )
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Model/ProjectileBlockers/UpperRightFootBlocker"]
+shape = SubResource( 39 )
+
+[node name="LowerLeftFootBlocker" type="KinematicBody2D" parent="Model/ProjectileBlockers"]
+position = Vector2( -150, 82 )
+rotation = 1.64202
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Model/ProjectileBlockers/LowerLeftFootBlocker"]
+shape = SubResource( 39 )
+
+[node name="LowerRightFootBlocker" type="KinematicBody2D" parent="Model/ProjectileBlockers"]
+position = Vector2( 150, 82 )
+rotation = 1.49957
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Model/ProjectileBlockers/LowerRightFootBlocker"]
+shape = SubResource( 39 )
+
+[node name="UpperLeftJointBlocker" type="KinematicBody2D" parent="Model/ProjectileBlockers"]
+position = Vector2( -61, -53 )
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/ProjectileBlockers/UpperLeftJointBlocker"]
+polygon = PoolVector2Array( 11, -7, 31, -1, 26, 13, 10, 23, 10, 40, 6, 57, -1, 60, -12, 32, -12, 8 )
+
+[node name="UpperRightJointBlocker" type="KinematicBody2D" parent="Model/ProjectileBlockers"]
+position = Vector2( 61, -53 )
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/ProjectileBlockers/UpperRightJointBlocker"]
+scale = Vector2( -1, 1 )
+polygon = PoolVector2Array( 11, -7, 31, -1, 26, 13, 10, 23, 10, 40, 6, 57, -1, 60, -12, 32, -12, 8 )
+
+[node name="AttackZones" type="Node2D" parent="Model"]
+visible = false
+
+[node name="FlakCannonSweep" type="Area2D" parent="Model/AttackZones"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/AttackZones/FlakCannonSweep"]
+polygon = PoolVector2Array( -72, 0, 72, 0, 240, 104, -240, 104 )
+
+[node name="LeftLegStrike" type="Area2D" parent="Model/AttackZones"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/AttackZones/LeftLegStrike"]
+polygon = PoolVector2Array( -170, 0, -75, 0, -8, 104, -240, 104 )
+
+[node name="RightLegStrike" type="Area2D" parent="Model/AttackZones"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/AttackZones/RightLegStrike"]
+polygon = PoolVector2Array( 75, 0, 170, 0, 240, 104, 8, 104 )
+
+[node name="LegSwipe" type="Area2D" parent="Model/AttackZones"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Model/AttackZones/LegSwipe"]
+polygon = PoolVector2Array( -240, -120, 241, -120, 304, -16, 240, 104, -240, 104, -296, -16 )
+
+[node name="Weapons" type="Node2D" parent="Model"]
+
+[node name="LeftBarrel" parent="Model/Weapons" instance=ExtResource( 20 )]
+position = Vector2( -69.1908, 0.135791 )
+rotation = 0.967171
+scale = Vector2( 0.99988, 0.99988 )
+attach_parent_path = NodePath("../../..")
+projectile = ExtResource( 19 )
+fire_sound = ExtResource( 27 )
+
+[node name="RightBarrel" parent="Model/Weapons" instance=ExtResource( 20 )]
+position = Vector2( 69.1908, 0.135791 )
+rotation = 2.17285
+scale = Vector2( 0.999879, 0.999879 )
+attach_parent_path = NodePath("../../..")
+projectile = ExtResource( 19 )
+fire_sound = ExtResource( 27 )
+
+[node name="Audio" type="Node2D" parent="Model"]
+
+[node name="RoarAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( 4.2039e-45, 12 )
+stream = ExtResource( 28 )
+
+[node name="LeftSpinUpAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( -75.9889, -5.99392 )
+stream = ExtResource( 29 )
+
+[node name="RightSpinUpAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( 75.9985, -5.94161 )
+stream = ExtResource( 29 )
+
+[node name="UpperLeftLegSwipeAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( -175, -98 )
+rotation = -1.73965
+stream = ExtResource( 31 )
+
+[node name="UpperRightLegSwipeAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( 175, -98 )
+rotation = -1.40683
+stream = ExtResource( 31 )
+
+[node name="LowerLeftLegStrikeAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( -150, 82 )
+rotation = 1.64897
+stream = ExtResource( 30 )
+
+[node name="LowerRightLegStrikeAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( 150, 82 )
+rotation = 1.49673
+stream = ExtResource( 30 )
+
+[node name="UpperLeftLegWalkAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( -175, -98 )
+rotation = -1.73965
+stream = ExtResource( 32 )
+
+[node name="UpperRightLegWalkAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( 175, -98 )
+rotation = -1.40683
+stream = ExtResource( 32 )
+
+[node name="LowerLeftLegWalkAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( -150, 82 )
+rotation = 1.64897
+stream = ExtResource( 32 )
+
+[node name="LowerRightLegWalkAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( 150, 82 )
+rotation = 1.49673
+stream = ExtResource( 32 )
+
+[node name="UpperLeftJointSpringAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( -61, -53 )
+rotation = 1.49673
+stream = ExtResource( 33 )
+
+[node name="UpperRightJointSpringAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( 61, -53 )
+rotation = 1.49673
+stream = ExtResource( 33 )
+
+[node name="LowerLeftJointSpringAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( -59.9359, -51.1076 )
+rotation = 1.49673
+stream = ExtResource( 33 )
+
+[node name="LowerRightJointSpringAudio" type="AudioStreamPlayer2D" parent="Model/Audio"]
+position = Vector2( 62.0641, -51.1076 )
+rotation = 1.49673
+stream = ExtResource( 33 )
+
+[node name="Particles" type="Node2D" parent="Model"]
+
+[node name="LegStrike" type="Node2D" parent="Model/Particles"]
+position = Vector2( -150, 82 )
+rotation = 1.5888
+
+[node name="CPUParticles" type="CPUParticles2D" parent="Model/Particles/LegStrike"]
+position = Vector2( 25, 0 )
+emitting = false
+amount = 24
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.9
+lifetime_randomness = 0.5
+local_coords = false
+texture = ExtResource( 37 )
+direction = Vector2( -1, 0 )
+spread = 30.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 500.0
+initial_velocity_random = 0.8
+angular_velocity = 720.0
+angular_velocity_random = 1.0
+damping = 100.0
+damping_random = 1.0
+scale_amount = 0.25
+scale_amount_random = 0.75
+scale_amount_curve = SubResource( 40 )
+color_ramp = SubResource( 41 )
+hue_variation = 0.1
+hue_variation_random = 0.1
+
+[node name="ThinkTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.25
+one_shot = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+[connection signal="set_flak_cannon_sweep" from="." to="ArachnoroxStateMachine" method="fire_custom_event" binds= [ "SetFlakCannonSweep" ]]
+[connection signal="set_leg_strike" from="." to="ArachnoroxStateMachine" method="fire_custom_event" binds= [ "SetLegStrike" ]]
+[connection signal="set_leg_swipe" from="." to="ArachnoroxStateMachine" method="fire_custom_event" binds= [ "SetLegSwipe" ]]
+[connection signal="set_walking" from="." to="ArachnoroxStateMachine" method="fire_custom_event" binds= [ "SetWalking" ]]
+[connection signal="walk_finished" from="." to="ArachnoroxStateMachine" method="fire_custom_event" binds= [ "WalkFinished" ]]
+[connection signal="take_damage" from="Model/Hurtboxes/LeftEyeHurtbox" to="." method="take_damage"]
+[connection signal="take_damage" from="Model/Hurtboxes/RightEyeHurtbox" to="." method="take_damage"]
+[connection signal="take_damage" from="Model/Hurtboxes/BrainHurtbox" to="." method="take_damage"]
+[connection signal="timeout" from="ThinkTimer" to="." method="think"]

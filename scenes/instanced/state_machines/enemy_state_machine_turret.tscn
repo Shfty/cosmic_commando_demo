@@ -1,0 +1,276 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scenes/instanced/state_machines/enemy_state_machine_base.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/state.gd" type="Script" id=2]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/transition.gd" type="Script" id=3]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/event_base/event.gd" type="Script" id=4]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/internal_transition.gd" type="Script" id=5]
+[ext_resource path="res://addons/uml_state_machine/src/comparator.gd" type="Script" id=6]
+[ext_resource path="res://src/enemy/enemy_turret.gd" type="Script" id=7]
+
+[sub_resource type="Resource" id=1]
+resource_name = "Comparator"
+script = ExtResource( 6 )
+type = 1
+operator = 0
+null_comparator = null
+bool_comparator = true
+int_comparator = 0
+float_comparator = 0.0
+string_comparator = ""
+vector2_comparator = Vector2( 0, 0 )
+rect2_comparator = Rect2( 0, 0, 0, 0 )
+vector3_comparator = Vector3( 0, 0, 0 )
+transform2d_comparator = Transform2D( 1, 0, 0, 1, 0, 0 )
+plane_comparator = Plane( 0, 0, 0, 0 )
+quat_comparator = Quat( 0, 0, 0, 1 )
+aabb_comparator = AABB( 0, 0, 0, 0, 0, 0 )
+basis_comparator = Basis( 1, 0, 0, 0, 1, 0, 0, 0, 1 )
+transform_comparator = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_comparator = Color( 0, 0, 0, 1 )
+node_path_comparator = NodePath("")
+dictionary_comparator = {
+
+}
+array_comparator = [  ]
+byte_array_comparator = PoolByteArray(  )
+int_array_comparator = PoolIntArray(  )
+real_array_comparator = PoolRealArray(  )
+string_array_comparator = PoolStringArray(  )
+vector2_array_comparator = PoolVector2Array(  )
+vector3_array_comparator = PoolVector3Array(  )
+color_array_comparator = PoolColorArray(  )
+
+[node name="EnemyStateMachineTurret" instance=ExtResource( 1 )]
+target_script = ExtResource( 7 )
+custom_events = PoolStringArray( "SetDying", "DyingFinished", "AimFinished", "Fire" )
+
+[node name="Alive" parent="." index="0"]
+initial_transition = 1
+
+[node name="SetDying" parent="Alive" index="0"]
+custom_event = 4
+
+[node name="Dying" parent="Alive/SetDying" index="0"]
+target_state = 9
+
+[node name="Idle" type="Node" parent="Alive" index="1"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="OnAggro" type="Node" parent="Alive/Idle" index="0"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 5
+consume_event = false
+_custom_event_name = "OnAggro"
+debug_print = false
+debug_break = false
+
+[node name="Alive|AcquiringTarget" type="Node" parent="Alive/Idle/OnAggro" index="0"]
+script = ExtResource( 3 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 3
+_target_state_path = NodePath("Alive/AcquiringTarget")
+debug_print = false
+debug_break = false
+
+[node name="AcquiringTarget" type="Node" parent="Alive" index="2"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Alive/AcquiringTarget" index="0"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="StartAimTimer" type="Node" parent="Alive/AcquiringTarget/Entry" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 34
+arguments = [  ]
+_method_name = "start_aim_timer"
+debug_print = false
+debug_break = false
+
+[node name="PhysicsProcess" type="Node" parent="Alive/AcquiringTarget" index="1"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 3
+consume_event = false
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="UpdateAim" type="Node" parent="Alive/AcquiringTarget/PhysicsProcess" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 39
+arguments = [  ]
+_method_name = "update_aim"
+debug_print = false
+debug_break = false
+
+[node name="AimFinished" type="Node" parent="Alive/AcquiringTarget" index="2"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 1
+consume_event = false
+_custom_event_name = "AimFinished"
+debug_print = false
+debug_break = false
+
+[node name="Alive|Firing" type="Node" parent="Alive/AcquiringTarget/AimFinished" index="0"]
+script = ExtResource( 3 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 4
+_target_state_path = NodePath("Alive/Firing")
+debug_print = false
+debug_break = false
+
+[node name="Firing" type="Node" parent="Alive" index="3"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Alive/Firing" index="0"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="StartRefireTimer" type="Node" parent="Alive/Firing/Entry" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 36
+arguments = [  ]
+_method_name = "start_refire_timer"
+debug_print = false
+debug_break = false
+
+[node name="Fire" type="Node" parent="Alive/Firing" index="1"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 3
+consume_event = false
+_custom_event_name = "Fire"
+debug_print = false
+debug_break = false
+
+[node name="Fire" type="Node" parent="Alive/Firing/Fire" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 20
+arguments = [  ]
+_method_name = "fire"
+debug_print = false
+debug_break = false
+
+[node name="Alive|AcquiringTarget" type="Node" parent="Alive/Firing/Fire" index="1"]
+script = ExtResource( 3 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 3
+_target_state_path = NodePath("Alive/AcquiringTarget")
+debug_print = false
+debug_break = false
+
+[node name="CanSeePlayer" parent="Alive/Aggro/Active/Searching/PhysicsProcess" index="0"]
+method_comparator = SubResource( 1 )
+
+[node name="SpawnHealthPickup" parent="Dying/Entry" index="0"]
+method = 33
+
+[node name="StartDyingTimer" parent="Dying/Entry" index="1"]
+method = 35
+
+[node name="PhysicsProcess" type="Node" parent="Dying" index="1"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 3
+consume_event = false
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="SpawnDeathEffect" type="Node" parent="Dying/PhysicsProcess" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 32
+arguments = [  ]
+_method_name = "spawn_death_effect"
+debug_print = false
+debug_break = false
+
+[node name="DyingFinished" parent="Dying" index="2"]
+custom_event = 2
+
+[node name="Dead" parent="Dying/DyingFinished" index="0"]
+target_state = 10
+
+[node name="Destroy" parent="Dead/Entry" index="0"]
+method = 17

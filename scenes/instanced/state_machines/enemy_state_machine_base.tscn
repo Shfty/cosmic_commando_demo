@@ -1,0 +1,377 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/root.gd" type="Script" id=1]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/state.gd" type="Script" id=2]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/event_base/event.gd" type="Script" id=3]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/transition.gd" type="Script" id=4]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/emitted_event.gd" type="Script" id=5]
+[ext_resource path="res://src/enemy/enemy.gd" type="Script" id=6]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/internal_transition.gd" type="Script" id=7]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/guard.gd" type="Script" id=8]
+[ext_resource path="res://addons/uml_state_machine/src/comparator.gd" type="Script" id=9]
+
+[sub_resource type="Resource" id=1]
+resource_name = "Comparator"
+script = ExtResource( 9 )
+type = 1
+operator = 0
+null_comparator = null
+bool_comparator = true
+int_comparator = 0
+float_comparator = 0.0
+string_comparator = ""
+vector2_comparator = Vector2( 0, 0 )
+rect2_comparator = Rect2( 0, 0, 0, 0 )
+vector3_comparator = Vector3( 0, 0, 0 )
+transform2d_comparator = Transform2D( 1, 0, 0, 1, 0, 0 )
+plane_comparator = Plane( 0, 0, 0, 0 )
+quat_comparator = Quat( 0, 0, 0, 1 )
+aabb_comparator = AABB( 0, 0, 0, 0, 0, 0 )
+basis_comparator = Basis( 1, 0, 0, 0, 1, 0, 0, 0, 1 )
+transform_comparator = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_comparator = Color( 0, 0, 0, 1 )
+node_path_comparator = NodePath("")
+dictionary_comparator = {
+
+}
+array_comparator = [  ]
+byte_array_comparator = PoolByteArray(  )
+int_array_comparator = PoolIntArray(  )
+real_array_comparator = PoolRealArray(  )
+string_array_comparator = PoolStringArray(  )
+vector2_array_comparator = PoolVector2Array(  )
+vector3_array_comparator = PoolVector3Array(  )
+color_array_comparator = PoolColorArray(  )
+
+[node name="EnemyStateMachineBase" type="Node"]
+script = ExtResource( 1 )
+__meta__ = {
+"root": true,
+"stateful": true
+}
+update = null
+target_script = ExtResource( 6 )
+target_instance_path = NodePath("")
+custom_events = PoolStringArray( "SetDying", "DyingFinished" )
+notification_flags = 2
+initial_transition = 1
+debug_print = false
+debug_break = false
+
+[node name="Alive" type="Node" parent="."]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="SetDying" type="Node" parent="Alive"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 2
+consume_event = false
+_custom_event_name = "SetDying"
+debug_print = false
+debug_break = false
+
+[node name="Dying" type="Node" parent="Alive/SetDying"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 6
+_target_state_path = NodePath("Dying")
+debug_print = false
+debug_break = false
+
+[node name="Aggro" type="Node" parent="Alive"]
+script = ExtResource( 1 )
+__meta__ = {
+"root": true,
+"stateful": true
+}
+update = null
+target_script = ExtResource( 6 )
+target_instance_path = NodePath("")
+custom_events = PoolStringArray( "ScreenEntered", "ScreenExited", "OnAggro", "OnDeaggro" )
+notification_flags = 15
+initial_transition = 1
+debug_print = false
+debug_break = false
+
+[node name="Passive" type="Node" parent="Alive/Aggro"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Alive/Aggro/Passive"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="OnDeaggro" type="Node" parent="Alive/Aggro/Passive/Entry"]
+script = ExtResource( 5 )
+__meta__ = {
+"emitted_event": true
+}
+event = 2
+_event_name = "OnDeaggro"
+debug_print = false
+debug_break = false
+
+[node name="ScreenEntered" type="Node" parent="Alive/Aggro/Passive"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 3
+consume_event = false
+_custom_event_name = "ScreenEntered"
+debug_print = false
+debug_break = false
+
+[node name="Active" type="Node" parent="Alive/Aggro/Passive/ScreenEntered"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 2
+_target_state_path = NodePath("Active")
+debug_print = false
+debug_break = false
+
+[node name="Active" type="Node" parent="Alive/Aggro"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 1
+debug_print = false
+debug_break = false
+
+[node name="ScreenExited" type="Node" parent="Alive/Aggro/Active"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 4
+consume_event = false
+_custom_event_name = "ScreenExited"
+debug_print = false
+debug_break = false
+
+[node name="Passive" type="Node" parent="Alive/Aggro/Active/ScreenExited"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 1
+_target_state_path = NodePath("Passive")
+debug_print = false
+debug_break = false
+
+[node name="Searching" type="Node" parent="Alive/Aggro/Active"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="PhysicsProcess" type="Node" parent="Alive/Aggro/Active/Searching"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 3
+consume_event = false
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="CanSeePlayer" type="Node" parent="Alive/Aggro/Active/Searching/PhysicsProcess"]
+script = ExtResource( 8 )
+__meta__ = {
+"guard": true
+}
+type = 1
+method = 12
+method_arguments = [  ]
+method_comparator = SubResource( 1 )
+_property_name = ""
+_method_name = "can_see_player"
+_input_action_name = ""
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Active|Aggro" type="Node" parent="Alive/Aggro/Active/Searching/PhysicsProcess/CanSeePlayer"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 4
+_target_state_path = NodePath("Active/Aggro")
+debug_print = false
+debug_break = false
+
+[node name="Aggro" type="Node" parent="Alive/Aggro/Active"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Alive/Aggro/Active/Aggro"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="OnAggro" type="Node" parent="Alive/Aggro/Active/Aggro/Entry"]
+script = ExtResource( 5 )
+__meta__ = {
+"emitted_event": true
+}
+event = 1
+_event_name = "OnAggro"
+debug_print = false
+debug_break = false
+
+[node name="Dying" type="Node" parent="."]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Dying"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="SpawnHealthPickup" type="Node" parent="Dying/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 27
+arguments = [  ]
+_method_name = "spawn_health_pickup"
+debug_print = false
+debug_break = false
+
+[node name="StartDyingTimer" type="Node" parent="Dying/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 28
+arguments = [  ]
+_method_name = "start_dying_timer"
+debug_print = false
+debug_break = false
+
+[node name="DyingFinished" type="Node" parent="Dying"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 1
+consume_event = false
+_custom_event_name = "DyingFinished"
+debug_print = false
+debug_break = false
+
+[node name="Dead" type="Node" parent="Dying/DyingFinished"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 7
+_target_state_path = NodePath("Dead")
+debug_print = false
+debug_break = false
+
+[node name="Dead" type="Node" parent="."]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Dead"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="Destroy" type="Node" parent="Dead/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 16
+arguments = [  ]
+_method_name = "destroy"
+debug_print = false
+debug_break = false

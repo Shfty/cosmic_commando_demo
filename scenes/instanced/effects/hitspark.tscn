@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/sprites/sprite_hitspark.gd" type="Script" id=1]
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=2]
+[ext_resource path="res://scenes/instanced/effects/effect.tscn" type="PackedScene" id=3]
+
+[node name="Hitspark" instance=ExtResource( 3 )]
+
+[node name="PixelSnap" type="Node2D" parent="." index="0"]
+script = ExtResource( 2 )
+
+[node name="HitsparkSprite" type="Node2D" parent="PixelSnap" index="0"]
+script = ExtResource( 1 )

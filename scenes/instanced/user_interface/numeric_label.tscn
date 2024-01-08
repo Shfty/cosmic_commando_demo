@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/instanced/user_interface/numeric_label.gd" type="Script" id=1]
+
+[node name="NumericLabel" type="HBoxContainer"]
+margin_right = 32.0
+margin_bottom = 14.0
+custom_constants/separation = 0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LabelLeadingZeroes" type="Label" parent="."]
+margin_right = 24.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 0.0705882, 0.0705882, 1 )
+text = "000"
+align = 2
+
+[node name="LabelNumber" type="Label" parent="."]
+margin_left = 24.0
+margin_right = 32.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 0.866667, 0, 1 )
+text = "0"
+align = 2

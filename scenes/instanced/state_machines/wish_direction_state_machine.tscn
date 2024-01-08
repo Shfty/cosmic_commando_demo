@@ -1,0 +1,608 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://src/alien_soldier.gd" type="Script" id=1]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/orthogonal_region.gd" type="Script" id=2]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/event_base/event.gd" type="Script" id=3]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/transition.gd" type="Script" id=4]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/guard.gd" type="Script" id=5]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/state.gd" type="Script" id=6]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/internal_transition.gd" type="Script" id=7]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/root.gd" type="Script" id=8]
+
+[node name="WishDirection" type="Node"]
+script = ExtResource( 8 )
+__meta__ = {
+"root": true,
+"stateful": true
+}
+update = null
+target_script = ExtResource( 1 )
+target_instance_path = NodePath("")
+custom_events = PoolStringArray(  )
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Horizontal" type="Node" parent="."]
+script = ExtResource( 2 )
+__meta__ = {
+"orthogonal_region": true,
+"stateful": true
+}
+initial_transition = 2
+debug_print = false
+debug_break = false
+
+[node name="Left" type="Node" parent="Horizontal"]
+script = ExtResource( 6 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Horizontal/Left"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+debug_print = false
+debug_break = false
+
+[node name="SetHorizontalWishDirection" type="Node" parent="Horizontal/Left/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 43
+arguments = [ -1.0 ]
+_method_name = "set_horizontal_wish_direction"
+debug_print = false
+debug_break = false
+
+[node name="InputAction" type="Node" parent="Horizontal/Left"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 4
+consume_event = false
+debug_print = false
+debug_break = false
+
+[node name="MoveLeftReleased" type="Node" parent="Horizontal/Left/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 5
+input_action_type = 1
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_left"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Horizontal|None" type="Node" parent="Horizontal/Left/InputAction/MoveLeftReleased"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 2
+_target_state_path = NodePath("Horizontal/None")
+debug_print = false
+debug_break = false
+
+[node name="MoveRightPressed" type="Node" parent="Horizontal/Left/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 6
+input_action_type = 0
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_right"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Horizontal|Right" type="Node" parent="Horizontal/Left/InputAction/MoveRightPressed"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 3
+_target_state_path = NodePath("Horizontal/Right")
+debug_print = false
+debug_break = false
+
+[node name="None" type="Node" parent="Horizontal"]
+script = ExtResource( 6 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Horizontal/None"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+debug_print = false
+debug_break = false
+
+[node name="SetHorizontalWishDirection" type="Node" parent="Horizontal/None/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 43
+arguments = [ 0.0 ]
+_method_name = "set_horizontal_wish_direction"
+debug_print = false
+debug_break = false
+
+[node name="InputAction" type="Node" parent="Horizontal/None"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 4
+consume_event = false
+debug_print = false
+debug_break = false
+
+[node name="MoveLeftPressed" type="Node" parent="Horizontal/None/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 5
+input_action_type = 0
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_left"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Horizontal|Left" type="Node" parent="Horizontal/None/InputAction/MoveLeftPressed"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 1
+_target_state_path = NodePath("Horizontal/Left")
+debug_print = false
+debug_break = false
+
+[node name="MoveRightPressed" type="Node" parent="Horizontal/None/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 6
+input_action_type = 0
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_right"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Horizontal|Right" type="Node" parent="Horizontal/None/InputAction/MoveRightPressed"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 3
+_target_state_path = NodePath("Horizontal/Right")
+debug_print = false
+debug_break = false
+
+[node name="Right" type="Node" parent="Horizontal"]
+script = ExtResource( 6 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Horizontal/Right"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+debug_print = false
+debug_break = false
+
+[node name="SetHorizontalWishDirection" type="Node" parent="Horizontal/Right/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 43
+arguments = [ 1.0 ]
+_method_name = "set_horizontal_wish_direction"
+debug_print = false
+debug_break = false
+
+[node name="InputAction" type="Node" parent="Horizontal/Right"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 4
+consume_event = false
+debug_print = false
+debug_break = false
+
+[node name="MoveRightReleased" type="Node" parent="Horizontal/Right/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 6
+input_action_type = 1
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_right"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Horizontal|None" type="Node" parent="Horizontal/Right/InputAction/MoveRightReleased"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 2
+_target_state_path = NodePath("Horizontal/None")
+debug_print = false
+debug_break = false
+
+[node name="MoveLeftPressed" type="Node" parent="Horizontal/Right/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 5
+input_action_type = 0
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_left"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Horizontal|Left" type="Node" parent="Horizontal/Right/InputAction/MoveLeftPressed"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 1
+_target_state_path = NodePath("Horizontal/Left")
+debug_print = false
+debug_break = false
+
+[node name="Vertical" type="Node" parent="."]
+script = ExtResource( 2 )
+__meta__ = {
+"orthogonal_region": true,
+"stateful": true
+}
+initial_transition = 2
+debug_print = false
+debug_break = false
+
+[node name="Up" type="Node" parent="Vertical"]
+script = ExtResource( 6 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Vertical/Up"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+debug_print = false
+debug_break = false
+
+[node name="SetVerticalWishDirection" type="Node" parent="Vertical/Up/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 44
+arguments = [ -1.0 ]
+_method_name = "set_vertical_wish_direction"
+debug_print = false
+debug_break = false
+
+[node name="InputAction" type="Node" parent="Vertical/Up"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 4
+consume_event = false
+debug_print = false
+debug_break = false
+
+[node name="MoveUpReleased" type="Node" parent="Vertical/Up/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 7
+input_action_type = 1
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_up"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Vertical|None" type="Node" parent="Vertical/Up/InputAction/MoveUpReleased"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 5
+_target_state_path = NodePath("Vertical/None")
+debug_print = false
+debug_break = false
+
+[node name="MoveDownPressed" type="Node" parent="Vertical/Up/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 4
+input_action_type = 0
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_down"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Vertical|Down" type="Node" parent="Vertical/Up/InputAction/MoveDownPressed"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 6
+_target_state_path = NodePath("Vertical/Down")
+debug_print = false
+debug_break = false
+
+[node name="None" type="Node" parent="Vertical"]
+script = ExtResource( 6 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Vertical/None"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+debug_print = false
+debug_break = false
+
+[node name="SetVerticalWishDirection" type="Node" parent="Vertical/None/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 44
+arguments = [ 0.0 ]
+_method_name = "set_vertical_wish_direction"
+debug_print = false
+debug_break = false
+
+[node name="InputAction" type="Node" parent="Vertical/None"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 4
+consume_event = false
+debug_print = false
+debug_break = false
+
+[node name="MoveUpPressed" type="Node" parent="Vertical/None/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 7
+input_action_type = 0
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_up"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Vertical|Up" type="Node" parent="Vertical/None/InputAction/MoveUpPressed"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 4
+_target_state_path = NodePath("Vertical/Up")
+debug_print = false
+debug_break = false
+
+[node name="MoveDownPressed" type="Node" parent="Vertical/None/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 4
+input_action_type = 0
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_down"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Vertical|Down" type="Node" parent="Vertical/None/InputAction/MoveDownPressed"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 6
+_target_state_path = NodePath("Vertical/Down")
+debug_print = false
+debug_break = false
+
+[node name="Down" type="Node" parent="Vertical"]
+script = ExtResource( 6 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Vertical/Down"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+debug_print = false
+debug_break = false
+
+[node name="SetVerticalWishDirection" type="Node" parent="Vertical/Down/Entry"]
+script = ExtResource( 7 )
+__meta__ = {
+"internal_transition": true
+}
+method = 44
+arguments = [ 1.0 ]
+_method_name = "set_vertical_wish_direction"
+debug_print = false
+debug_break = false
+
+[node name="InputAction" type="Node" parent="Vertical/Down"]
+script = ExtResource( 3 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 4
+consume_event = false
+debug_print = false
+debug_break = false
+
+[node name="MoveDownReleased" type="Node" parent="Vertical/Down/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 4
+input_action_type = 1
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_down"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Vertical|None" type="Node" parent="Vertical/Down/InputAction/MoveDownReleased"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 5
+_target_state_path = NodePath("Vertical/None")
+debug_print = false
+debug_break = false
+
+[node name="MoveUpPressed" type="Node" parent="Vertical/Down/InputAction"]
+script = ExtResource( 5 )
+__meta__ = {
+"guard": true
+}
+type = 2
+input_action = 7
+input_action_type = 0
+_property_name = ""
+_method_name = ""
+_input_action_name = "move_up"
+_state_path = NodePath("")
+_state_child_path = NodePath("")
+debug_print = false
+debug_break = false
+
+[node name="Vertical|Up" type="Node" parent="Vertical/Down/InputAction/MoveUpPressed"]
+script = ExtResource( 4 )
+__meta__ = {
+"transition": true
+}
+target_state = 4
+_target_state_path = NodePath("Vertical/Up")
+debug_print = false
+debug_break = false

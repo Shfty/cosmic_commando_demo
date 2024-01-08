@@ -1,0 +1,632 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "UMLStateMachineBase",
+"class": "ActionBase",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/action_base.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "Actor",
+"language": "GDScript",
+"path": "res://src/actor.gd"
+}, {
+"base": "Actor",
+"class": "AlienSoldier",
+"language": "GDScript",
+"path": "res://src/alien_soldier.gd"
+}, {
+"base": "Control",
+"class": "AlienSoldierUI",
+"language": "GDScript",
+"path": "res://scenes/instanced/user_interface/alien_soldier_ui.gd"
+}, {
+"base": "Node2D",
+"class": "AlienSoldierWeapon",
+"language": "GDScript",
+"path": "res://src/weapon.gd"
+}, {
+"base": "VBoxContainer",
+"class": "AudioSettingsVBox",
+"language": "GDScript",
+"path": "res://scenes/instanced/user_interface/audio_settings_vbox.gd"
+}, {
+"base": "Bone2D",
+"class": "BoneChain2D",
+"language": "GDScript",
+"path": "res://src/treasure_kit/bone_chain_2d.gd"
+}, {
+"base": "AlienSoldierWeapon",
+"class": "BurstFireWeapon",
+"language": "GDScript",
+"path": "res://src/weapon/weapon_burst_fire.gd"
+}, {
+"base": "Node2D",
+"class": "CameraController",
+"language": "GDScript",
+"path": "res://src/camera_controller.gd"
+}, {
+"base": "Node2D",
+"class": "CapsuleSprite",
+"language": "GDScript",
+"path": "res://src/sprites/sprite_alien_soldier.gd"
+}, {
+"base": "Path2D",
+"class": "ChildPath2D",
+"language": "GDScript",
+"path": "res://src/treasure_kit/child_path_2d.gd"
+}, {
+"base": "Resource",
+"class": "Comparator",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/comparator.gd"
+}, {
+"base": "VBoxContainer",
+"class": "ControlSettingsVBox",
+"language": "GDScript",
+"path": "res://scenes/instanced/user_interface/control_settings_vbox.gd"
+}, {
+"base": "Node2D",
+"class": "DebugChildStrip",
+"language": "GDScript",
+"path": "res://src/treasure_kit/debug_child_strip.gd"
+}, {
+"base": "EventBase",
+"class": "DeferredEvent",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/event_base/deferred_event.gd"
+}, {
+"base": "Reference",
+"class": "DragonflyConstants",
+"language": "GDScript",
+"path": "res://src/dragonfly_constants.gd"
+}, {
+"base": "Reference",
+"class": "DragonflyEffects",
+"language": "GDScript",
+"path": "res://src/dragonfly_resources/effects.gd"
+}, {
+"base": "Reference",
+"class": "DragonflyItems",
+"language": "GDScript",
+"path": "res://src/dragonfly_resources/items.gd"
+}, {
+"base": "Reference",
+"class": "DragonflyProjectiles",
+"language": "GDScript",
+"path": "res://src/dragonfly_resources/projectiles.gd"
+}, {
+"base": "Reference",
+"class": "DragonflyUtil",
+"language": "GDScript",
+"path": "res://src/dragonfly_util.gd"
+}, {
+"base": "Area2D",
+"class": "Effect",
+"language": "GDScript",
+"path": "res://src/effect/effect.gd"
+}, {
+"base": "ActionBase",
+"class": "EmittedEvent",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/action_base/emitted_event.gd"
+}, {
+"base": "Actor",
+"class": "Enemy",
+"language": "GDScript",
+"path": "res://src/enemy/enemy.gd"
+}, {
+"base": "Area2D",
+"class": "EnemyAggroBox",
+"language": "GDScript",
+"path": "res://src/enemy/enemy_aggro_box.gd"
+}, {
+"base": "Enemy",
+"class": "EnemyMob",
+"language": "GDScript",
+"path": "res://src/enemy/enemy_mob.gd"
+}, {
+"base": "Projectile",
+"class": "EnemyProjectile",
+"language": "GDScript",
+"path": "res://src/effect/projectile/enemy_projectile.gd"
+}, {
+"base": "Enemy",
+"class": "EnemyTurret",
+"language": "GDScript",
+"path": "res://src/enemy/enemy_turret.gd"
+}, {
+"base": "EventBase",
+"class": "Event",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/event_base/event.gd"
+}, {
+"base": "UMLStateMachineBase",
+"class": "EventBase",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/event_base.gd"
+}, {
+"base": "Node",
+"class": "FloatPropertyIntegrator",
+"language": "GDScript",
+"path": "res://src/treasure_kit/float_property_integrator.gd"
+}, {
+"base": "UMLStateMachineBase",
+"class": "Guard",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/guard.gd"
+}, {
+"base": "Area2D",
+"class": "HealthPickup",
+"language": "GDScript",
+"path": "res://src/health_pickup.gd"
+}, {
+"base": "Node2D",
+"class": "HealthPickupSprite",
+"language": "GDScript",
+"path": "res://src/sprites/sprite_health_pickup.gd"
+}, {
+"base": "Area2D",
+"class": "Hitbox",
+"language": "GDScript",
+"path": "res://src/hitbox.gd"
+}, {
+"base": "Node2D",
+"class": "HitsparkSprite",
+"language": "GDScript",
+"path": "res://src/sprites/sprite_hitspark.gd"
+}, {
+"base": "Area2D",
+"class": "Hurtbox",
+"language": "GDScript",
+"path": "res://src/hurtbox.gd"
+}, {
+"base": "ActionBase",
+"class": "InternalTransition",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/action_base/internal_transition.gd"
+}, {
+"base": "Area2D",
+"class": "Itembox",
+"language": "GDScript",
+"path": "res://src/item_box.gd"
+}, {
+"base": "ColorRect",
+"class": "LoadingScreen",
+"language": "GDScript",
+"path": "res://scenes/instanced/user_interface/loading_screen.gd"
+}, {
+"base": "Node",
+"class": "NodeProxy",
+"language": "GDScript",
+"path": "res://src/treasure_kit/node_proxy.gd"
+}, {
+"base": "Node2D",
+"class": "PathTransform",
+"language": "GDScript",
+"path": "res://src/treasure_kit/path_transform.gd"
+}, {
+"base": "Node2D",
+"class": "PhysicsInterpolator2D",
+"language": "GDScript",
+"path": "res://src/physics_interpolator_2d.gd"
+}, {
+"base": "Node2D",
+"class": "PixelSnap",
+"language": "GDScript",
+"path": "res://src/pixel_snap.gd"
+}, {
+"base": "Node",
+"class": "PlayerController",
+"language": "GDScript",
+"path": "res://src/player_controller.gd"
+}, {
+"base": "Effect",
+"class": "Projectile",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile.gd"
+}, {
+"base": "Projectile",
+"class": "ProjectileBuster",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile_buster.gd"
+}, {
+"base": "Projectile",
+"class": "ProjectileFlame",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile_flame.gd"
+}, {
+"base": "Projectile",
+"class": "ProjectileHoming",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile_homing.gd"
+}, {
+"base": "Projectile",
+"class": "ProjectileLancer",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile_lancer.gd"
+}, {
+"base": "Projectile",
+"class": "ProjectileNoForce",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile_no_force.gd"
+}, {
+"base": "ProjectileSpread",
+"class": "ProjectileRanger",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile_ranger.gd"
+}, {
+"base": "Projectile",
+"class": "ProjectileSpread",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile_spread.gd"
+}, {
+"base": "Projectile",
+"class": "ProjectileSword",
+"language": "GDScript",
+"path": "res://src/effect/projectile/projectile_sword.gd"
+}, {
+"base": "Reference",
+"class": "PropertyUtil",
+"language": "GDScript",
+"path": "res://src/util/property_util.gd"
+}, {
+"base": "StateBase",
+"class": "Region",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/state_base/orthogonal_region.gd"
+}, {
+"base": "StateBase",
+"class": "Root",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/state_base/root.gd"
+}, {
+"base": "CanvasItem",
+"class": "SceneLoader",
+"language": "GDScript",
+"path": "res://src/scene_loader.gd"
+}, {
+"base": "Control",
+"class": "SceneSelectVBox",
+"language": "GDScript",
+"path": "res://src/scene_select_vbox.gd"
+}, {
+"base": "BoxContainer",
+"class": "ScrollBoxContainer",
+"language": "GDScript",
+"path": "res://src/scroll_box_container.gd"
+}, {
+"base": "Node2D",
+"class": "Spring2D",
+"language": "GDScript",
+"path": "res://src/treasure_kit/spring_2d.gd"
+}, {
+"base": "Node2D",
+"class": "SpriteCircle",
+"language": "GDScript",
+"path": "res://src/sprites/sprite_circle.gd"
+}, {
+"base": "Node2D",
+"class": "SpriteEpsilonEagle",
+"language": "GDScript",
+"path": "res://src/sprites/sprite_epsilon_eagle.gd"
+}, {
+"base": "Node2D",
+"class": "SpriteHomingForce",
+"language": "GDScript",
+"path": "res://src/sprites/sprite_homing_force.gd"
+}, {
+"base": "Node2D",
+"class": "SpriteLine",
+"language": "GDScript",
+"path": "res://src/sprites/sprite_line.gd"
+}, {
+"base": "Node2D",
+"class": "SpritePath",
+"language": "GDScript",
+"path": "res://src/treasure_kit/sprite_path.gd"
+}, {
+"base": "StateBase",
+"class": "State",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/state_base/state.gd"
+}, {
+"base": "UMLStateMachineBase",
+"class": "StateBase",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/state_base.gd"
+}, {
+"base": "Control",
+"class": "TitleScreen",
+"language": "GDScript",
+"path": "res://scenes/instanced/user_interface/title_screen.gd"
+}, {
+"base": "Node2D",
+"class": "TransformWatcher2D",
+"language": "GDScript",
+"path": "res://src/treasure_kit/transform_watcher_2d.gd"
+}, {
+"base": "ActionBase",
+"class": "Transition",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine/action_base/transition.gd"
+}, {
+"base": "TextureRect",
+"class": "UIPointer",
+"language": "GDScript",
+"path": "res://src/ui_pointer.gd"
+}, {
+"base": "Reference",
+"class": "UIUtil",
+"language": "GDScript",
+"path": "res://src/util/ui_util.gd"
+}, {
+"base": "Node",
+"class": "UMLStateMachineBase",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine.gd"
+}, {
+"base": "Reference",
+"class": "UMLStateMachineEnums",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine_enums.gd"
+}, {
+"base": "EditorPlugin",
+"class": "UMLStateMachinePlugin",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/uml_state_machine_plugin.gd"
+}, {
+"base": "Reference",
+"class": "UMLStateMachineUtil",
+"language": "GDScript",
+"path": "res://addons/uml_state_machine/src/uml_state_machine_util.gd"
+}, {
+"base": "Node",
+"class": "Vector2PropertyIntegrator",
+"language": "GDScript",
+"path": "res://src/treasure_kit/vector2_property_integrator.gd"
+}, {
+"base": "ColorRect",
+"class": "WeaponIcon",
+"language": "GDScript",
+"path": "res://scenes/instanced/user_interface/weapon_icon.gd"
+}, {
+"base": "Node2D",
+"class": "WeaponWheelSprite",
+"language": "GDScript",
+"path": "res://src/sprites/sprite_weapon_wheel.gd"
+} ]
+_global_script_class_icons={
+"ActionBase": "",
+"Actor": "",
+"AlienSoldier": "",
+"AlienSoldierUI": "",
+"AlienSoldierWeapon": "",
+"AudioSettingsVBox": "",
+"BoneChain2D": "",
+"BurstFireWeapon": "",
+"CameraController": "",
+"CapsuleSprite": "",
+"ChildPath2D": "",
+"Comparator": "",
+"ControlSettingsVBox": "",
+"DebugChildStrip": "",
+"DeferredEvent": "res://addons/uml_state_machine/icons/deferred_event.svg",
+"DragonflyConstants": "",
+"DragonflyEffects": "",
+"DragonflyItems": "",
+"DragonflyProjectiles": "",
+"DragonflyUtil": "",
+"Effect": "",
+"EmittedEvent": "res://addons/uml_state_machine/icons/emitted_event.svg",
+"Enemy": "",
+"EnemyAggroBox": "",
+"EnemyMob": "",
+"EnemyProjectile": "",
+"EnemyTurret": "",
+"Event": "res://addons/uml_state_machine/icons/event.svg",
+"EventBase": "",
+"FloatPropertyIntegrator": "",
+"Guard": "res://addons/uml_state_machine/icons/guard.svg",
+"HealthPickup": "",
+"HealthPickupSprite": "",
+"Hitbox": "",
+"HitsparkSprite": "",
+"Hurtbox": "",
+"InternalTransition": "res://addons/uml_state_machine/icons/internal_transition.svg",
+"Itembox": "",
+"LoadingScreen": "",
+"NodeProxy": "",
+"PathTransform": "",
+"PhysicsInterpolator2D": "",
+"PixelSnap": "",
+"PlayerController": "",
+"Projectile": "",
+"ProjectileBuster": "",
+"ProjectileFlame": "",
+"ProjectileHoming": "",
+"ProjectileLancer": "",
+"ProjectileNoForce": "",
+"ProjectileRanger": "",
+"ProjectileSpread": "",
+"ProjectileSword": "",
+"PropertyUtil": "",
+"Region": "res://addons/uml_state_machine/icons/orthogonal_region.svg",
+"Root": "res://addons/uml_state_machine/icons/root.svg",
+"SceneLoader": "",
+"SceneSelectVBox": "",
+"ScrollBoxContainer": "",
+"Spring2D": "",
+"SpriteCircle": "",
+"SpriteEpsilonEagle": "",
+"SpriteHomingForce": "",
+"SpriteLine": "",
+"SpritePath": "",
+"State": "res://addons/uml_state_machine/icons/state.svg",
+"StateBase": "",
+"TitleScreen": "",
+"TransformWatcher2D": "",
+"Transition": "res://addons/uml_state_machine/icons/transition.svg",
+"UIPointer": "",
+"UIUtil": "",
+"UMLStateMachineBase": "",
+"UMLStateMachineEnums": "",
+"UMLStateMachinePlugin": "",
+"UMLStateMachineUtil": "",
+"Vector2PropertyIntegrator": "",
+"WeaponIcon": "",
+"WeaponWheelSprite": ""
+}
+
+[application]
+
+config/name="Cosmic Commando"
+run/main_scene="res://scenes/main_scene.tscn"
+boot_splash/image="res://resources/textures/splash.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
+config/icon="res://resources/textures/icon.png"
+
+[audio]
+
+default_bus_layout="res://resources/audio_bus_layout/default_bus_layout.tres"
+
+[autoload]
+
+Game="*res://src/autoload/game_singleton.gd"
+PackedScenePool="*res://src/autoload/packed_scene_pool.gd"
+TimeManager="*res://src/autoload/time_manager.gd"
+DebugOverlay="*res://src/autoload/debug_overlay.gd"
+
+[display]
+
+window/size/width=400
+window/size/height=224
+window/size/test_width=1200
+window/size/test_height=672
+window/vsync/use_vsync=false
+
+[editor_plugins]
+
+enabled=PoolStringArray( "uml_state_machine" )
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 0,
+"compress/lossy_quality": 0.7,
+"compress/mode": 0,
+"compress/normal_map": 0,
+"detect_3d": true,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 2,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": true,
+"process/invert_color": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
+
+[input]
+
+ui_page_up={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777235,"unicode":0,"echo":false,"script":null)
+ ]
+}
+move_up={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777232,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":12,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":1,"axis_value":-1.0,"script":null)
+ ]
+}
+move_down={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777234,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":13,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":1,"axis_value":1.0,"script":null)
+ ]
+}
+move_left={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777231,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":14,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":-1.0,"script":null)
+ ]
+}
+move_right={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777233,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":15,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":1.0,"script":null)
+ ]
+}
+button_jump={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
+button_fire={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":70,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":2,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
+button_switch_weapon={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":3,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
+ui_menu={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777217,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":11,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
+
+[layer_names]
+
+2d_physics/layer_1="Environment"
+2d_physics/layer_2="Passive Environment"
+2d_physics/layer_3="Player Hurtbox"
+2d_physics/layer_4="Player Itembox"
+2d_physics/layer_6="Enemy Hurtbox"
+2d_physics/layer_7="Enemy Projectile"
+2d_physics/layer_8="Camera Environment"
+2d_physics/layer_9="Camera Aggro"
+
+[memory]
+
+limits/message_queue/max_size_kb=81920
+
+[physics]
+
+2d/thread_model=0
+
+[rendering]
+
+quality/driver/driver_name="GLES2"
+quality/intended_usage/framebuffer_allocation=0
+quality/intended_usage/framebuffer_allocation.mobile=1
+threads/thread_model=2
+environment/default_clear_color=Color( 0, 0, 0, 1 )
+environment/default_environment="res://resources/environment/default_env.tres"
+quality/dynamic_fonts/use_oversampling=false

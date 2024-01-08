@@ -1,0 +1,417 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scenes/instanced/bosses/arachnorox/arachnorox.gd" type="Script" id=1]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/root.gd" type="Script" id=2]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/state.gd" type="Script" id=3]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/event_base/event.gd" type="Script" id=4]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/internal_transition.gd" type="Script" id=5]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/transition.gd" type="Script" id=6]
+
+[node name="ArachnoroxStateMachine" type="Node"]
+script = ExtResource( 2 )
+__meta__ = {
+"root": true,
+"stateful": true
+}
+update = null
+target_script = ExtResource( 1 )
+target_instance_path = NodePath("..")
+custom_events = PoolStringArray( "SetWalking", "SetFlakCannonSweep", "SetLegStrike", "SetLegSwipe", "WalkFinished", "FlakCannonSweepFinished", "LegStrikeFinished", "LegSwipeFinished" )
+notification_flags = 2
+initial_transition = 1
+debug_print = false
+debug_break = false
+
+[node name="Passive" type="Node" parent="."]
+script = ExtResource( 3 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Passive"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="Active" type="Node" parent="Passive/Entry"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 2
+_target_state_path = NodePath("Active")
+debug_print = false
+debug_break = false
+
+[node name="Active" type="Node" parent="."]
+script = ExtResource( 3 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 1
+debug_print = false
+debug_break = false
+
+[node name="Idle" type="Node" parent="Active"]
+script = ExtResource( 3 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Active/Idle"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="StartThinkTimer" type="Node" parent="Active/Idle/Entry"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 18
+arguments = [  ]
+_method_name = "start_think_timer"
+debug_print = false
+debug_break = false
+
+[node name="SetWalking" type="Node" parent="Active/Idle"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 7
+consume_event = false
+_custom_event_name = "SetWalking"
+debug_print = false
+debug_break = false
+
+[node name="Active|Walking" type="Node" parent="Active/Idle/SetWalking"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 4
+_target_state_path = NodePath("Active/Walking")
+debug_print = false
+debug_break = false
+
+[node name="SetFlakCannonSweep" type="Node" parent="Active/Idle"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 4
+consume_event = false
+_custom_event_name = "SetFlakCannonSweep"
+debug_print = false
+debug_break = false
+
+[node name="Active|FlakCannonSweep" type="Node" parent="Active/Idle/SetFlakCannonSweep"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 5
+_target_state_path = NodePath("Active/FlakCannonSweep")
+debug_print = false
+debug_break = false
+
+[node name="SetLegStrike" type="Node" parent="Active/Idle"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 5
+consume_event = false
+_custom_event_name = "SetLegStrike"
+debug_print = false
+debug_break = false
+
+[node name="Active|LegStrike" type="Node" parent="Active/Idle/SetLegStrike"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 6
+_target_state_path = NodePath("Active/LegStrike")
+debug_print = false
+debug_break = false
+
+[node name="SetLegSwipe" type="Node" parent="Active/Idle"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 6
+consume_event = false
+_custom_event_name = "SetLegSwipe"
+debug_print = false
+debug_break = false
+
+[node name="Active|LegSwipe" type="Node" parent="Active/Idle/SetLegSwipe"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 7
+_target_state_path = NodePath("Active/LegSwipe")
+debug_print = false
+debug_break = false
+
+[node name="Walking" type="Node" parent="Active"]
+script = ExtResource( 3 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Active/Walking"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="Walk" type="Node" parent="Active/Walking/Entry"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 23
+arguments = [  ]
+_method_name = "walk"
+debug_print = false
+debug_break = false
+
+[node name="WalkFinished" type="Node" parent="Active/Walking"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 8
+consume_event = false
+_custom_event_name = "WalkFinished"
+debug_print = false
+debug_break = false
+
+[node name="Active|Idle" type="Node" parent="Active/Walking/WalkFinished"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 3
+_target_state_path = NodePath("Active/Idle")
+debug_print = false
+debug_break = false
+
+[node name="FlakCannonSweep" type="Node" parent="Active"]
+script = ExtResource( 3 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Active/FlakCannonSweep"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="FlakCannonSweep" type="Node" parent="Active/FlakCannonSweep/Entry"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 7
+arguments = [  ]
+_method_name = "flak_cannon_sweep"
+debug_print = false
+debug_break = false
+
+[node name="FlakCannonSweepFinished" type="Node" parent="Active/FlakCannonSweep"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 1
+consume_event = false
+_custom_event_name = "FlakCannonSweepFinished"
+debug_print = false
+debug_break = false
+
+[node name="Active|Idle" type="Node" parent="Active/FlakCannonSweep/FlakCannonSweepFinished"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 3
+_target_state_path = NodePath("Active/Idle")
+debug_print = false
+debug_break = false
+
+[node name="LegStrike" type="Node" parent="Active"]
+script = ExtResource( 3 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Active/LegStrike"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="LegStrike" type="Node" parent="Active/LegStrike/Entry"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 10
+arguments = [  ]
+_method_name = "leg_strike"
+debug_print = false
+debug_break = false
+
+[node name="LegStrikeFinished" type="Node" parent="Active/LegStrike"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 2
+consume_event = false
+_custom_event_name = "LegStrikeFinished"
+debug_print = false
+debug_break = false
+
+[node name="Active|Idle" type="Node" parent="Active/LegStrike/LegStrikeFinished"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 3
+_target_state_path = NodePath("Active/Idle")
+debug_print = false
+debug_break = false
+
+[node name="LegSwipe" type="Node" parent="Active"]
+script = ExtResource( 3 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Active/LegSwipe"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="LegSwipe" type="Node" parent="Active/LegSwipe/Entry"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 11
+arguments = [  ]
+_method_name = "leg_swipe"
+debug_print = false
+debug_break = false
+
+[node name="LegSwipeFinished" type="Node" parent="Active/LegSwipe"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 3
+consume_event = false
+_custom_event_name = "LegSwipeFinished"
+debug_print = false
+debug_break = false
+
+[node name="Active|Idle" type="Node" parent="Active/LegSwipe/LegSwipeFinished"]
+script = ExtResource( 6 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 3
+_target_state_path = NodePath("Active/Idle")
+debug_print = false
+debug_break = false

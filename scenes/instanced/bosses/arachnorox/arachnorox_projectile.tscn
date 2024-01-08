@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scenes/instanced/projectiles/projectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/sprites/sprite_circle.gd" type="Script" id=2]
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=3]
+[ext_resource path="res://src/physics_interpolator_2d.gd" type="Script" id=4]
+[ext_resource path="res://src/effect/projectile/enemy_projectile.gd" type="Script" id=5]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 5.0
+height = 0.0
+
+[node name="ArachnoroxProjectile" instance=ExtResource( 1 )]
+collision_layer = 64
+collision_mask = 5
+script = ExtResource( 5 )
+duration = 0.5
+speed = 600.0
+damage = 50
+
+[node name="CollisionShape2D" parent="." index="0"]
+rotation = 1.5708
+shape = SubResource( 1 )
+
+[node name="PhysicsInterpolator2D" type="Node2D" parent="." index="1"]
+pause_mode = 2
+script = ExtResource( 4 )
+active = true
+debug_draw = false
+
+[node name="PixelSnap" type="Node2D" parent="PhysicsInterpolator2D" index="0"]
+script = ExtResource( 3 )
+mode = 0
+process_mode = 0
+
+[node name="SpriteCircle" type="Node2D" parent="PhysicsInterpolator2D/PixelSnap" index="0"]
+script = ExtResource( 2 )
+radius = 5.0
+color = Color( 0.960784, 0.34902, 0.0470588, 1 )

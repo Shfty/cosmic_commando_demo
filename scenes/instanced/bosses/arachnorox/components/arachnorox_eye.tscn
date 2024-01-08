@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=1]
+[ext_resource path="res://src/physics_interpolator_2d.gd" type="Script" id=3]
+
+[node name="Eye" type="Node2D"]
+
+[node name="PhysicsInterpolator2D" type="Node2D" parent="."]
+pause_mode = 2
+script = ExtResource( 3 )
+
+[node name="PixelSnap" type="Node2D" parent="PhysicsInterpolator2D"]
+script = ExtResource( 1 )
+mode = 0
+process_mode = 0
+
+[node name="Frame" type="Polygon2D" parent="PhysicsInterpolator2D/PixelSnap"]
+scale = Vector2( 0.994414, 0.994414 )
+color = Color( 0.796078, 0.219608, 0.160784, 1 )
+polygon = PoolVector2Array( 11.0618, -2.01123, -2.01123, 9.05056, -7.03932, 9.05056, -10.0562, 0, -7.03932, -5.02809, 8.04494, -8.04494 )
+
+[node name="Eye" type="Polygon2D" parent="PhysicsInterpolator2D/PixelSnap"]
+scale = Vector2( 0.85, 0.85 )
+color = Color( 0.960784, 0.960784, 0.960784, 1 )
+polygon = PoolVector2Array( 11.0618, -2.01123, -2.01123, 9.05056, -7.03932, 9.05056, -10.0562, 0, -7.03932, -5.02809, 8.04494, -8.04494 )

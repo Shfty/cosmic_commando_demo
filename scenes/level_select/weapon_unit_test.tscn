@@ -1,0 +1,126 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://scenes/instanced/weapon.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/instanced/projectiles/buster_force_startup.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/instanced/projectiles/lancer_force.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/instanced/projectiles/sword_force.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/instanced/projectiles/ranger_force.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/weapon/weapon_burst_fire.gd" type="Script" id=6]
+[ext_resource path="res://scenes/instanced/projectiles/flame_force.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/instanced/projectiles/homing_force.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/instanced/projectiles/enemy_projectile.tscn" type="PackedScene" id=9]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 8, 96 )
+
+[sub_resource type="QuadMesh" id=2]
+size = Vector2( 15, 200 )
+
+[sub_resource type="QuadMesh" id=3]
+size = Vector2( 10, 10 )
+
+[node name="WeaponUnitTest" type="Node2D"]
+
+[node name="WeaponSource" type="Node2D" parent="."]
+
+[node name="BusterForce" parent="WeaponSource" instance=ExtResource( 1 )]
+position = Vector2( -120, -64 )
+max_ammo = 100000.0
+projectile = ExtResource( 2 )
+
+[node name="RangerForce" parent="WeaponSource" instance=ExtResource( 1 )]
+position = Vector2( -120, 0 )
+script = ExtResource( 6 )
+fire_rate = 30.0
+max_ammo = 100000.0
+ammo_cost_free = 18
+ammo_cost_fixed = 26
+ammo_regen_rate = 1.0
+projectile = ExtResource( 5 )
+
+[node name="FlameForce" parent="WeaponSource" instance=ExtResource( 1 )]
+position = Vector2( -120, 64 )
+fire_rate = 2.0
+max_ammo = 100000.0
+ammo_cost_free = 3
+ammo_cost_fixed = 5
+ammo_regen_rate = 0.45
+projectile = ExtResource( 7 )
+
+[node name="HomingForce" parent="WeaponSource" instance=ExtResource( 1 )]
+position = Vector2( 120, -64 )
+rotation = 3.14159
+fire_rate = 2.0
+max_ammo = 100000.0
+ammo_cost_fixed = 5
+ammo_regen_rate = 0.5
+projectile = ExtResource( 8 )
+
+[node name="SwordForce" parent="WeaponSource" instance=ExtResource( 1 )]
+position = Vector2( 120, 0 )
+rotation = 3.14159
+fire_rate = 1.0
+max_ammo = 100000.0
+ammo_cost_free = 2
+ammo_cost_fixed = 4
+ammo_regen_rate = 0.1
+projectile = ExtResource( 4 )
+
+[node name="LancerForce" parent="WeaponSource" instance=ExtResource( 1 )]
+position = Vector2( 120, 64 )
+rotation = 3.14159
+fire_rate = 60.0
+max_ammo = 100000.0
+ammo_cost_free = 150
+ammo_cost_fixed = 140
+ammo_regen_rate = 0.3
+projectile = ExtResource( 3 )
+
+[node name="EnemyProjectile" parent="WeaponSource" instance=ExtResource( 1 )]
+position = Vector2( 120, 32 )
+rotation = 3.14159
+fire_rate = 12.0
+max_ammo = 100000.0
+ammo_cost_free = 150
+ammo_cost_fixed = 140
+ammo_regen_rate = 0.3
+projectile = ExtResource( 9 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 1 )
+
+[node name="MeshInstance2D7" type="MeshInstance2D" parent="StaticBody2D/CollisionShape2D"]
+mesh = SubResource( 2 )
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+position = Vector2( 120, 0 )
+mesh = SubResource( 3 )
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="."]
+position = Vector2( 120, -64 )
+mesh = SubResource( 3 )
+
+[node name="MeshInstance2D3" type="MeshInstance2D" parent="."]
+position = Vector2( 120, 64 )
+mesh = SubResource( 3 )
+
+[node name="MeshInstance2D4" type="MeshInstance2D" parent="."]
+position = Vector2( -120, 64 )
+mesh = SubResource( 3 )
+
+[node name="MeshInstance2D5" type="MeshInstance2D" parent="."]
+position = Vector2( -120, 0 )
+mesh = SubResource( 3 )
+
+[node name="MeshInstance2D6" type="MeshInstance2D" parent="."]
+position = Vector2( -120, -64 )
+mesh = SubResource( 3 )
+[connection signal="ready_deferred" from="WeaponSource/BusterForce" to="WeaponSource/BusterForce" method="start_refire_timer"]
+[connection signal="ready_deferred" from="WeaponSource/RangerForce" to="WeaponSource/RangerForce" method="start_refire_timer"]
+[connection signal="ready_deferred" from="WeaponSource/FlameForce" to="WeaponSource/FlameForce" method="start_refire_timer"]
+[connection signal="ready_deferred" from="WeaponSource/HomingForce" to="WeaponSource/HomingForce" method="start_refire_timer"]
+[connection signal="ready_deferred" from="WeaponSource/SwordForce" to="WeaponSource/SwordForce" method="start_refire_timer"]
+[connection signal="ready_deferred" from="WeaponSource/LancerForce" to="WeaponSource/LancerForce" method="start_refire_timer"]
+[connection signal="ready_deferred" from="WeaponSource/EnemyProjectile" to="WeaponSource/EnemyProjectile" method="start_refire_timer"]

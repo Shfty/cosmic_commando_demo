@@ -1,0 +1,202 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/instanced/user_interface/numeric_label.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/instanced/user_interface/stat_readout.gd" type="Script" id=2]
+[ext_resource path="res://resources/themes/alien_soldier.tres" type="Theme" id=3]
+
+[node name="StatReadout" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxLabel" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 24.0
+custom_constants/separation = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxLabel" type="VBoxContainer" parent="HBoxLabel"]
+margin_right = 36.0
+margin_bottom = 24.0
+custom_constants/separation = 0
+
+[node name="LabelPlayer" type="Label" parent="HBoxLabel/VBoxLabel"]
+margin_right = 36.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0.866667, 0, 1 )
+text = "PLAYER"
+align = 2
+
+[node name="LabelForce" type="Label" parent="HBoxLabel/VBoxLabel"]
+margin_top = 8.0
+margin_right = 36.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.615686, 0.768627, 1, 1 )
+text = "FORCE"
+align = 2
+
+[node name="LabelEnemy" type="Label" parent="HBoxLabel/VBoxLabel"]
+margin_top = 16.0
+margin_right = 36.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+text = "ENEMY"
+align = 2
+
+[node name="VBoxDash" type="VBoxContainer" parent="HBoxLabel"]
+margin_left = 38.0
+margin_right = 43.0
+margin_bottom = 24.0
+custom_constants/separation = 0
+
+[node name="DashPlayer" type="Label" parent="HBoxLabel/VBoxDash"]
+margin_right = 5.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.92549, 0.243137, 0.00392157, 1 )
+text = "-"
+align = 2
+
+[node name="DashForce" type="Label" parent="HBoxLabel/VBoxDash"]
+margin_top = 8.0
+margin_right = 5.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.92549, 0.243137, 0.00392157, 1 )
+text = "-"
+align = 2
+
+[node name="DashEnemy" type="Label" parent="HBoxLabel/VBoxDash"]
+margin_top = 16.0
+margin_right = 5.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.92549, 0.243137, 0.00392157, 1 )
+text = "-"
+align = 2
+
+[node name="VBoxValue" type="VBoxContainer" parent="HBoxLabel"]
+margin_left = 45.0
+margin_right = 69.0
+margin_bottom = 24.0
+custom_constants/separation = 0
+
+[node name="ValuePlayer" parent="HBoxLabel/VBoxValue" instance=ExtResource( 1 )]
+margin_right = 24.0
+margin_bottom = 8.0
+value = 512
+
+[node name="ValueForce" parent="HBoxLabel/VBoxValue" instance=ExtResource( 1 )]
+margin_top = 8.0
+margin_right = 24.0
+margin_bottom = 16.0
+value = 1000
+
+[node name="ValueEnemy" parent="HBoxLabel/VBoxValue" instance=ExtResource( 1 )]
+margin_top = 16.0
+margin_right = 24.0
+margin_bottom = 24.0
+value = 3584
+
+[node name="VBoxSlash" type="VBoxContainer" parent="HBoxLabel"]
+margin_left = 71.0
+margin_right = 77.0
+margin_bottom = 24.0
+custom_constants/separation = 0
+
+[node name="SlashPlayer" type="Label" parent="HBoxLabel/VBoxSlash"]
+margin_right = 6.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0.866667, 0, 1 )
+text = "/"
+align = 2
+
+[node name="SlashForce" type="Label" parent="HBoxLabel/VBoxSlash"]
+margin_top = 8.0
+margin_right = 6.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0.878431, 0.0705882, 1 )
+text = "/"
+align = 2
+
+[node name="SlashEnemy" type="Label" parent="HBoxLabel/VBoxSlash"]
+margin_top = 16.0
+margin_right = 6.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0.878431, 0.0705882, 1 )
+text = "/"
+align = 2
+
+[node name="VBoxTotal" type="VBoxContainer" parent="HBoxLabel"]
+margin_left = 79.0
+margin_right = 103.0
+margin_bottom = 24.0
+custom_constants/separation = 0
+
+[node name="TotalPlayer" parent="HBoxLabel/VBoxTotal" instance=ExtResource( 1 )]
+margin_right = 24.0
+margin_bottom = 8.0
+value = 512
+
+[node name="TotalForce" parent="HBoxLabel/VBoxTotal" instance=ExtResource( 1 )]
+margin_top = 8.0
+margin_right = 24.0
+margin_bottom = 16.0
+value = 1000
+
+[node name="TotalEnemy" parent="HBoxLabel/VBoxTotal" instance=ExtResource( 1 )]
+margin_top = 16.0
+margin_right = 24.0
+margin_bottom = 24.0
+value = 3584
+
+[node name="HBoxFlash" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 24.0
+custom_constants/separation = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxLabel" type="VBoxContainer" parent="HBoxFlash"]
+margin_right = 1200.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="FlashPlayer" type="ColorRect" parent="HBoxFlash/VBoxLabel"]
+modulate = Color( 1, 1, 1, 0 )
+margin_right = 1200.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FlashForce" type="ColorRect" parent="HBoxFlash/VBoxLabel"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 8.0
+margin_right = 1200.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FlashEnemy" type="ColorRect" parent="HBoxFlash/VBoxLabel"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 16.0
+margin_right = 1200.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FlashTimer" type="Timer" parent="."]

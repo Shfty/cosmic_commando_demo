@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/sprites/sprite_health_pickup.gd" type="Script" id=1]
+[ext_resource path="res://src/health_pickup.gd" type="Script" id=2]
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 7.5, 7.5 )
+
+[node name="HealthPickup" type="Area2D"]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource( 2 )
+type = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="PixelSnap" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="HealthPickupSprite" type="Node2D" parent="PixelSnap"]
+script = ExtResource( 1 )
+size = 7.5
+
+[node name="AnimationTimer" type="Timer" parent="PixelSnap/HealthPickupSprite"]
+wait_time = 0.0666667
+autostart = true
+[connection signal="area_entered" from="." to="." method="area_entered"]
+[connection signal="timeout" from="PixelSnap/HealthPickupSprite/AnimationTimer" to="PixelSnap/HealthPickupSprite" method="animation_timeout"]

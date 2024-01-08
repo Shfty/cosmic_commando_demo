@@ -1,0 +1,316 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://resources/themes/alien_soldier.tres" type="Theme" id=2]
+[ext_resource path="res://scenes/instanced/user_interface/loading_screen.gd" type="Script" id=3]
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=4]
+
+[sub_resource type="Animation" id=2]
+length = 0.25
+step = 0.125
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.125 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("LoadingBarMargin:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.125, 0.25 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("CornerWidgets:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.125, 0.25 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+length = 0.25
+step = 0.125
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.125, 0.25 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("LoadingBarMargin:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.125 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("CornerWidgets:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.125 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("LoadingBarMargin:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("CornerWidgets:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "loop"
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -6 ), Vector2( 0, -8 ), Vector2( 0, -6 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "loop"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 360.0 ]
+}
+
+[sub_resource type="SphereMesh" id=1]
+radius = 7.5
+height = 10.0
+
+[node name="LoadingScreen" type="ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+color = Color( 0, 0, 0, 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false,
+"_edit_vertical_guides_": [  ]
+}
+
+[node name="TransitionAnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "unit"
+anims/transition_in = SubResource( 2 )
+anims/transition_out = SubResource( 3 )
+anims/unit = SubResource( 4 )
+
+[node name="ArrowAnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../CornerWidgets/PressButtonArrow/PixelSnap")
+autoplay = "loop"
+anims/loop = SubResource( 5 )
+
+[node name="SpinnerAnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../CornerWidgets/Spinner")
+autoplay = "loop"
+anims/loop = SubResource( 6 )
+
+[node name="CornerWidgets" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spinner" type="Label" parent="CornerWidgets"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -21.0
+margin_top = -20.0
+margin_right = -13.0
+margin_bottom = -12.0
+rect_scale = Vector2( 2, 2 )
+rect_pivot_offset = Vector2( 3.5, 3.5 )
+size_flags_horizontal = 4
+text = "[]"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PressButtonArrow" type="Node2D" parent="CornerWidgets"]
+position = Vector2( 383, 208 )
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="CornerWidgets/PressButtonArrow"]
+mesh = SubResource( 1 )
+
+[node name="PixelSnap" type="Node2D" parent="CornerWidgets/PressButtonArrow"]
+position = Vector2( 0, -6 )
+script = ExtResource( 4 )
+mode = 0
+process_mode = 0
+
+[node name="Node2D" type="Polygon2D" parent="CornerWidgets/PressButtonArrow/PixelSnap"]
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 0, 6, -6, -1, -3, -1, -3, -7, 3, -7, 3, -1, 6, -1 )
+
+[node name="Node2D" type="Polygon2D" parent="CornerWidgets/PressButtonArrow/PixelSnap/Node2D"]
+polygon = PoolVector2Array( 0, 4.5, -4, 0, -2, 0, -2, -6, 2, -6, 2, 0, 4, 0 )
+
+[node name="LoadingBarMargin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 100
+custom_constants/margin_left = 100
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LoadingBarHBox" type="HBoxContainer" parent="LoadingBarMargin"]
+margin_left = 100.0
+margin_right = 300.0
+margin_bottom = 224.0
+
+[node name="LabelVBox" type="VBoxContainer" parent="LoadingBarMargin/LoadingBarHBox"]
+margin_top = 96.0
+margin_right = 66.0
+margin_bottom = 128.0
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="LoadingBarMargin/LoadingBarHBox/LabelVBox"]
+margin_right = 66.0
+margin_bottom = 8.0
+size_flags_vertical = 1
+text = "Loading..."
+align = 2
+valign = 1
+
+[node name="Label2" type="Label" parent="LoadingBarMargin/LoadingBarHBox/LabelVBox"]
+margin_top = 12.0
+margin_right = 66.0
+margin_bottom = 20.0
+size_flags_vertical = 1
+text = "Instancing..."
+align = 2
+valign = 1
+
+[node name="Label3" type="Label" parent="LoadingBarMargin/LoadingBarHBox/LabelVBox"]
+margin_top = 24.0
+margin_right = 66.0
+margin_bottom = 32.0
+size_flags_vertical = 1
+text = "Populating..."
+align = 2
+valign = 1
+
+[node name="ProgressBarVBox" type="VBoxContainer" parent="LoadingBarMargin/LoadingBarHBox"]
+margin_left = 70.0
+margin_top = 93.0
+margin_right = 200.0
+margin_bottom = 131.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LoadingProgress" type="ProgressBar" parent="LoadingBarMargin/LoadingBarHBox/ProgressBarVBox"]
+margin_right = 130.0
+margin_bottom = 10.0
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.0
+value = 1.0
+
+[node name="InstancingProgress" type="ProgressBar" parent="LoadingBarMargin/LoadingBarHBox/ProgressBarVBox"]
+margin_top = 14.0
+margin_right = 130.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.0
+
+[node name="PopulatingProgress" type="ProgressBar" parent="LoadingBarMargin/LoadingBarHBox/ProgressBarVBox"]
+margin_top = 28.0
+margin_right = 130.0
+margin_bottom = 38.0
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.0

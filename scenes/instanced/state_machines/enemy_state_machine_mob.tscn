@@ -1,0 +1,319 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://scenes/instanced/state_machines/enemy_state_machine_base.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/state.gd" type="Script" id=2]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/transition.gd" type="Script" id=3]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/event_base/event.gd" type="Script" id=4]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/action_base/internal_transition.gd" type="Script" id=5]
+[ext_resource path="res://src/enemy/enemy_mob.gd" type="Script" id=6]
+[ext_resource path="res://addons/uml_state_machine/src/uml_state_machine/state_base/orthogonal_region.gd" type="Script" id=7]
+[ext_resource path="res://addons/uml_state_machine/src/comparator.gd" type="Script" id=8]
+
+[sub_resource type="Resource" id=1]
+resource_name = "Comparator"
+script = ExtResource( 8 )
+type = 1
+operator = 0
+null_comparator = null
+bool_comparator = true
+int_comparator = 0
+float_comparator = 0.0
+string_comparator = ""
+vector2_comparator = Vector2( 0, 0 )
+rect2_comparator = Rect2( 0, 0, 0, 0 )
+vector3_comparator = Vector3( 0, 0, 0 )
+transform2d_comparator = Transform2D( 1, 0, 0, 1, 0, 0 )
+plane_comparator = Plane( 0, 0, 0, 0 )
+quat_comparator = Quat( 0, 0, 0, 1 )
+aabb_comparator = AABB( 0, 0, 0, 0, 0, 0 )
+basis_comparator = Basis( 1, 0, 0, 0, 1, 0, 0, 0, 1 )
+transform_comparator = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_comparator = Color( 0, 0, 0, 1 )
+node_path_comparator = NodePath("")
+dictionary_comparator = {
+
+}
+array_comparator = [  ]
+byte_array_comparator = PoolByteArray(  )
+int_array_comparator = PoolIntArray(  )
+real_array_comparator = PoolRealArray(  )
+string_array_comparator = PoolStringArray(  )
+vector2_array_comparator = PoolVector2Array(  )
+vector3_array_comparator = PoolVector3Array(  )
+color_array_comparator = PoolColorArray(  )
+
+[node name="EnemyStateMachineMob" instance=ExtResource( 1 )]
+target_script = ExtResource( 6 )
+custom_events = PoolStringArray( "SetDying", "DyingFinished", "AimFinished", "Fire" )
+
+[node name="PreTick" type="Node" parent="." index="0"]
+script = ExtResource( 7 )
+__meta__ = {
+"orthogonal_region": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="PhysicsProcess" type="Node" parent="PreTick" index="0"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 3
+consume_event = false
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="ApplyGravity" type="Node" parent="PreTick/PhysicsProcess" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 11
+arguments = [  ]
+_method_name = "apply_gravity"
+debug_print = false
+debug_break = false
+
+[node name="Alive" parent="." index="1"]
+initial_transition = 1
+
+[node name="SetDying" parent="Alive" index="0"]
+custom_event = 4
+
+[node name="Dying" parent="Alive/SetDying" index="0"]
+target_state = 10
+
+[node name="CanSeePlayer" parent="Alive/Aggro/Active/Searching/PhysicsProcess" index="0"]
+method_comparator = SubResource( 1 )
+
+[node name="Idle" type="Node" parent="Alive" index="2"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="PhysicsProcess" type="Node" parent="Alive/Idle" index="0"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 3
+consume_event = false
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="Decelerate" type="Node" parent="Alive/Idle/PhysicsProcess" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 17
+arguments = [  ]
+_method_name = "decelerate"
+debug_print = false
+debug_break = false
+
+[node name="OnAggro" type="Node" parent="Alive/Idle" index="1"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 5
+consume_event = false
+_custom_event_name = "OnAggro"
+debug_print = false
+debug_break = false
+
+[node name="Alive|Sprint" type="Node" parent="Alive/Idle/OnAggro" index="0"]
+script = ExtResource( 3 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 7
+_target_state_path = NodePath("Alive/Sprint")
+debug_print = false
+debug_break = false
+
+[node name="Sprint" type="Node" parent="Alive" index="3"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Entry" type="Node" parent="Alive/Sprint" index="0"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 0
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="ChooseSprintDirection" type="Node" parent="Alive/Sprint/Entry" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 16
+arguments = [  ]
+_method_name = "choose_sprint_direction"
+debug_print = false
+debug_break = false
+
+[node name="PhysicsProcess" type="Node" parent="Alive/Sprint" index="1"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 3
+consume_event = false
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="IntegrateSprint" type="Node" parent="Alive/Sprint/PhysicsProcess" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 29
+arguments = [  ]
+_method_name = "integrate_sprint"
+debug_print = false
+debug_break = false
+
+[node name="OnDeaggro" type="Node" parent="Alive/Sprint" index="2"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 5
+custom_event = 6
+consume_event = false
+_custom_event_name = "OnDeaggro"
+debug_print = false
+debug_break = false
+
+[node name="Alive|Idle" type="Node" parent="Alive/Sprint/OnDeaggro" index="0"]
+script = ExtResource( 3 )
+__meta__ = {
+"transition": true
+}
+type = 0
+target_state = 6
+_target_state_path = NodePath("Alive/Idle")
+debug_print = false
+debug_break = false
+
+[node name="Rush" type="Node" parent="Alive" index="4"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="Shoot" type="Node" parent="Alive" index="5"]
+script = ExtResource( 2 )
+__meta__ = {
+"state": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="SpawnHealthPickup" parent="Dying/Entry" index="0"]
+method = 34
+
+[node name="StartDyingTimer" parent="Dying/Entry" index="1"]
+method = 35
+
+[node name="PhysicsProcess" type="Node" parent="Dying" index="1"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 3
+consume_event = false
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="SpawnDeathEffect" type="Node" parent="Dying/PhysicsProcess" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 33
+arguments = [  ]
+_method_name = "spawn_death_effect"
+debug_print = false
+debug_break = false
+
+[node name="DyingFinished" parent="Dying" index="2"]
+custom_event = 2
+
+[node name="Dead" parent="Dying/DyingFinished" index="0"]
+target_state = 11
+
+[node name="Destroy" parent="Dead/Entry" index="0"]
+method = 18
+
+[node name="PostTick" type="Node" parent="." index="4"]
+script = ExtResource( 7 )
+__meta__ = {
+"orthogonal_region": true,
+"stateful": true
+}
+initial_transition = 0
+debug_print = false
+debug_break = false
+
+[node name="PhysicsProcess" type="Node" parent="PostTick" index="0"]
+script = ExtResource( 4 )
+__meta__ = {
+"event": true,
+"eventful": true
+}
+type = 3
+consume_event = false
+_custom_event_name = ""
+debug_print = false
+debug_break = false
+
+[node name="IntegrateMovement" type="Node" parent="PostTick/PhysicsProcess" index="0"]
+script = ExtResource( 5 )
+__meta__ = {
+"internal_transition": true
+}
+method = 28
+arguments = [  ]
+_method_name = "integrate_movement"
+debug_print = false
+debug_break = false

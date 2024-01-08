@@ -1,0 +1,891 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://resources/themes/alien_soldier.tres" type="Theme" id=1]
+[ext_resource path="res://src/ui_pointer.gd" type="Script" id=2]
+[ext_resource path="res://resources/textures/ui_pointer.png" type="Texture" id=3]
+[ext_resource path="res://scenes/instanced/user_interface/title_screen.gd" type="Script" id=4]
+[ext_resource path="res://src/hover_button_container.gd" type="Script" id=5]
+[ext_resource path="res://src/scroll_box_container.gd" type="Script" id=6]
+[ext_resource path="res://src/scene_select_vbox.gd" type="Script" id=7]
+[ext_resource path="res://scenes/instanced/user_interface/audio_settings_vbox.gd" type="Script" id=8]
+[ext_resource path="res://scenes/instanced/user_interface/control_settings_vbox.gd" type="Script" id=9]
+
+[sub_resource type="SphereMesh" id=1]
+radius = 96.0
+height = 192.0
+
+[sub_resource type="SphereMesh" id=2]
+radius = 72.0
+height = 144.0
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Control
+
+signal ui_cancel()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not UIUtil.has_focused_child(self):
+		return
+
+	if event.is_action_pressed(\"ui_cancel\"):
+		emit_signal(\"ui_cancel\")
+		get_tree().set_input_as_handled()
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Control
+
+signal ui_cancel()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not UIUtil.has_focused_child(self):
+		return
+
+	if event.is_action_pressed(\"ui_cancel\"):
+		emit_signal(\"ui_cancel\")
+		get_tree().set_input_as_handled()
+"
+
+[node name="TitleScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.4013e-45
+margin_right = 0.000244141
+theme = ExtResource( 1 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 0, 1 )
+color = Color( 0.0117647, 0.0117647, 0.117647, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EclipseOuter" type="MeshInstance2D" parent="Background"]
+modulate = Color( 0, 0.27451, 1, 1 )
+position = Vector2( 200, 112 )
+mesh = SubResource( 1 )
+
+[node name="EclipseInner" type="MeshInstance2D" parent="Background"]
+modulate = Color( 0.0117647, 0.0117647, 0.117647, 1 )
+position = Vector2( 224, 136 )
+mesh = SubResource( 2 )
+
+[node name="PaneHBox" type="HBoxContainer" parent="."]
+anchor_left = -1.0
+anchor_right = 2.0
+anchor_bottom = 1.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_constants/separation = 0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+active_pane = 1
+
+[node name="OptionsPane" type="Control" parent="PaneHBox"]
+margin_right = 400.0
+margin_bottom = 224.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/OptionsPane"]
+margin_right = 400.0
+margin_bottom = 224.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer"]
+margin_right = 400.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "Options"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer"]
+margin_top = 32.0
+margin_right = 400.0
+margin_bottom = 224.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="CategoryContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer"]
+margin_right = 133.0
+margin_bottom = 192.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 24
+custom_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer"]
+margin_left = 24.0
+margin_top = 8.0
+margin_right = 125.0
+margin_bottom = 184.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Gameplay" type="Button" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer"]
+margin_right = 101.0
+margin_bottom = 13.0
+focus_neighbour_top = NodePath("../Back")
+action_mode = 0
+text = "Gameplay"
+
+[node name="Control" type="Button" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer"]
+margin_top = 17.0
+margin_right = 101.0
+margin_bottom = 30.0
+action_mode = 0
+text = "Control"
+
+[node name="Video" type="Button" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer"]
+margin_top = 34.0
+margin_right = 101.0
+margin_bottom = 47.0
+action_mode = 0
+text = "Video"
+
+[node name="Audio" type="Button" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer"]
+margin_top = 51.0
+margin_right = 101.0
+margin_bottom = 64.0
+action_mode = 0
+text = "Audio"
+
+[node name="Back" type="Button" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer"]
+margin_top = 68.0
+margin_right = 101.0
+margin_bottom = 81.0
+focus_neighbour_bottom = NodePath("../Gameplay")
+action_mode = 0
+text = "Back"
+
+[node name="Settings" type="Control" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer"]
+margin_left = 133.0
+margin_right = 400.0
+margin_bottom = 192.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SettingsVBox" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings"]
+anchor_right = 1.0
+anchor_bottom = 4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+scroll_axis = 1
+
+[node name="GameplayContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox"]
+margin_right = 267.0
+margin_bottom = 189.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/GameplayContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 262.0
+margin_bottom = 184.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/GameplayContainer/VBoxContainer"]
+margin_right = 257.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+text = "Gameplay"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/GameplayContainer/VBoxContainer"]
+margin_top = 16.0
+margin_right = 257.0
+margin_bottom = 179.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/GameplayContainer/VBoxContainer/HBoxContainer"]
+margin_right = 257.0
+margin_bottom = 163.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 24
+custom_constants/margin_bottom = 8
+
+[node name="GameplaySettingsVBox" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/GameplayContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+margin_left = 24.0
+margin_top = 8.0
+margin_right = 249.0
+margin_bottom = 155.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ControlContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox"]
+margin_top = 193.0
+margin_right = 267.0
+margin_bottom = 382.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 262.0
+margin_bottom = 184.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer"]
+margin_right = 257.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+text = "Control"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer"]
+margin_top = 16.0
+margin_right = 257.0
+margin_bottom = 179.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer/HBoxContainer"]
+margin_right = 257.0
+margin_bottom = 163.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 24
+custom_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+margin_left = 24.0
+margin_top = 8.0
+margin_right = 249.0
+margin_bottom = 155.0
+
+[node name="Options" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+margin_right = 225.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+text = "Options"
+align = 1
+valign = 1
+
+[node name="DoubleTapCounterForce" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 20.0
+margin_right = 225.0
+margin_bottom = 28.0
+text = "Double-Tap Fire - Counter Force"
+
+[node name="DownJumpDash" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 32.0
+margin_right = 225.0
+margin_bottom = 40.0
+text = "Down + Jump - Dash"
+
+[node name="DownWeaponSwitch" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 44.0
+margin_right = 225.0
+margin_bottom = 52.0
+text = "Down + Weapon - Fire Mode Switch"
+
+[node name="Bindings" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 56.0
+margin_right = 225.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 16 )
+text = "Bindings"
+align = 1
+valign = 1
+
+[node name="ControlSettingsVBox" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/ControlContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 76.0
+margin_right = 225.0
+margin_bottom = 147.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VideoContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox"]
+margin_top = 386.0
+margin_right = 267.0
+margin_bottom = 575.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/VideoContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 262.0
+margin_bottom = 184.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/VideoContainer/VBoxContainer"]
+margin_right = 257.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+text = "Video"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/VideoContainer/VBoxContainer"]
+margin_top = 16.0
+margin_right = 257.0
+margin_bottom = 179.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/VideoContainer/VBoxContainer/HBoxContainer"]
+margin_right = 257.0
+margin_bottom = 163.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 24
+custom_constants/margin_bottom = 8
+
+[node name="VideoSettingsVBox" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/VideoContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+margin_left = 24.0
+margin_top = 8.0
+margin_right = 249.0
+margin_bottom = 155.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FullscreenLabel" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/VideoContainer/VBoxContainer/HBoxContainer/MarginContainer/VideoSettingsVBox"]
+margin_right = 225.0
+margin_bottom = 8.0
+text = "Fullscreen"
+
+[node name="VsyncLabel" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/VideoContainer/VBoxContainer/HBoxContainer/MarginContainer/VideoSettingsVBox"]
+margin_top = 12.0
+margin_right = 225.0
+margin_bottom = 20.0
+text = "VSync"
+
+[node name="AudioContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox"]
+margin_top = 579.0
+margin_right = 267.0
+margin_bottom = 768.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/AudioContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 262.0
+margin_bottom = 184.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/AudioContainer/VBoxContainer"]
+margin_right = 257.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+text = "Audio"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/AudioContainer/VBoxContainer"]
+margin_top = 16.0
+margin_right = 257.0
+margin_bottom = 179.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/AudioContainer/VBoxContainer/HBoxContainer"]
+margin_right = 257.0
+margin_bottom = 163.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 24
+custom_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/AudioContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+margin_left = 24.0
+margin_top = 8.0
+margin_right = 249.0
+margin_bottom = 155.0
+
+[node name="Label" type="Label" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/AudioContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+margin_right = 225.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+text = "Volume"
+align = 1
+valign = 1
+
+[node name="AudioSettingsVBox" type="VBoxContainer" parent="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox/AudioContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 20.0
+margin_right = 225.0
+margin_bottom = 147.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainMenuPane" type="Control" parent="PaneHBox"]
+margin_left = 400.0
+margin_right = 800.0
+margin_bottom = 224.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ShockHBox" type="HBoxContainer" parent="PaneHBox/MainMenuPane"]
+anchor_right = 1.0
+margin_top = 30.0
+margin_bottom = 38.0
+custom_constants/separation = 42
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Visualshock" type="Label" parent="PaneHBox/MainMenuPane/ShockHBox"]
+margin_left = 60.0
+margin_right = 129.0
+margin_bottom = 8.0
+text = "VISUALSHOCK!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Speedshock" type="Label" parent="PaneHBox/MainMenuPane/ShockHBox"]
+margin_left = 171.0
+margin_right = 234.0
+margin_bottom = 8.0
+text = "SPEEDSHOCK!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Soundshock" type="Label" parent="PaneHBox/MainMenuPane/ShockHBox"]
+margin_left = 276.0
+margin_right = 339.0
+margin_bottom = 8.0
+grow_horizontal = 0
+text = "SOUNDSHOCK!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NowIsTimeToSetTheEngineHeartOnFire" type="Label" parent="PaneHBox/MainMenuPane"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -112.5
+margin_top = 46.0
+margin_right = 112.5
+margin_bottom = 54.0
+grow_horizontal = 0
+text = "NOW IS TIME TO SET THE ENGINE HEART ON FIRE!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CosmicCommando" type="Label" parent="PaneHBox/MainMenuPane"]
+modulate = Color( 0.501961, 0.952941, 1, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -43.0
+margin_top = -14.0
+margin_right = 43.0
+margin_bottom = -6.0
+rect_scale = Vector2( 4, 4 )
+rect_pivot_offset = Vector2( 43, 4 )
+text = "COSMIC COMMANDO"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ForGodotCustomVBox" type="VBoxContainer" parent="PaneHBox/MainMenuPane"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 152.0
+margin_top = -83.0
+margin_right = -152.0
+margin_bottom = -73.0
+custom_constants/separation = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ForGodotCustom" type="Label" parent="PaneHBox/MainMenuPane/ForGodotCustomVBox"]
+modulate = Color( 1, 0.992157, 0.431373, 1 )
+margin_right = 96.0
+margin_bottom = 8.0
+text = "FOR GODOT CUSTOM"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="PaneHBox/MainMenuPane/ForGodotCustomVBox"]
+margin_top = 9.0
+margin_right = 96.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 0, 1 )
+color = Color( 0.886275, 0.333333, 0, 1 )
+
+[node name="MainMenuHBox" type="HBoxContainer" parent="PaneHBox/MainMenuPane"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -57.0
+margin_bottom = -44.0
+custom_constants/separation = 22
+alignment = 1
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Options" type="Button" parent="PaneHBox/MainMenuPane/MainMenuHBox"]
+margin_left = 36.0
+margin_right = 100.0
+margin_bottom = 13.0
+rect_min_size = Vector2( 64, 0 )
+focus_neighbour_left = NodePath("../Quit")
+focus_neighbour_top = NodePath("../../CreditHBox/GithubButton")
+focus_neighbour_right = NodePath("../DemoStart")
+focus_neighbour_bottom = NodePath("../../CreditHBox/GithubButton")
+action_mode = 0
+text = "Options"
+
+[node name="DemoStart" type="Button" parent="PaneHBox/MainMenuPane/MainMenuHBox"]
+margin_left = 122.0
+margin_right = 183.0
+margin_bottom = 13.0
+focus_neighbour_left = NodePath("../Options")
+focus_neighbour_top = NodePath("../../CreditHBox/GithubButton")
+focus_neighbour_right = NodePath("../SceneSelect")
+focus_neighbour_bottom = NodePath("../../CreditHBox/GithubButton")
+action_mode = 0
+text = "Demo Start"
+
+[node name="SceneSelect" type="Button" parent="PaneHBox/MainMenuPane/MainMenuHBox"]
+margin_left = 205.0
+margin_right = 278.0
+margin_bottom = 13.0
+focus_neighbour_left = NodePath("../DemoStart")
+focus_neighbour_top = NodePath("../../CreditHBox/GithubButton")
+focus_neighbour_right = NodePath("../Quit")
+focus_neighbour_bottom = NodePath("../../CreditHBox/GithubButton")
+action_mode = 0
+text = "Scene Select"
+
+[node name="Quit" type="Button" parent="PaneHBox/MainMenuPane/MainMenuHBox"]
+margin_left = 300.0
+margin_right = 364.0
+margin_bottom = 13.0
+rect_min_size = Vector2( 64, 0 )
+focus_neighbour_left = NodePath("../SceneSelect")
+focus_neighbour_top = NodePath("../../CreditHBox/GithubButton")
+focus_neighbour_right = NodePath("../Options")
+focus_neighbour_bottom = NodePath("../../CreditHBox/GithubButton")
+action_mode = 0
+text = "Quit"
+
+[node name="CreditHBox" type="HBoxContainer" parent="PaneHBox/MainMenuPane"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -28.0
+margin_bottom = -20.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CreatedByShifty" type="Label" parent="PaneHBox/MainMenuPane/CreditHBox"]
+margin_left = 129.0
+margin_right = 230.0
+margin_bottom = 8.0
+grow_horizontal = 0
+text = "Created by Shifty -"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GithubButton" type="LinkButton" parent="PaneHBox/MainMenuPane/CreditHBox"]
+margin_left = 234.0
+margin_right = 240.0
+margin_bottom = 8.0
+hint_tooltip = "Github"
+focus_neighbour_left = NodePath("../TwitterButton")
+focus_neighbour_top = NodePath("../../MainMenuHBox/SceneSelect")
+focus_neighbour_right = NodePath("../DiscordButton")
+focus_neighbour_bottom = NodePath("../../MainMenuHBox/SceneSelect")
+focus_mode = 2
+text = "G"
+
+[node name="DiscordButton" type="LinkButton" parent="PaneHBox/MainMenuPane/CreditHBox"]
+margin_left = 244.0
+margin_right = 250.0
+margin_bottom = 8.0
+hint_tooltip = "Discord"
+focus_neighbour_left = NodePath("../GithubButton")
+focus_neighbour_top = NodePath("../../MainMenuHBox/SceneSelect")
+focus_neighbour_right = NodePath("../PatreonButton")
+focus_neighbour_bottom = NodePath("../../MainMenuHBox/SceneSelect")
+focus_mode = 2
+text = "D"
+
+[node name="PatreonButton" type="LinkButton" parent="PaneHBox/MainMenuPane/CreditHBox"]
+margin_left = 254.0
+margin_right = 260.0
+margin_bottom = 8.0
+hint_tooltip = "Patreon"
+focus_neighbour_left = NodePath("../DiscordButton")
+focus_neighbour_top = NodePath("../../MainMenuHBox/SceneSelect")
+focus_neighbour_right = NodePath("../TwitterButton")
+focus_neighbour_bottom = NodePath("../../MainMenuHBox/SceneSelect")
+focus_mode = 2
+text = "P"
+
+[node name="TwitterButton" type="LinkButton" parent="PaneHBox/MainMenuPane/CreditHBox"]
+margin_left = 264.0
+margin_right = 270.0
+margin_bottom = 8.0
+hint_tooltip = "Twitter"
+focus_neighbour_left = NodePath("../PatreonButton")
+focus_neighbour_top = NodePath("../../MainMenuHBox/SceneSelect")
+focus_neighbour_right = NodePath("../GithubButton")
+focus_neighbour_bottom = NodePath("../../MainMenuHBox/SceneSelect")
+focus_mode = 2
+text = "T"
+
+[node name="SceneSelectPane" type="Control" parent="PaneHBox"]
+margin_left = 800.0
+margin_right = 1200.0
+margin_bottom = 224.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaneHBox/SceneSelectPane"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PaneHBox/SceneSelectPane/VBoxContainer"]
+margin_right = 400.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "Scene Select"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaneHBox/SceneSelectPane/VBoxContainer"]
+margin_top = 32.0
+margin_right = 400.0
+margin_bottom = 224.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer"]
+margin_right = 400.0
+margin_bottom = 192.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 100
+custom_constants/margin_top = 8
+custom_constants/margin_left = 100
+custom_constants/margin_bottom = 16
+
+[node name="SceneSelectVBox" type="VBoxContainer" parent="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer"]
+margin_left = 100.0
+margin_top = 8.0
+margin_right = 300.0
+margin_bottom = 176.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 24
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SceneSelectVBox" type="VBoxContainer" parent="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox"]
+margin_right = 200.0
+margin_bottom = 131.0
+size_flags_vertical = 3
+script = ExtResource( 7 )
+
+[node name="Back" type="Button" parent="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox"]
+margin_top = 155.0
+margin_right = 200.0
+margin_bottom = 168.0
+focus_neighbour_left = NodePath(".")
+focus_neighbour_bottom = NodePath(".")
+action_mode = 0
+text = "Back"
+
+[node name="UIPointer" type="TextureRect" parent="."]
+margin_right = 16.0
+margin_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource( 3 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="focus_entered" from="PaneHBox/OptionsPane" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Gameplay" method="grab_focus"]
+[connection signal="ui_cancel" from="PaneHBox/OptionsPane" to="PaneHBox" method="set_active_pane" binds= [ 1 ]]
+[connection signal="focus_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Gameplay" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox" method="set_active_pane" binds= [ 0 ]]
+[connection signal="mouse_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Gameplay" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Gameplay" method="grab_focus"]
+[connection signal="focus_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Control" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox" method="set_active_pane" binds= [ 1 ]]
+[connection signal="mouse_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Control" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Control" method="grab_focus"]
+[connection signal="focus_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Video" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox" method="set_active_pane" binds= [ 2 ]]
+[connection signal="mouse_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Video" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Video" method="grab_focus"]
+[connection signal="focus_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Audio" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/Settings/SettingsVBox" method="set_active_pane" binds= [ 3 ]]
+[connection signal="mouse_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Audio" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Audio" method="grab_focus"]
+[connection signal="mouse_entered" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Back" to="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Back" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/OptionsPane/VBoxContainer/HBoxContainer/CategoryContainer/VBoxContainer/Back" to="PaneHBox" method="set_active_pane" binds= [ 1 ]]
+[connection signal="focus_entered" from="PaneHBox/MainMenuPane" to="PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" method="grab_focus"]
+[connection signal="mouse_entered" from="PaneHBox/MainMenuPane/MainMenuHBox/Options" to="PaneHBox/MainMenuPane/MainMenuHBox/Options" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/MainMenuPane/MainMenuHBox/Options" to="PaneHBox" method="set_active_pane" binds= [ 0 ]]
+[connection signal="mouse_entered" from="PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" to="PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" to="." method="start_demo"]
+[connection signal="ready" from="PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" to="PaneHBox/MainMenuPane/MainMenuHBox/DemoStart" method="grab_focus"]
+[connection signal="mouse_entered" from="PaneHBox/MainMenuPane/MainMenuHBox/SceneSelect" to="PaneHBox/MainMenuPane/MainMenuHBox/SceneSelect" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/MainMenuPane/MainMenuHBox/SceneSelect" to="PaneHBox" method="set_active_pane" binds= [ 2 ]]
+[connection signal="mouse_entered" from="PaneHBox/MainMenuPane/MainMenuHBox/Quit" to="PaneHBox/MainMenuPane/MainMenuHBox/Quit" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/MainMenuPane/MainMenuHBox/Quit" to="." method="quit_game"]
+[connection signal="mouse_entered" from="PaneHBox/MainMenuPane/CreditHBox/GithubButton" to="PaneHBox/MainMenuPane/CreditHBox/GithubButton" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/MainMenuPane/CreditHBox/GithubButton" to="." method="open_link" binds= [ "https://github.com/Shfty/" ]]
+[connection signal="mouse_entered" from="PaneHBox/MainMenuPane/CreditHBox/DiscordButton" to="PaneHBox/MainMenuPane/CreditHBox/DiscordButton" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/MainMenuPane/CreditHBox/DiscordButton" to="." method="open_link" binds= [ "https://discord.gg/c72WBuG" ]]
+[connection signal="mouse_entered" from="PaneHBox/MainMenuPane/CreditHBox/PatreonButton" to="PaneHBox/MainMenuPane/CreditHBox/PatreonButton" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/MainMenuPane/CreditHBox/PatreonButton" to="." method="open_link" binds= [ "https://www.patreon.com/shifty_studio" ]]
+[connection signal="mouse_entered" from="PaneHBox/MainMenuPane/CreditHBox/TwitterButton" to="PaneHBox/MainMenuPane/CreditHBox/TwitterButton" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/MainMenuPane/CreditHBox/TwitterButton" to="." method="open_link" binds= [ "https://twitter.com/shiftyaxel" ]]
+[connection signal="focus_entered" from="PaneHBox/SceneSelectPane" to="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/SceneSelectVBox" method="grab_focus"]
+[connection signal="ui_cancel" from="PaneHBox/SceneSelectPane" to="PaneHBox" method="set_active_pane" binds= [ 1 ]]
+[connection signal="scene_selected" from="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/SceneSelectVBox" to="." method="scene_selected"]
+[connection signal="mouse_entered" from="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/Back" to="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/Back" method="grab_focus"]
+[connection signal="pressed" from="PaneHBox/SceneSelectPane/VBoxContainer/HBoxContainer/MarginContainer/SceneSelectVBox/Back" to="PaneHBox" method="set_active_pane" binds= [ 1 ]]

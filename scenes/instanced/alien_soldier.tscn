@@ -1,0 +1,260 @@
+[gd_scene load_steps=31 format=2]
+
+[ext_resource path="res://scenes/instanced/state_machines/alien_soldier_state_machine.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/hitbox.gd" type="Script" id=2]
+[ext_resource path="res://src/alien_soldier.gd" type="Script" id=3]
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=4]
+[ext_resource path="res://src/sprites/sprite_alien_soldier.gd" type="Script" id=5]
+[ext_resource path="res://src/hurtbox.gd" type="Script" id=6]
+[ext_resource path="res://src/item_box.gd" type="Script" id=7]
+[ext_resource path="res://scenes/instanced/weapon.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/instanced/projectiles/buster_force_startup.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/instanced/projectiles/lancer_force.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/instanced/projectiles/flame_force.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scenes/instanced/projectiles/homing_force.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scenes/instanced/projectiles/sword_force.tscn" type="PackedScene" id=13]
+[ext_resource path="res://src/weapon/weapon_burst_fire.gd" type="Script" id=14]
+[ext_resource path="res://scenes/instanced/projectiles/no_force.tscn" type="PackedScene" id=15]
+[ext_resource path="res://scenes/instanced/projectiles/ranger_force.tscn" type="PackedScene" id=16]
+[ext_resource path="res://scenes/testing/sprite_test.tscn" type="PackedScene" id=17]
+[ext_resource path="res://src/sprites/sprite_weapon_wheel.gd" type="Script" id=18]
+[ext_resource path="res://src/physics_interpolator_2d.gd" type="Script" id=19]
+[ext_resource path="res://resources/audio_stream_sample/weapons/counter_force.wav" type="AudioStream" id=20]
+[ext_resource path="res://resources/audio_stream_sample/weapons/buster_force.wav" type="AudioStream" id=21]
+[ext_resource path="res://resources/audio_stream_sample/weapons/ranger_force.wav" type="AudioStream" id=22]
+[ext_resource path="res://resources/audio_stream_sample/weapons/lancer_force.wav" type="AudioStream" id=23]
+[ext_resource path="res://resources/audio_stream_sample/weapons/no_force.wav" type="AudioStream" id=24]
+[ext_resource path="res://resources/audio_stream_sample/player/zero_teleport.wav" type="AudioStream" id=25]
+[ext_resource path="res://resources/audio_stream_sample/player/phoenix_force.wav" type="AudioStream" id=26]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 20.0
+height = 30.0
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 15.0
+height = 30.0
+
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 25.0
+height = 30.0
+
+[sub_resource type="CapsuleShape2D" id=4]
+radius = 20.0
+height = 30.0
+
+[node name="AlienSoldier" type="KinematicBody2D"]
+pause_mode = 1
+collision_layer = 0
+script = ExtResource( 3 )
+facing = 1
+
+[node name="AlienSoldierStateMachine" parent="." instance=ExtResource( 1 )]
+target_instance_path = NodePath("..")
+
+[node name="CapsulePhysicsInterpolator" type="Node2D" parent="."]
+pause_mode = 2
+script = ExtResource( 19 )
+active = true
+debug_draw = false
+
+[node name="CapsulePixelSnap" type="Node2D" parent="CapsulePhysicsInterpolator"]
+script = ExtResource( 4 )
+mode = 0
+process_mode = 0
+
+[node name="CapsuleSprite" type="Node2D" parent="CapsulePhysicsInterpolator/CapsulePixelSnap"]
+pause_mode = 2
+script = ExtResource( 5 )
+
+[node name="EpsilonSpritePhysicsInterpolator" type="Node2D" parent="."]
+pause_mode = 2
+script = ExtResource( 19 )
+active = true
+debug_draw = false
+
+[node name="EpsilonSpritePixelSnap" type="Node2D" parent="EpsilonSpritePhysicsInterpolator"]
+script = ExtResource( 4 )
+mode = 0
+process_mode = 0
+
+[node name="EpsilonEagleSprite" parent="EpsilonSpritePhysicsInterpolator/EpsilonSpritePixelSnap" instance=ExtResource( 17 )]
+pause_mode = 1
+
+[node name="WeaponWheelPixelSnap" type="Node2D" parent="."]
+pause_mode = 2
+script = ExtResource( 4 )
+mode = 0
+process_mode = 0
+
+[node name="WeaponWheelSprite" type="Node2D" parent="WeaponWheelPixelSnap"]
+script = ExtResource( 18 )
+
+[node name="WeaponAnchor" type="Node2D" parent="."]
+position = Vector2( 48, -16 )
+
+[node name="WeaponSlots" type="Node2D" parent="WeaponAnchor"]
+
+[node name="BusterForce" parent="WeaponAnchor/WeaponSlots" instance=ExtResource( 8 )]
+attach_parent_path = NodePath("../../..")
+projectile = ExtResource( 9 )
+fire_sound = ExtResource( 21 )
+
+[node name="RangerForce" parent="WeaponAnchor/WeaponSlots" instance=ExtResource( 8 )]
+script = ExtResource( 14 )
+attach_parent_path = NodePath("../../..")
+fire_rate = 30.0
+ammo_cost_free = 18
+ammo_cost_fixed = 26
+ammo_regen_rate = 1.0
+projectile = ExtResource( 16 )
+fire_sound = ExtResource( 22 )
+
+[node name="FlameForce" parent="WeaponAnchor/WeaponSlots" instance=ExtResource( 8 )]
+attach_parent_path = NodePath("../../..")
+fire_rate = 2.0
+ammo_cost_free = 3
+ammo_cost_fixed = 5
+ammo_regen_rate = 0.45
+projectile = ExtResource( 11 )
+
+[node name="HomingForce" parent="WeaponAnchor/WeaponSlots" instance=ExtResource( 8 )]
+attach_parent_path = NodePath("../../..")
+fire_rate = 2.0
+ammo_cost_fixed = 5
+ammo_regen_rate = 0.5
+projectile = ExtResource( 12 )
+
+[node name="SwordForce" parent="WeaponAnchor/WeaponSlots" instance=ExtResource( 8 )]
+attach_parent_path = NodePath("../../..")
+attach_offset_path = "."
+fire_rate = 1.0
+ammo_cost_free = 2
+ammo_cost_fixed = 4
+ammo_regen_rate = 0.1
+projectile = ExtResource( 13 )
+
+[node name="LancerForce" parent="WeaponAnchor/WeaponSlots" instance=ExtResource( 8 )]
+attach_parent_path = NodePath("../../..")
+fire_rate = 60.0
+ammo_cost_free = 140
+ammo_cost_fixed = 150
+ammo_regen_rate = 0.3
+projectile = ExtResource( 10 )
+fire_sound = ExtResource( 23 )
+
+[node name="NoForce" parent="WeaponAnchor" instance=ExtResource( 8 )]
+attach_parent_path = NodePath("../..")
+max_ammo = 0.0
+ammo_cost_free = 0
+ammo_cost_fixed = 0
+ammo_regen_rate = 0.0
+projectile = ExtResource( 15 )
+fire_sound = ExtResource( 24 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+show_behind_parent = true
+shape = SubResource( 1 )
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+show_behind_parent = true
+shape = SubResource( 2 )
+
+[node name="Hitbox" type="Area2D" parent="."]
+monitoring = false
+monitorable = false
+collision_layer = 0
+collision_mask = 32
+script = ExtResource( 2 )
+active = false
+contact_damage = 512
+contact_force = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+show_behind_parent = true
+rotation = 1.5708
+shape = SubResource( 3 )
+
+[node name="Itembox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Itembox"]
+show_behind_parent = true
+shape = SubResource( 4 )
+
+[node name="Audio" type="Node2D" parent="."]
+
+[node name="CounterForceAudio" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource( 20 )
+
+[node name="ZeroTeleportAudio" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource( 25 )
+
+[node name="PhoenixForceAudio" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource( 26 )
+
+[node name="JumpTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.125
+one_shot = true
+
+[node name="TuckRollJumpTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.1
+one_shot = true
+
+[node name="DashTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.2
+one_shot = true
+
+[node name="DashRecoveryTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.15
+one_shot = true
+
+[node name="DashEffectTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.0166667
+
+[node name="CounterForceInputTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.25
+one_shot = true
+
+[node name="CounterForceTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.15
+one_shot = true
+
+[node name="DamageTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.2
+one_shot = true
+
+[node name="InvulnerabilityTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.5
+one_shot = true
+
+[node name="DyingTimer" type="Timer" parent="."]
+process_mode = 0
+one_shot = true
+[connection signal="take_damage" from="Hurtbox" to="." method="take_damage"]
+[connection signal="give_damage" from="Hitbox" to="." method="give_damage"]
+[connection signal="take_healing" from="Itembox" to="." method="take_healing"]
+[connection signal="timeout" from="JumpTimer" to="AlienSoldierStateMachine" method="fire_custom_event" binds= [ "JumpFinished" ]]
+[connection signal="timeout" from="DashTimer" to="AlienSoldierStateMachine" method="fire_custom_event" binds= [ "DashFinished" ]]
+[connection signal="timeout" from="DashRecoveryTimer" to="AlienSoldierStateMachine" method="fire_custom_event" binds= [ "DashRecoveryFinished" ]]
+[connection signal="timeout" from="DashEffectTimer" to="." method="spawn_dash_effect"]
+[connection signal="timeout" from="CounterForceTimer" to="AlienSoldierStateMachine" method="fire_custom_event" binds= [ "CounterForceFinished" ]]
+[connection signal="timeout" from="DamageTimer" to="AlienSoldierStateMachine" method="fire_custom_event" binds= [ "DamageFinished" ]]
+[connection signal="timeout" from="InvulnerabilityTimer" to="AlienSoldierStateMachine" method="fire_custom_event" binds= [ "SetHitboxActive" ]]
+[connection signal="timeout" from="DyingTimer" to="." method="dead"]

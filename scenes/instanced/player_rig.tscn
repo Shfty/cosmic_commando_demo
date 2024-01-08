@@ -1,0 +1,65 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=2]
+[ext_resource path="res://src/physics_interpolator_2d.gd" type="Script" id=3]
+[ext_resource path="res://scenes/instanced/alien_soldier.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/camera_controller.gd" type="Script" id=5]
+[ext_resource path="res://src/camera_box.gd" type="Script" id=6]
+[ext_resource path="res://src/player_controller.gd" type="Script" id=7]
+[ext_resource path="res://src/alien_soldier_debug_overlay.gd" type="Script" id=8]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Camera2D
+
+func get_collision_shape() -> CollisionShape2D:
+	return $Area2D/CollisionShape2D as CollisionShape2D
+
+func ready_deferred() -> void:
+	get_collision_shape().shape.extents = get_viewport_rect().size * 0.5
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 200, 112 )
+
+[node name="PlayerRig" type="Node2D"]
+
+[node name="AlienSoldier" parent="." instance=ExtResource( 4 )]
+
+[node name="PlayerController" type="Node" parent="AlienSoldier"]
+script = ExtResource( 7 )
+
+[node name="CameraController" type="Node2D" parent="AlienSoldier"]
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
+camera_path = NodePath("../../PixelSnap")
+
+[node name="PhysicsInterpolator2D" type="Node2D" parent="AlienSoldier"]
+pause_mode = 2
+script = ExtResource( 3 )
+active = true
+debug_draw = false
+
+[node name="PixelSnapOverlay" type="Node2D" parent="AlienSoldier/PhysicsInterpolator2D"]
+script = ExtResource( 2 )
+
+[node name="AlienSoldierDebugOverlay" type="Node2D" parent="AlienSoldier/PhysicsInterpolator2D/PixelSnapOverlay"]
+script = ExtResource( 8 )
+
+[node name="PixelSnap" type="Node2D" parent="."]
+visible = false
+position = Vector2( 64, -61 )
+script = ExtResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="PixelSnap"]
+current = true
+script = SubResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="PixelSnap/Camera2D"]
+collision_layer = 0
+collision_mask = 256
+script = ExtResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PixelSnap/Camera2D/Area2D"]
+shape = SubResource( 2 )

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/creature_roar.wav-6df4efb65ff6b89ca67ff7b9881e856a.sample"
+
+[deps]
+
+source_file="res://resources/audio_stream_sample/bosses/arachnorox/creature_roar.wav"
+dest_files=[ "res://.import/creature_roar.wav-6df4efb65ff6b89ca67ff7b9881e856a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

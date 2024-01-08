@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://resources/sprite_frames/epsilon_eagle_torso.tres" type="SpriteFrames" id=1]
+[ext_resource path="res://resources/sprite_frames/epsilon_eagle_legs.tres" type="SpriteFrames" id=2]
+[ext_resource path="res://resources/textures/epsilon_eagle.png" type="Texture" id=3]
+[ext_resource path="res://resources/sprite_frames/epsilon_eagle_composite.tres" type="SpriteFrames" id=4]
+[ext_resource path="res://src/sprites/sprite_epsilon_eagle.gd" type="Script" id=5]
+
+[node name="EpsilonEagleSprite" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="epsilon_eagle" type="Sprite" parent="."]
+visible = false
+position = Vector2( -32, -836 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Legs" type="AnimatedSprite" parent="."]
+frames = ExtResource( 2 )
+animation = "standing"
+playing = true
+offset = Vector2( -2, 24 )
+
+[node name="Torso" type="AnimatedSprite" parent="."]
+position = Vector2( 2, -1 )
+frames = ExtResource( 1 )
+animation = "idle"
+playing = true
+offset = Vector2( 5, -17 )
+
+[node name="Composite" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 2, -1 )
+frames = ExtResource( 4 )
+animation = "phoenix_force"
+playing = true
+[connection signal="frame_changed" from="Composite" to="." method="composite_frame_changed"]

@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/sprites/sprite_circle.gd" type="Script" id=1]
+[ext_resource path="res://src/hitbox.gd" type="Script" id=2]
+[ext_resource path="res://src/enemy/enemy_trip_mine.gd" type="Script" id=3]
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=4]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 20.0
+
+[node name="TripMine" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="PixelSnap" type="Node2D" parent="."]
+script = ExtResource( 4 )
+mode = 0
+process_mode = 0
+
+[node name="SpriteCircle" type="Node2D" parent="PixelSnap"]
+script = ExtResource( 1 )
+radius = 5.0
+color = Color( 0.203922, 0.254902, 0.588235, 1 )
+
+[node name="PixelSnap2" type="Node2D" parent="."]
+position = Vector2( 0, -4 )
+script = ExtResource( 4 )
+mode = 0
+process_mode = 0
+
+[node name="SpriteCircle2" type="Node2D" parent="PixelSnap2"]
+script = ExtResource( 1 )
+radius = 1.0
+color = Color( 1, 0, 0, 1 )
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource( 2 )
+active = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource( 1 )
+
+[node name="TripRayCast" type="RayCast2D" parent="."]
+position = Vector2( 0, -19 )
+enabled = true
+exclude_parent = false
+cast_to = Vector2( 0, -200 )
+collision_mask = 9
+collide_with_areas = true
+[connection signal="give_damage" from="Hitbox" to="." method="hitbox_give_damage"]

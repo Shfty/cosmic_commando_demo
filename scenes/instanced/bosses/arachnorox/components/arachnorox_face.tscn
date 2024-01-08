@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/pixel_snap.gd" type="Script" id=1]
+[ext_resource path="res://src/physics_interpolator_2d.gd" type="Script" id=2]
+
+[node name="Face" type="Node2D"]
+
+[node name="PhysicsInterpolator2D" type="Node2D" parent="."]
+pause_mode = 2
+script = ExtResource( 2 )
+
+[node name="PixelSnap" type="Node2D" parent="PhysicsInterpolator2D"]
+script = ExtResource( 1 )
+
+[node name="Frame" type="Polygon2D" parent="PhysicsInterpolator2D/PixelSnap"]
+rotation = -4.17226e-07
+scale = Vector2( 0.825, 0.825 )
+color = Color( 0.313726, 0.313726, 0.313726, 1 )
+polygon = PoolVector2Array( -50, -72, 0, -58, 50, -72, 72, -57, 72, -33, 50, 27, 16.8505, 58.8235, 0, 51, -17, 59, -50, 27, -73, -33, -73, -57 )
+
+[node name="Face" type="Polygon2D" parent="PhysicsInterpolator2D/PixelSnap/Frame"]
+position = Vector2( 1.01146e-06, -2.42424 )
+rotation = 3.3497e-14
+scale = Vector2( 0.848485, 0.848485 )
+color = Color( 0.835294, 0.34902, 0.298039, 1 )
+polygon = PoolVector2Array( -50, -72, 0, -58, 50, -72, 72, -57, 72, -33, 50, 27, 16.8505, 58.8235, 0, 51, -17, 59, -50, 27, -73, -33, -73, -57 )
+
+[node name="Face2" type="Polygon2D" parent="PhysicsInterpolator2D/PixelSnap/Frame"]
+position = Vector2( 1.01146e-06, -2.42424 )
+rotation = 3.3497e-14
+scale = Vector2( 0.848485, 0.848485 )
+color = Color( 0.376471, 0.156863, 0.133333, 1 )
+polygon = PoolVector2Array( -22.8551, -64.4524, 0, -58, 22.8816, -64.4524, 12.8572, -24.2857, 15.7143, -18.5714, 61.4286, -2.85712, 54.2857, 14.2857, 3.57622e-06, -8.57143, -55.7143, 14.2857, -61.4286, -2.85717, -15.7143, -18.5714, -12.8571, -24.2857 )

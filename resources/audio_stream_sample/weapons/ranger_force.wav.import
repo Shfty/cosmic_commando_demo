@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ranger_force.wav-661e958030fad82fcee52b22784c0922.sample"
+
+[deps]
+
+source_file="res://resources/audio_stream_sample/weapons/ranger_force.wav"
+dest_files=[ "res://.import/ranger_force.wav-661e958030fad82fcee52b22784c0922.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

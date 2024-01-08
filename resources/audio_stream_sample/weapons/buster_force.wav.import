@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/buster_force.wav-71434ee27874e2dc10026a27c4dd351e.sample"
+
+[deps]
+
+source_file="res://resources/audio_stream_sample/weapons/buster_force.wav"
+dest_files=[ "res://.import/buster_force.wav-71434ee27874e2dc10026a27c4dd351e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,141 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/treasure_kit/node_proxy.gd" type="Script" id=1]
+
+[sub_resource type="Animation" id=1]
+resource_name = "test"
+tracks/0/type = "value"
+tracks/0/path = NodePath("NodeProxy:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0.00784314, 0, 1, 1 ), Color( 1, 0, 0, 1 ) ]
+}
+
+[node name="NodeProxyTest" type="Node"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../RectB")
+anims/test = SubResource( 1 )
+
+[node name="ColorRectA" type="ColorRect" parent="."]
+anchor_right = 0.45
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_right = 1.0
+color = Color( 1, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRectB" type="ColorRect" parent="."]
+anchor_left = 0.55
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.00784314, 0, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RectA" type="Node" parent="."]
+
+[node name="NodeProxy" type="Node" parent="RectA"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_node_path = NodePath("../../ColorRectA")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.45
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = 0.0
+margin_right = 1.0
+margin_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+rect_min_size = Vector2( 0, 0 )
+rect_rotation = 0.0
+rect_scale = Vector2( 1, 1 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+hint_tooltip = ""
+focus_neighbour_left = NodePath("")
+focus_neighbour_top = NodePath("")
+focus_neighbour_right = NodePath("")
+focus_neighbour_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 0
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+theme = null
+color = Color( 1, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RectB" type="Node" parent="."]
+
+[node name="NodeProxy" type="Node" parent="RectB"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_node_path = NodePath("../../ColorRectB")
+visible = true
+modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 1 )
+show_behind_parent = false
+light_mask = 1
+material = null
+use_parent_material = false
+anchor_left = 0.55
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+rect_min_size = Vector2( 0, 0 )
+rect_rotation = 0.0
+rect_scale = Vector2( 1, 1 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+hint_tooltip = ""
+focus_neighbour_left = NodePath("")
+focus_neighbour_top = NodePath("")
+focus_neighbour_right = NodePath("")
+focus_neighbour_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 0
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+theme = null
+color = Color( 0.00784314, 0, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

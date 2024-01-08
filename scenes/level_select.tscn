@@ -1,0 +1,129 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://resources/themes/alien_soldier.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/instanced/user_interface/loading_screen.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/scene_loader.gd" type="Script" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+var _scene_instance: Node = null
+
+onready var _loading_screen = $LoadingScreen
+onready var _scene_list = $SceneList
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event is InputEventKey:
+		return
+
+	if not event.pressed:
+		return
+
+	if event.is_echo():
+		return
+
+	if event.scancode != KEY_ESCAPE:
+		return
+
+	_scene_list.visible = true
+
+
+func _on_LoadedScene_load_scene_started() -> void:
+	_scene_list.visible = false
+	_loading_screen.visible = true
+
+func _on_LoadedScene_load_scene_finished() -> void:
+	_loading_screen.visible = false
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Control
+tool
+
+signal scene_selected(scene_path)
+
+const SCENE_DIRECTORY := \"res://scenes/level_select\"
+const SCENE_EXTENSIONS := [
+	\"tscn\",
+	\"scn\",
+	\"tres\"
+]
+
+onready var _vbox_container := $VBoxContainer as VBoxContainer
+
+func _ready() -> void:
+	var dir = Directory.new()
+	var open_err = dir.open(SCENE_DIRECTORY)
+	if open_err:
+		printerr(\"Error opening %s: %s\" % [SCENE_DIRECTORY, open_err])
+		return
+
+	var list_dir_begin_err = dir.list_dir_begin(true, true)
+	if open_err:
+		printerr(\"Error beginning list dir: %s\" % [open_err])
+		return
+
+	while true:
+		var next_item = dir.get_next()
+		if not next_item:
+			break
+
+		var comps = next_item.split(\".\")
+		if comps[-1] in SCENE_EXTENSIONS:
+			var button = Button.new()
+			button.text = comps[0]
+			button.size_flags_horizontal = SIZE_SHRINK_CENTER
+			button.focus_mode = Control.FOCUS_NONE
+			button.connect(\"pressed\", self, \"_scene_selected\", [SCENE_DIRECTORY + \"/\" + next_item])
+			_vbox_container.add_child(button)
+			print(comps)
+
+func _scene_selected(scene_path: String) -> void:
+	emit_signal(\"scene_selected\", scene_path)
+"
+
+[node name="LevelSelect" type="Node"]
+
+[node name="SceneLoader" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="LevelSelectUI" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LoadingScreen" parent="CanvasLayer/LevelSelectUI" instance=ExtResource( 2 )]
+
+[node name="SceneList" type="Control" parent="CanvasLayer/LevelSelectUI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/LevelSelectUI/SceneList"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/LevelSelectUI/SceneList/VBoxContainer"]
+margin_left = 566.0
+margin_top = 298.0
+margin_right = 634.0
+margin_bottom = 306.0
+size_flags_horizontal = 4
+text = "Scene Select"
+align = 1
+[connection signal="load_scene_finished" from="SceneLoader" to="CanvasLayer/LevelSelectUI" method="_on_LoadedScene_load_scene_finished"]
+[connection signal="load_scene_started" from="SceneLoader" to="CanvasLayer/LevelSelectUI" method="_on_LoadedScene_load_scene_started"]
+[connection signal="scene_selected" from="CanvasLayer/LevelSelectUI/SceneList" to="SceneLoader" method="load_scene"]
